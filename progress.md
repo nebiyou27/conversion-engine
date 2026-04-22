@@ -28,6 +28,22 @@ Append-only. Date every entry.
 - What exact thresholds for verified vs corroborated? Tentative: verified = ≥2 independent primary, ≤7 days; corroborated = 1 primary + 1 secondary, ≤30 days.
 - How to calibrate shadow-review disagreement rate into a reliability metric? Tentative: treat as filter only, not metric; calibration data comes from periodic hand-labeling.
 
+## 2026-04-22 — Phase 1: Day 0 smoke tests green
+
+**What:** All 5 external services verified reachable — Resend, HubSpot, Cal.com, Langfuse, τ²-Bench env vars. HubSpot contact confirmed visually in dashboard.
+
+## 2026-04-22 — Phase 2: Storage layer
+
+**What:** SQLite DDL at `storage/schema.sql` with 5 tables (evidence, claims, judgments, drafts, gate_reports). Thin Python API at `storage/db.py` exposes one insert + one read per layer. File-based JSON cache at `storage/cache.py` under `data/cache/`. 9 contract tests in `tests/test_storage.py`, all green.
+
+**Why append-only by API contract, not DB trigger:** R5 — the contract is "no update/delete functions exist on the module." A test locks this by introspecting `storage.db` for `update_*` / `delete_*` / `remove_*` and failing if any are added. A trigger would be belt-and-braces ceremony for the same guarantee.
+
+**Why CHECK constraints on tier/kind/channel/path/decision:** These enumerations are the epistemic contract (R2, R4). Invalid values must fail loud at insert time, not sneak through and corrupt downstream reasoning. `test_claim_rejects_invalid_tier` locks this.
+
+**Why evidence_ids / claim_ids as JSON arrays, not a join table:** Every read path needs the full array together (no "find claims citing evidence X" query yet). R5 — a join table would be premature for a one-use access pattern. Revisit if cross-layer queries appear.
+
+**Why a single DB at `data/conversion.db`:** Runs are ephemeral (`outputs/runs/<ts>/`) and will pull snapshots. The DB is the durable ground truth across runs. Already gitignored by `*.db`.
+
 ## Next up
 
-Phase 1 — Day 0 smoke tests for all 5 external services.
+Phase 3 — evidence collector + fixture loaders. Begin wiring the first real path through the layers using a synthetic company fixture.
