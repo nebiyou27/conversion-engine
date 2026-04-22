@@ -52,7 +52,3 @@ python scripts/run_one_prospect.py  # (Phase 8 — not yet implemented)
 ## Safety
 
 All outbound traffic routes to `STAFF_SINK_EMAIL` by default. Real prospect contact requires `ALLOW_REAL_PROSPECT_CONTACT=true` in `.env`, which is only set after program-staff + Tenacious-executive approval.
-
-## Team
-
-- Nebiyou Alehegn — 10 Academy trainee (nebiyoua@10academy.org)
