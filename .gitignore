@@ -42,6 +42,7 @@ data/cache/
 
 # Licensed seed materials — do not redistribute
 Challenge_Documents/
+data/bench/bench_summary.json
 
 # Do keep these empty-dir markers
 !outputs/runs/.gitkeep

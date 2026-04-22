@@ -1,0 +1,40 @@
+{
+  "_note": "SYNTHETIC EXAMPLE ONLY. Real bench data is gitignored. This file documents the schema.",
+  "last_updated": "2026-04-21",
+  "total_bench_size": 12,
+  "availability_windows": {
+    "immediate": 0,
+    "within_4_weeks": 3,
+    "within_8_weeks": 5
+  },
+  "skill_clusters": [
+    {
+      "cluster_id": "SYNTHETIC-python-data",
+      "role_title": "Python Data Engineer",
+      "seniority_mix": {"senior": 1, "mid": 2, "junior": 0},
+      "stack": ["python", "airflow", "dbt", "postgres"],
+      "languages": ["en"],
+      "timezones": ["EAT", "CET"],
+      "available_from": "2026-05-15"
+    },
+    {
+      "cluster_id": "SYNTHETIC-react-fullstack",
+      "role_title": "Full-stack Engineer (React/Node)",
+      "seniority_mix": {"senior": 0, "mid": 2, "junior": 1},
+      "stack": ["react", "typescript", "node", "postgres"],
+      "languages": ["en"],
+      "timezones": ["EAT"],
+      "available_from": "2026-06-01"
+    },
+    {
+      "cluster_id": "SYNTHETIC-ml-platform",
+      "role_title": "ML Platform Engineer",
+      "seniority_mix": {"senior": 1, "mid": 1, "junior": 0},
+      "stack": ["python", "kubernetes", "mlflow", "aws"],
+      "languages": ["en"],
+      "timezones": ["EAT", "CET"],
+      "available_from": "2026-05-28"
+    }
+  ],
+  "disclaimer": "Real Tenacious bench data stays in data/bench/bench_summary.json (gitignored). The agent reads whichever file is present; example is schema reference only."
+}
