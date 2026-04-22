@@ -44,6 +44,18 @@ Append-only. Date every entry.
 
 **Why a single DB at `data/conversion.db`:** Runs are ephemeral (`outputs/runs/<ts>/`) and will pull snapshots. The DB is the durable ground truth across runs. Already gitignored by `*.db`.
 
+## 2026-04-22 — Phase 3: Evidence collector + fixture loaders
+
+**What:** `Fact` dataclass in `agent/evidence/schema.py` (frozen, `__post_init__` rejects empty source_url — audit trail is mandatory). Four pure fixture loaders under `agent/evidence/sources/` (crunchbase, job_posts, layoffs, leadership). Thin dispatch collector in `agent/evidence/collector.py`. One synthetic fixture at `data/fixtures/companies/acme_series_b.json` with all 4 sections (layoffs intentionally empty). 17 tests green.
+
+**Why fail-loud-on-malformed, clean-on-absent:** These are different failure semantics. Missing section = source returned nothing today — a normal state, 0 facts. Present-but-malformed = corrupted input — must raise, because silent degradation looks identical to "no evidence" downstream and would let the system over-claim confidence later. R7 is about thin input at the judgment layer; the evidence layer is upstream of that and has the opposite obligation.
+
+**Why underscore-prefixed keys skipped in collector:** The fixture carries a top-level `_note` disclaimer and the collector tolerates arbitrary `_`-prefixed keys inside `sources` too. Cheap protection: reviewers can add provenance annotations without crashing a loader.
+
+**Why one Phase-2 extension (retrieved_at kwarg on insert_evidence):** Tier thresholds are time-based (≤7d verified, ≤30d corroborated). Phase 4 will need aged fixture signals to exercise tier-downgrade paths. Adding the override as a kwarg with default None preserves existing behavior and keeps one connection-handling pattern (tightening #4).
+
+**Why kind lives on Fact but is merged into raw_payload at DB write time:** DB schema has no kind column — raw_payload (JSON) is the right home since kind is source-specific taxonomy. Keeping kind as a typed dataclass field (not buried in payload) makes it visible to future claim-builder code without requiring a schema change now.
+
 ## Next up
 
-Phase 3 — evidence collector + fixture loaders. Begin wiring the first real path through the layers using a synthetic company fixture.
+Phase 4 — claims layer. Evidence → tiered assertions with `verified` / `corroborated` / `inferred` / `below_threshold`. Tier thresholds are time-based; aged-retrieved_at path is already wired for this.

@@ -49,6 +49,7 @@ def insert_evidence(
     source_type: str,
     method: str,
     raw_payload: dict | None = None,
+    retrieved_at: str | None = None,
 ) -> str:
     evidence_id = _uid()
     conn.execute(
@@ -61,7 +62,7 @@ def insert_evidence(
             fact,
             source_url,
             source_type,
-            _now(),
+            retrieved_at or _now(),
             method,
             json.dumps(raw_payload) if raw_payload is not None else None,
         ),

@@ -1,0 +1,41 @@
+{
+  "_note": "SYNTHETIC FIXTURE for testing. Any resemblance to real companies is coincidental. Week 10 data handling policy: no real prospect data in fixtures.",
+  "company_id": "acme",
+  "name": "Acme Data",
+  "sources": {
+    "crunchbase": {
+      "funding_round": {
+        "round": "Series B",
+        "amount_usd": 50000000,
+        "announced_on": "2026-04-18",
+        "source_url": "https://example.com/crunchbase/acme-series-b"
+      }
+    },
+    "job_posts": [
+      {
+        "title": "Staff Backend Engineer",
+        "posted_on": "2026-04-15",
+        "source_url": "https://example.com/jobs/acme/staff-backend"
+      },
+      {
+        "title": "Senior ML Engineer",
+        "posted_on": "2026-04-10",
+        "source_url": "https://example.com/jobs/acme/senior-ml"
+      },
+      {
+        "title": "Engineering Manager, Platform",
+        "posted_on": "2026-04-08",
+        "source_url": "https://example.com/jobs/acme/em-platform"
+      }
+    ],
+    "leadership": [
+      {
+        "event": "new_cto",
+        "person": "Jane Doe",
+        "effective": "2026-03-15",
+        "source_url": "https://example.com/news/acme-new-cto"
+      }
+    ],
+    "layoffs": []
+  }
+}
