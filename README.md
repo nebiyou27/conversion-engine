@@ -1,0 +1,58 @@
+# Conversion Engine
+
+AI agent for automated, evidence-backed sales outreach on behalf of Tenacious Consulting and Outsourcing. Built for TRP1 Week 10.
+
+## Status
+
+Phase 0 complete — repo scaffolded. Day 0 smoke tests and Acts I–II work in progress.
+
+See `PRD.md` for acceptance criteria and `progress.md` for decision log.
+
+## Architecture
+
+Epistemic layering — the system is organized by the kind of truth claim each layer handles, not by function. See `CLAUDE.md` Section 2 for the full contract.
+
+```
+EVIDENCE  →  CLAIMS  →  JUDGMENT  →  ACTIONS  →  GATE
+raw facts    tiered       interp.     drafts    pre-send
+             assertions   over         with      validation
+                          claims       citations
+```
+
+## Quick start
+
+```bash
+# 1. Create virtualenv
+python -m venv .venv
+source .venv/Scripts/activate   # Windows Git Bash
+# or: .venv\Scripts\activate     # Windows cmd/PowerShell
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Copy env template and fill in keys
+cp .env.example .env
+# edit .env with real API keys (never commit)
+
+# 4. Run Day 0 smoke tests
+python scripts/day0_check.py
+
+# 5. Run a single end-to-end prospect
+python scripts/run_one_prospect.py  # (Phase 8 — not yet implemented)
+```
+
+## Key files
+
+- `CLAUDE.md` — architecture, rules, skills index (read first)
+- `PRD.md` — what we're building + acceptance criteria
+- `progress.md` — decision log
+- `deliverables/` — reviewer-facing artifacts (baseline, method, memo)
+- `.claude/skills/` — project-scoped skills: `claim-audit`, `probe-author`, `gate-check`
+
+## Safety
+
+All outbound traffic routes to `STAFF_SINK_EMAIL` by default. Real prospect contact requires `ALLOW_REAL_PROSPECT_CONTACT=true` in `.env`, which is only set after program-staff + Tenacious-executive approval.
+
+## Team
+
+- Nebiyou Alehegn — 10 Academy trainee (nebiyoua@10academy.org)

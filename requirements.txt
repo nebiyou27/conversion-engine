@@ -1,0 +1,26 @@
+# Core
+python-dotenv==1.0.1
+requests==2.32.3
+pydantic==2.9.2
+
+# LLM providers
+anthropic==0.39.0
+openai==1.54.3
+
+# External services
+resend==2.4.0
+hubspot-api-client==11.1.0
+africastalking==1.2.9
+langfuse==2.53.1
+
+# Web backend (reply webhooks)
+fastapi==0.115.5
+uvicorn[standard]==0.32.0
+
+# Storage
+sqlite-utils==3.37
+
+# Dev / test
+pytest==8.3.3
+pytest-asyncio==0.24.0
+ruff==0.7.4

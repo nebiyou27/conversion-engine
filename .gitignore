@@ -1,0 +1,48 @@
+# Secrets
+.env
+.env.local
+*.key
+*.pem
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Outputs — runs are per-timestamp and not checked in
+outputs/runs/
+data/cache/
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Licensed seed materials — do not redistribute
+Challenge_Documents/
+
+# Do keep these empty-dir markers
+!outputs/runs/.gitkeep
+!data/cache/.gitkeep
