@@ -250,3 +250,9 @@ Phase 6 — actions layer. Email drafting with tier-inherited mood, channel sele
 **What:** Added a reviewer-facing competitor gap brief under `deliverables/competitor_gap_brief.json` with a matching short markdown summary. The artifact is seed-backed and aligned to the challenge schema, so the submission package now includes the required one-prospect research brief.
 
 **Why this is the right interim state:** The brief is honest about being seed-backed rather than live-scraped, which keeps the package credible while still satisfying the reviewer-facing artifact requirement.
+
+## 2026-04-23 â€” Latency measurement harness
+
+**What:** Added `scripts/measure_email_sms_latency.py` and documented the live-mode command in `README.md`. The script records per-run email send, email reply normalization, SMS send, SMS reply normalization, and total wall-clock timings into a JSONL log plus a summary JSON file.
+
+**Why this is the right measurement shape:** The rubric asks for p50/p95 from real runs of the email + SMS flow. Timing each step separately makes the final report more transparent and gives us a reusable artifact if the reviewers ask how the numbers were derived.

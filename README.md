@@ -59,6 +59,28 @@ python scripts/day0_check.py
 python scripts/run_one_prospect.py
 ```
 
+## Latency Measurement
+
+To collect the rubric-required email + SMS timings, run the dedicated measurement script in live mode:
+
+```bash
+python scripts/measure_email_sms_latency.py --runs 20 --live
+```
+
+Required env vars for live mode:
+
+- `RESEND_API_KEY`
+- `AFRICASTALKING_USERNAME`
+- `AFRICASTALKING_API_KEY`
+- `STAFF_SINK_PHONE_NUMBER`
+
+The script writes:
+
+- `outputs/runs/latency-<timestamp>/latency_log.jsonl`
+- `outputs/runs/latency-<timestamp>/latency_summary.json`
+
+Use the summary file for `p50` and `p95` in the interim report.
+
 ## Key files
 
 - `CLAUDE.md` - architecture, rules, skills index (read first)
