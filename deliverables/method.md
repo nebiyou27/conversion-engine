@@ -45,6 +45,17 @@ That run is written to `outputs/runs/<timestamp>/` for reviewer inspection.
 
 The official baseline artifacts from the challenge documents are checked into the repo deliverables package. They are treated as the source of truth for comparison rather than re-running a new baseline locally.
 
+For the live latency sample, we ran `scripts/measure_email_sms_latency.py --runs 20 --live` and recorded the output under `outputs/runs/latency-20260423-201603/`. The measured totals were:
+
+- p50 total latency: `1.1698s`
+- p95 total latency: `3.5083s`
+- p50 email send: `0.5811s`
+- p95 email send: `2.9272s`
+- p50 SMS send: `0.5725s`
+- p95 SMS send: `0.7749s`
+
+The normalization steps were effectively instantaneous relative to provider send time, which is expected because they are local webhook-shaping functions rather than provider round trips.
+
 ## What Works
 
 - Core evidence, claims, judgment, actions, and gating layers are implemented.
@@ -55,7 +66,6 @@ The official baseline artifacts from the challenge documents are checked into th
 ## What Does Not Yet Work
 
 - The interim PDF still needs to be exported from this draft.
-- The 20-interaction latency sample is not yet collected.
 - The competitor gap brief is present as a reviewer-facing artifact, but it is still seed-backed rather than live-scraped.
 
 ## Remaining-Day Plan

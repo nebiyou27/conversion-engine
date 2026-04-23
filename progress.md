@@ -262,3 +262,9 @@ Phase 6 — actions layer. Email drafting with tier-inherited mood, channel sele
 **What:** Added a `--sink-phone` override to the latency harness so live runs do not depend on `STAFF_SINK_PHONE_NUMBER` being present in `.env`. The harness now cleanly separates the Africa's Talking sender ID from the sink recipient number.
 
 **Why this mattered:** The previous live invocation failed because the SMS wrapper had no sink destination to route to. The override makes the command self-contained and avoids accidental dependence on local env drift.
+
+## 2026-04-23 â€” Live latency sample collected
+
+**What:** Ran `scripts/measure_email_sms_latency.py --runs 20 --live` successfully and captured the live timing summary under `outputs/runs/latency-20260423-201603/`. The measured totals were p50 `1.1698s` and p95 `3.5083s`.
+
+**Why this matters:** This closes the last rubric-required measurement gap in the interim package. The report can now cite real live timing data instead of synthetic estimates.
