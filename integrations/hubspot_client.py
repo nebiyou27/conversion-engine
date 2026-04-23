@@ -27,6 +27,16 @@ def _get_client():
     return HubSpot(access_token=token)
 
 
+def _use_mcp() -> bool:
+    return os.getenv("USE_HUBSPOT_MCP", "false").lower() == "true"
+
+
+def _get_mcp_client():
+    from integrations.hubspot_mcp_client import HubSpotMCPClient
+
+    return HubSpotMCPClient.from_env()
+
+
 def build_contact_properties(
     email: str,
     *,
@@ -90,6 +100,9 @@ def upsert_contact(
         extra=props,
     )
 
+    if _use_mcp():
+        return _get_mcp_client().upsert_contact(email=email, properties=properties)
+
     from hubspot.crm.contacts import SimplePublicObjectInputForCreate
 
     client = _get_client()
@@ -124,6 +137,9 @@ def update_contact(
         booking_status=booking_status,
         extra=props,
     )
+
+    if _use_mcp():
+        return _get_mcp_client().update_contact(contact_id, email=email, properties=properties)
 
     from hubspot.crm.contacts import SimplePublicObjectInput
 

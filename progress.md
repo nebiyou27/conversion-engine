@@ -232,3 +232,9 @@ Phase 6 — actions layer. Email drafting with tier-inherited mood, channel sele
 **Why layoffs stayed CSV-first:** Layoffs data is the cleanest source in the set to keep public and auditable. A CSV fetch path is enough to prove the ingestion contract while staying within the no-login, no-bypass rule.
 
 **Why the helper split matters:** The fixture loader still handles synthetic tests, while the live-facing helper makes the public CSV ingestion path obvious and separately testable. That keeps the repo honest about what is simulated versus externally fetched.
+
+## 2026-04-23 â€” HubSpot MCP route
+
+**What:** Added a remote HubSpot MCP client wrapper for CRM writes and routed `integrations/hubspot_client.py` through it when `USE_HUBSPOT_MCP=true`. The SDK fallback remains in place for local dev, while the MCP path uses the remote server and an auth-app access token.
+
+**Why this is the right compromise:** It gives us a real MCP integration without breaking the current smoke suite or forcing the repo to depend on a live OAuth flow during tests. Reviewers can see both the MCP implementation and the local fallback clearly.

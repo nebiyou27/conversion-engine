@@ -10,6 +10,7 @@ openai==1.54.3
 # External services
 resend==2.4.0
 hubspot-api-client==11.1.0
+mcp==1.26.0
 africastalking==1.2.9
 langfuse==2.53.1
 playwright

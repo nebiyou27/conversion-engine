@@ -19,6 +19,24 @@ raw facts    tiered       interp.     drafts    pre-send
                           claims       citations
 ```
 
+## Rubric Implementation Map
+
+| Rubric component | Files | Test |
+|---|---|---|
+| Outbound Email Handler | `integrations/email_client.py`, `agent/handlers/email.py` | `tests/test_email_handler.py` |
+| SMS Handler | `integrations/sms_client.py`, `agent/handlers/sms.py` | `tests/test_sms_handler.py` |
+| CRM + Calendar | `integrations/hubspot_client.py`, `integrations/hubspot_mcp_client.py`, `agent/actions/schedule.py` | `tests/test_crm_calendar.py`, `tests/test_hubspot_mcp_client.py` |
+| Signal Enrichment | `agent/evidence/sources/*.py`, `agent/evidence/enrichment.py` | `tests/test_signal_enrichment.py` |
+
+## CRM
+
+HubSpot writes now support two paths:
+
+- `USE_HUBSPOT_MCP=true` routes contact create and update operations through the remote HubSpot MCP server at `https://mcp.hubspot.com/`.
+- `HUBSPOT_TOKEN` remains as a local SDK fallback for development and smoke testing.
+
+The MCP route expects an access token minted from a HubSpot MCP auth app. The auth app is created in HubSpot under Development > MCP Auth Apps, and the MCP client uses the remote server with OAuth 2.1 + PKCE outside the agent hot path.
+
 ## Quick start
 
 ```bash

@@ -67,3 +67,64 @@ def test_schedule_discovery_call_updates_hubspot_after_booking(monkeypatch):
     assert [kind for kind, _ in calls] == ["upsert", "book", "record"]
     assert calls[2][1]["booking_id"] == "bk_123"
     assert calls[2][1]["booking_url"] == "https://cal.com/booking/bk_123"
+
+
+def test_hubspot_client_routes_to_mcp_when_enabled(monkeypatch):
+    calls: list[tuple[str, tuple, dict]] = []
+
+    class FakeMCPClient:
+        def upsert_contact(self, *, email: str, properties: dict):
+            calls.append(("upsert", (), {"email": email, "properties": properties}))
+            return "mcp_contact_123"
+
+        def update_contact(self, contact_id: str, *, email: str, properties: dict):
+            calls.append(("update", (contact_id,), {"email": email, "properties": properties}))
+            return contact_id
+
+    monkeypatch.setenv("USE_HUBSPOT_MCP", "true")
+    monkeypatch.setattr(hubspot_client, "_get_mcp_client", lambda: FakeMCPClient())
+    monkeypatch.setattr(hubspot_client, "_get_client", lambda: (_ for _ in ()).throw(AssertionError("SDK path should not be used")))
+
+    contact_id = hubspot_client.upsert_contact(
+        "prospect@example.com",
+        icp_segment="segment_1_series_a_b",
+        signal_enrichment={"job_posts": 3},
+        company_name="Acme",
+    )
+
+    assert contact_id == "mcp_contact_123"
+    assert calls[0][0] == "upsert"
+    assert calls[0][2]["email"] == "prospect@example.com"
+    assert calls[0][2]["properties"]["company"] == "Acme"
+
+
+def test_hubspot_client_routes_booking_updates_to_mcp_when_enabled(monkeypatch):
+    calls: list[tuple[str, tuple, dict]] = []
+
+    class FakeMCPClient:
+        def upsert_contact(self, *, email: str, properties: dict):
+            calls.append(("upsert", (), {"email": email, "properties": properties}))
+            return "mcp_contact_123"
+
+        def update_contact(self, contact_id: str, *, email: str, properties: dict):
+            calls.append(("update", (contact_id,), {"email": email, "properties": properties}))
+            return contact_id
+
+    monkeypatch.setenv("USE_HUBSPOT_MCP", "true")
+    monkeypatch.setattr(hubspot_client, "_get_mcp_client", lambda: FakeMCPClient())
+    monkeypatch.setattr(hubspot_client, "_get_client", lambda: (_ for _ in ()).throw(AssertionError("SDK path should not be used")))
+
+    result = hubspot_client.record_booking(
+        "contact_123",
+        email="prospect@example.com",
+        booking_id="bk_123",
+        booking_url="https://cal.com/booking/bk_123",
+        icp_segment="segment_1_series_a_b",
+        signal_enrichment={"job_posts": 3},
+        company_name="Acme",
+    )
+
+    assert result == "contact_123"
+    assert calls[0][0] == "update"
+    assert calls[0][1] == ("contact_123",)
+    assert calls[0][2]["properties"]["calcom_booking_status"] == "booked"
