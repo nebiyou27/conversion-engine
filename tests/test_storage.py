@@ -49,7 +49,7 @@ def test_claim_roundtrip_references_evidence(conn):
         source_type="jobs", method="fixture",
     )
     cid = db.insert_claim(
-        conn, company_id="acme", assertion="hiring surge",
+        conn, company_id="acme", kind="hiring_surge", assertion="hiring surge",
         tier="corroborated", evidence_ids=[eid],
     )
     claim = db.get_claims(conn, [cid])[0]
@@ -60,7 +60,8 @@ def test_claim_roundtrip_references_evidence(conn):
 
 def test_judgment_references_claims(conn):
     cid = db.insert_claim(
-        conn, company_id="acme", assertion="a", tier="verified", evidence_ids=[],
+        conn, company_id="acme", kind="funding_round", assertion="a",
+        tier="verified", evidence_ids=[],
     )
     jid = db.insert_judgment(
         conn, company_id="acme", kind="icp", value="segment_1",
@@ -74,7 +75,8 @@ def test_judgment_references_claims(conn):
 
 def test_draft_and_gate_report(conn):
     cid = db.insert_claim(
-        conn, company_id="acme", assertion="a", tier="verified", evidence_ids=[],
+        conn, company_id="acme", kind="funding_round", assertion="a",
+        tier="verified", evidence_ids=[],
     )
     did = db.insert_draft(
         conn, company_id="acme", channel="email", path="commitment",
@@ -94,7 +96,7 @@ def test_draft_and_gate_report(conn):
 def test_claim_rejects_invalid_tier(conn):
     with pytest.raises(sqlite3.IntegrityError):
         db.insert_claim(
-            conn, company_id="acme", assertion="x",
+            conn, company_id="acme", kind="funding_round", assertion="x",
             tier="definitely_true",  # not in CHECK list
             evidence_ids=[],
         )

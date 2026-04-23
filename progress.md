@@ -56,6 +56,26 @@ Append-only. Date every entry.
 
 **Why kind lives on Fact but is merged into raw_payload at DB write time:** DB schema has no kind column — raw_payload (JSON) is the right home since kind is source-specific taxonomy. Keeping kind as a typed dataclass field (not buried in payload) makes it visible to future claim-builder code without requiring a schema change now.
 
+## 2026-04-22 — Phase 4: Claims layer
+
+**What:** Tier computation (pure function) + claim builder (DB-aware) that aggregates evidence into tiered assertions. Added `kind` column to claims table with CHECK constraint on the four kinds (funding_round, hiring_surge, leadership_change, layoff_event). 13 tests green — total 39/39.
+
+**Why primary/secondary is claim-relative, not source-relative:** job_posts are the primary signal for "hiring_surge" but only a corroborating secondary signal for "funding_round." A single evidence row can feed multiple claim kinds at different roles. Captured in `PRIMARY`/`SECONDARY` lookup tables in `agent/claims/tiers.py`.
+
+**Why lenient corroborated (≥1 primary + ≥1 other, age≤30d) instead of literal (1 primary + 1 secondary):** Two primaries where the most recent is 10 days old would fall to below_threshold under literal reading — clearly wrong. Under lenient rule, it falls from verified to corroborated on age, which matches intuition. Locked by `test_tier_verified_downgrades_to_corroborated_on_age`.
+
+**Why single-primary-within-7d → inferred (not corroborated, not below_threshold):** Corroboration requires a second source by definition. A lone primary is real evidence but uncorroborated — the honest downstream posture is interrogative mood ("Has Acme finalized the CTO transition?"). Below-threshold would silence evidence that genuinely exists. Locked by `test_tier_single_primary_within_7d_is_inferred` and its aged counterpart.
+
+**Why age clock = event date, not retrieved_at:** What the prospect cares about is fact freshness, not observation freshness. A Series B from 6 months ago is stale regardless of when we scraped the page. Retrieved_at is the fallback only when the source carries no event-date field.
+
+**Why below_threshold claims are persisted, not dropped:** "Invisible to downstream" means judgment/actions/gate filter them out, not that they never touch the DB. The row is an audit trail of "we had evidence but chose not to act." When Phase 5+ starts producing human-queue routing decisions, this history justifies the no-op. `test_builder_persists_below_threshold_claim` locks it.
+
+**Why hiring_surge below 3 postings emits no claim at all (not even below_threshold):** 2 job postings aren't a surge — they're background noise. Emitting below_threshold would pollute the audit log with non-signals. Different from the below_threshold-but-real-signal case (stale funding round), where we DO want the row. Locked by `test_builder_hiring_surge_below_postings_threshold_not_emitted`.
+
+**Why the tier check runs `p==1 ∧ s==0 ∧ age≤7` BEFORE the "p==0 ∧ s≥1" check:** Ordering matters because both branches return INFERRED but represent different epistemic states. Keeping them distinct (not merged) makes future probe categorization easier — we can separately measure "single-source claims" vs "no-primary claims" failure rates.
+
+**Minor Phase-2 extension:** added `kind` column + CHECK to claims table, `kind` param to `db.insert_claim`. Three existing test_storage.py tests updated to pass `kind="funding_round"` etc. Same pattern as tier CHECK; no schema drift.
+
 ## Next up
 
-Phase 4 — claims layer. Evidence → tiered assertions with `verified` / `corroborated` / `inferred` / `below_threshold`. Tier thresholds are time-based; aged-retrieved_at path is already wired for this.
+Phase 5 — judgment layer. ICP and segment classifiers (deterministic, read claims only), plus AI-maturity (LLM-adjudicated with claim_id citations). First LLM call of the project — cost discipline (R10) matters.

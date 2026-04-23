@@ -88,15 +88,16 @@ def insert_claim(
     conn: sqlite3.Connection,
     *,
     company_id: str,
+    kind: str,
     assertion: str,
     tier: str,
     evidence_ids: list[str],
 ) -> str:
     claim_id = _uid()
     conn.execute(
-        "INSERT INTO claims (claim_id, company_id, assertion, tier, built_at, evidence_ids) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
-        (claim_id, company_id, assertion, tier, _now(), json.dumps(evidence_ids)),
+        "INSERT INTO claims (claim_id, company_id, kind, assertion, tier, built_at, evidence_ids) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (claim_id, company_id, kind, assertion, tier, _now(), json.dumps(evidence_ids)),
     )
     conn.commit()
     return claim_id
