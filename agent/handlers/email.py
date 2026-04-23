@@ -1,13 +1,17 @@
 """Outbound email handler and inbound webhook normalization."""
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Any, Callable, Literal
 
 from integrations import email_client
+from agent.runtime import claim_once, log_event, stable_key
 
 EmailEventType = Literal["reply", "bounce", "delivery", "failed", "complaint", "unknown"]
 EmailEventHandler = Callable[["NormalizedEmailEvent"], None]
+
+logger = logging.getLogger(__name__)
 
 
 class EmailHandlerError(Exception):
@@ -64,18 +68,33 @@ def send_outbound_email(to: str, subject: str, html: str) -> str:
     try:
         message_id = email_client.send(to=to, subject=subject, html=html)
     except Exception as exc:  # pragma: no cover - integration-level failure
+        log_event(logger, logging.ERROR, "email_send_error", to=to, subject=subject, error=str(exc))
         raise EmailDeliveryError(f"Outbound email send failed: {exc}") from exc
 
     if not message_id:
         raise EmailDeliveryError("Outbound email send failed: missing message id")
+    log_event(logger, logging.INFO, "email_send_ok", to=to, subject=subject, message_id=message_id)
     return message_id
 
 
 def handle_webhook_payload(payload: Any) -> dict[str, Any]:
     """Normalize an inbound webhook payload and dispatch it downstream."""
     event = _normalize_payload(payload)
+    event_key = _event_key(event)
+
+    if not claim_once("email_webhooks", event_key, payload={"event_type": event.event_type, "message_id": event.message_id}):
+        log_event(logger, logging.INFO, "email_webhook_replayed", event_type=event.event_type, message_id=event.message_id, event_key=event_key)
+        return {
+            "ok": True,
+            "event_type": event.event_type,
+            "message_id": event.message_id,
+            "handled": False,
+            "replayed": True,
+            "event_key": event_key,
+        }
 
     if _EVENT_HANDLER is not None:
+        log_event(logger, logging.INFO, "email_webhook_dispatch", event_type=event.event_type, message_id=event.message_id, event_key=event_key)
         _EVENT_HANDLER(event)
 
     return {
@@ -83,6 +102,8 @@ def handle_webhook_payload(payload: Any) -> dict[str, Any]:
         "event_type": event.event_type,
         "message_id": event.message_id,
         "handled": _EVENT_HANDLER is not None,
+        "replayed": False,
+        "event_key": event_key,
     }
 
 
@@ -141,3 +162,9 @@ def _classify_event_type(raw_event: str) -> EmailEventType:
     if "complaint" in event:
         return "complaint"
     return "unknown"
+
+
+def _event_key(event: NormalizedEmailEvent) -> str:
+    if event.message_id:
+        return stable_key("email", event.event_type, event.message_id)
+    return stable_key("email", event.event_type, event.sender, event.recipient, event.subject, event.body, event.raw)

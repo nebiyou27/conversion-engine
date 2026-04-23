@@ -7,10 +7,12 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from agent.runtime import configure_logging
 from agent.core import run_synthetic_thread
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Run one synthetic prospect thread.")
     parser.add_argument("--fixture", default="data/fixtures/companies/acme_series_b.json")
     parser.add_argument("--output-root", default="outputs/runs")

@@ -69,6 +69,50 @@ def test_schedule_discovery_call_updates_hubspot_after_booking(monkeypatch):
     assert calls[2][1]["booking_url"] == "https://cal.com/booking/bk_123"
 
 
+def test_schedule_discovery_call_skips_duplicate_booking_update(monkeypatch):
+    calls: list[tuple[str, dict]] = []
+
+    def fake_upsert_contact(email: str, **kwargs):
+        calls.append(("upsert", {"email": email, **kwargs}))
+        return "contact_123"
+
+    def fake_record_booking(contact_id: str, **kwargs):
+        calls.append(("record", {"contact_id": contact_id, **kwargs}))
+        return contact_id
+
+    def fake_book_discovery_call(**kwargs):
+        calls.append(("book", kwargs))
+        return _FakeBookingResponse(
+            booking_id="bk_replay_123",
+            booking_url="https://cal.com/booking/bk_replay_123",
+        )
+
+    monkeypatch.setattr(hubspot_client, "upsert_contact", fake_upsert_contact)
+    monkeypatch.setattr(hubspot_client, "record_booking", fake_record_booking)
+    monkeypatch.setattr(calcom_client, "book_discovery_call", fake_book_discovery_call)
+
+    first = schedule_discovery_call(
+        email="prospect@example.com",
+        company_name="Acme",
+        name="Prospect",
+        icp_segment="segment_1_series_a_b",
+        signal_enrichment={"job_posts": 3},
+        booking_endpoint="https://cal.example.test/book",
+    )
+    second = schedule_discovery_call(
+        email="prospect@example.com",
+        company_name="Acme",
+        name="Prospect",
+        icp_segment="segment_1_series_a_b",
+        signal_enrichment={"job_posts": 3},
+        booking_endpoint="https://cal.example.test/book",
+    )
+
+    assert first["hubspot_updated"] is True
+    assert second["hubspot_updated"] is False
+    assert [kind for kind, _ in calls].count("record") == 1
+
+
 def test_hubspot_client_routes_to_mcp_when_enabled(monkeypatch):
     calls: list[tuple[str, tuple, dict]] = []
 

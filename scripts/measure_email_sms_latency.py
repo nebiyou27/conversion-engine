@@ -19,6 +19,7 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 from agent.actions.email_draft import build_commitment_email
 from agent.handlers import email as email_handler
 from agent.handlers import sms as sms_handler
+from agent.runtime import configure_logging
 from integrations import sms_client
 
 
@@ -187,6 +188,7 @@ def _summarize(runs: list[RunLatency]) -> dict[str, Any]:
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Measure email + SMS flow latency.")
     parser.add_argument("--runs", type=int, default=20, help="Number of runs to record.")
     parser.add_argument("--live", action="store_true", help="Use live providers instead of demo mode.")

@@ -70,6 +70,32 @@ def test_sms_webhook_dispatches_reply_event():
     assert seen[0].body == "Thanks, let's talk."
 
 
+def test_sms_webhook_is_idempotent():
+    seen: list[sms_handler.NormalizedSmsEvent] = []
+    previous = sms_handler.register_event_handler(seen.append)
+    try:
+        first = sms_handler.handle_webhook_payload({
+            "event": "inbound.reply",
+            "message_id": "sms_idempotent",
+            "from": "+254700000000",
+            "to": "+254711111111",
+            "text": "Thanks, let's talk.",
+        })
+        second = sms_handler.handle_webhook_payload({
+            "event": "inbound.reply",
+            "message_id": "sms_idempotent",
+            "from": "+254700000000",
+            "to": "+254711111111",
+            "text": "Thanks, let's talk.",
+        })
+    finally:
+        sms_handler.register_event_handler(previous)
+
+    assert first["replayed"] is False
+    assert second["replayed"] is True
+    assert len(seen) == 1
+
+
 def test_sms_webhook_route_returns_400_on_malformed_payload():
     client = TestClient(app)
     response = client.post("/webhooks/sms", json={"message_id": "sms_123"})

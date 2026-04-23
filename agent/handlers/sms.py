@@ -1,13 +1,17 @@
 """SMS handler for warm-lead messaging and inbound replies."""
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Any, Callable, Literal
 
+from agent.runtime import claim_once, log_event, stable_key
 from integrations import sms_client
 
 SmsEventType = Literal["reply", "delivery", "failed", "unknown"]
 SmsEventHandler = Callable[["NormalizedSmsEvent"], None]
+
+logger = logging.getLogger(__name__)
 
 
 class SmsHandlerError(Exception):
@@ -77,8 +81,10 @@ def send_warm_lead_sms(
     try:
         result = sms_client.send_message(to, message, sender_id=sender_id)
     except Exception as exc:  # pragma: no cover - integration-level failure
+        log_event(logger, logging.ERROR, "sms_send_error", to=to, error=str(exc))
         raise SmsDeliveryError(f"Outbound SMS send failed: {exc}") from exc
 
+    log_event(logger, logging.INFO, "sms_send_ok", to=to, sender_id=sender_id, warm_lead=True)
     return {
         "ok": True,
         "channel": "sms",
@@ -90,8 +96,21 @@ def send_warm_lead_sms(
 def handle_webhook_payload(payload: Any) -> dict[str, Any]:
     """Normalize an inbound SMS webhook payload and dispatch it downstream."""
     event = _normalize_payload(payload)
+    event_key = _event_key(event)
+
+    if not claim_once("sms_webhooks", event_key, payload={"event_type": event.event_type, "message_id": event.message_id}):
+        log_event(logger, logging.INFO, "sms_webhook_replayed", event_type=event.event_type, message_id=event.message_id, event_key=event_key)
+        return {
+            "ok": True,
+            "event_type": event.event_type,
+            "message_id": event.message_id,
+            "handled": False,
+            "replayed": True,
+            "event_key": event_key,
+        }
 
     if _EVENT_HANDLER is not None:
+        log_event(logger, logging.INFO, "sms_webhook_dispatch", event_type=event.event_type, message_id=event.message_id, event_key=event_key)
         _EVENT_HANDLER(event)
 
     return {
@@ -99,6 +118,8 @@ def handle_webhook_payload(payload: Any) -> dict[str, Any]:
         "event_type": event.event_type,
         "message_id": event.message_id,
         "handled": _EVENT_HANDLER is not None,
+        "replayed": False,
+        "event_key": event_key,
     }
 
 
@@ -149,3 +170,9 @@ def _classify_event_type(raw_event: str) -> SmsEventType:
     if any(token in event for token in ("fail", "error", "rejected", "blocked")):
         return "failed"
     return "unknown"
+
+
+def _event_key(event: NormalizedSmsEvent) -> str:
+    if event.message_id:
+        return stable_key("sms", event.event_type, event.message_id)
+    return stable_key("sms", event.event_type, event.sender, event.recipient, event.body, event.raw)

@@ -81,6 +81,16 @@ The script writes:
 
 Use the summary file for `p50` and `p95` in the interim report.
 
+## Operational Hardening
+
+The runtime now favors operator visibility and safe replays:
+
+- `LOG_LEVEL` controls structured log verbosity for send attempts, webhook receipt, booking confirmation, and CRM writes.
+- `IDEMPOTENCY_CACHE_DIR` can be set to persist replay protection across restarts. If it is unset, replay protection stays in-memory for the current process.
+- Resend, Africa's Talking, Cal.com, and HubSpot writes use bounded retries with backoff for transient provider failures.
+- Email and SMS webhook handlers reject malformed payloads and ignore duplicate replays.
+- Booking write-backs to HubSpot are replay-safe for the same booking id.
+
 ## Key files
 
 - `CLAUDE.md` - architecture, rules, skills index (read first)

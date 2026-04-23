@@ -2,13 +2,17 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 from datetime import datetime, timezone
 from typing import Any
 
 from dotenv import load_dotenv
+from integrations.retry import retry_call
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 
 def _now() -> str:
@@ -100,16 +104,28 @@ def upsert_contact(
         extra=props,
     )
 
-    if _use_mcp():
-        return _get_mcp_client().upsert_contact(email=email, properties=properties)
+    def _upsert_once() -> str:
+        if _use_mcp():
+            logger.info("hubspot_upsert_attempt mode=mcp email=%s", email)
+            return _get_mcp_client().upsert_contact(email=email, properties=properties)
 
-    from hubspot.crm.contacts import SimplePublicObjectInputForCreate
+        from hubspot.crm.contacts import SimplePublicObjectInputForCreate
 
-    client = _get_client()
-    contact = client.crm.contacts.basic_api.create(
-        SimplePublicObjectInputForCreate(properties=properties)
+        logger.info("hubspot_upsert_attempt mode=sdk email=%s", email)
+        client = _get_client()
+        contact = client.crm.contacts.basic_api.create(
+            SimplePublicObjectInputForCreate(properties=properties)
+        )
+        return contact.id
+
+    contact_id = retry_call(
+        _upsert_once,
+        attempts=3,
+        base_delay_seconds=0.3,
+        operation_name="HubSpot upsert",
     )
-    return contact.id
+    logger.info("hubspot_upsert_success email=%s contact_id=%s", email, contact_id)
+    return contact_id
 
 
 def update_contact(
@@ -138,17 +154,29 @@ def update_contact(
         extra=props,
     )
 
-    if _use_mcp():
-        return _get_mcp_client().update_contact(contact_id, email=email, properties=properties)
+    def _update_once() -> str:
+        if _use_mcp():
+            logger.info("hubspot_update_attempt mode=mcp contact_id=%s", contact_id)
+            return _get_mcp_client().update_contact(contact_id, email=email, properties=properties)
 
-    from hubspot.crm.contacts import SimplePublicObjectInput
+        from hubspot.crm.contacts import SimplePublicObjectInput
 
-    client = _get_client()
-    client.crm.contacts.basic_api.update(
-        contact_id,
-        SimplePublicObjectInput(properties=properties),
+        logger.info("hubspot_update_attempt mode=sdk contact_id=%s", contact_id)
+        client = _get_client()
+        client.crm.contacts.basic_api.update(
+            contact_id,
+            SimplePublicObjectInput(properties=properties),
+        )
+        return contact_id
+
+    updated_contact_id = retry_call(
+        _update_once,
+        attempts=3,
+        base_delay_seconds=0.3,
+        operation_name="HubSpot update",
     )
-    return contact_id
+    logger.info("hubspot_update_success contact_id=%s email=%s", contact_id, email)
+    return updated_contact_id
 
 
 def record_booking(

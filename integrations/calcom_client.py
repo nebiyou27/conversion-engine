@@ -1,6 +1,7 @@
 """Cal.com booking wrapper."""
 from __future__ import annotations
 
+import logging
 import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -8,8 +9,11 @@ from typing import Any
 
 import requests
 from dotenv import load_dotenv
+from integrations.retry import retry_call
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 
 def _now() -> str:
@@ -31,6 +35,14 @@ class BookingResult:
     scheduled_start: str | None
     scheduled_end: str | None
     raw: dict[str, Any]
+
+
+class CalcomBookingError(RuntimeError):
+    """Raised when Cal.com rejects a booking request."""
+
+
+class CalcomTransientError(CalcomBookingError):
+    """Raised when Cal.com fails with a retryable transport or server error."""
 
 
 def book_discovery_call(
@@ -75,9 +87,26 @@ def book_discovery_call(
         headers["Authorization"] = f"Bearer {api_key}"
 
     requester = session or requests
-    response = requester.post(url, json=payload, headers=headers, timeout=30)
-    if response.status_code >= 400:
-        raise RuntimeError(f"Cal.com booking failed: {response.status_code} {response.text}")
+
+    def _post_once() -> requests.Response:
+        logger.info("calcom_booking_attempt endpoint=%s email=%s", url, email)
+        try:
+            response = requester.post(url, json=payload, headers=headers, timeout=30)
+        except requests.RequestException as exc:  # pragma: no cover - network dependent
+            raise CalcomTransientError(f"Cal.com booking transport failed: {exc}") from exc
+        if response.status_code >= 500:
+            raise CalcomTransientError(f"Cal.com booking failed: {response.status_code} {response.text}")
+        if response.status_code >= 400:
+            raise CalcomBookingError(f"Cal.com booking failed: {response.status_code} {response.text}")
+        return response
+
+    response = retry_call(
+        _post_once,
+        attempts=3,
+        base_delay_seconds=0.3,
+        retry_on=(CalcomTransientError,),
+        operation_name="Cal.com booking",
+    )
 
     data = response.json() if response.content else {}
     booking_id = str(data.get("booking_id") or data.get("id") or data.get("uid") or "")
@@ -91,6 +120,8 @@ def book_discovery_call(
         booking_id = f"calcom-{int(datetime.now(timezone.utc).timestamp())}"
     if not booking_url:
         booking_url = os.getenv("CALCOM_BOOKING_URL", url)
+
+    logger.info("calcom_booking_success endpoint=%s booking_id=%s", url, booking_id)
 
     return BookingResult(
         booking_id=booking_id,
