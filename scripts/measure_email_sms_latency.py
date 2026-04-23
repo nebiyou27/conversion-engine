@@ -19,6 +19,7 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 from agent.actions.email_draft import build_commitment_email
 from agent.handlers import email as email_handler
 from agent.handlers import sms as sms_handler
+from integrations import sms_client
 
 
 @dataclass(frozen=True)
@@ -71,6 +72,14 @@ def _resolve_sink_phone(override: str | None) -> str:
         "STAFF_SINK_PHONE_NUMBER is required for live latency measurement "
         "(pass --sink-phone or set it in .env)"
     )
+
+
+def _configure_sms_sink(sink_phone: str | None) -> str | None:
+    resolved = _resolve_sink_phone(sink_phone)
+    sms_client._SINK = resolved  # type: ignore[attr-defined]
+    sms_handler.sms_client._SINK = resolved  # type: ignore[attr-defined]
+    os.environ["STAFF_SINK_PHONE_NUMBER"] = resolved
+    return resolved
 
 
 def _build_email_subject(company_name: str) -> str:
@@ -200,7 +209,7 @@ def main() -> int:
         _require_env("RESEND_API_KEY")
         _require_env("AT_USERNAME", "AFRICASTALKING_USERNAME")
         _require_env("AT_API_KEY", "AFRICASTALKING_API_KEY")
-        _resolve_sink_phone(args.sink_phone)
+        _configure_sms_sink(args.sink_phone)
 
     output_dir = Path(args.output_dir) / f"latency-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')}"
     output_dir.mkdir(parents=True, exist_ok=True)
