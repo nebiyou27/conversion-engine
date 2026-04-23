@@ -178,3 +178,42 @@ These are failure modes the architecture does NOT solve. Naming them prevents ac
 ## Next up
 
 Phase 6 — actions layer. Email drafting with tier-inherited mood, channel selection, scheduling. The competitor_gap stub will be filled when peer-company fixtures or live scraping ships.
+## 2026-04-23 â€” Interim submission packaging
+
+**What:** Imported the official baseline artifacts from `Challenge_Documents/` into the repo deliverables package: `deliverables/baseline.md`, `eval/score_log.json`, and `eval/trace_log.jsonl`. Added `submission_checklist.md` as a local working tracker and ignored it in `.gitignore` so it stays out of the submission bundle.
+
+**Why the challenge artifacts became the source of truth:** The tutor-provided baseline is the official comparison point for submission. Re-running our own baseline would only create noise and a risk of mismatched numbers. Copying the provided artifacts keeps the submission honest and aligned with the rubric.
+
+**Why the checklist lives locally only:** The checklist is an execution aid, not a reviewer artifact. Ignoring it avoids accidental submission of an internal progress tracker.
+
+## 2026-04-23 â€” CRM + calendar bridge
+
+**What:** Upgraded the CRM/calendar path so HubSpot writes include ICP segment classification, signal enrichment payloads, enrichment timestamp, and booking state. Added a callable Cal.com booking wrapper and a scheduling action that books a discovery call and then writes the booking back to the same HubSpot prospect record. Added contract tests covering the handoff.
+
+**Why the booking bridge matters:** The rubric does not just want a booking API wrapper; it wants the booking event to be traceable back into CRM for the same prospect. The scheduling action makes that relationship explicit instead of leaving it to caller discipline.
+
+**Why the CRM payload is richer than identity-only contact data:** The prospect record needs to carry the same evidence context the agent used for the outreach decision. Segment, enrichment data, and timestamps make the CRM record an audit artifact instead of a bare address book entry.
+
+## 2026-04-23 â€” Signal enrichment pipeline
+
+**What:** Added a reviewer-facing structured enrichment artifact at `agent/evidence/enrichment.py` and added live-facing helper entrypoints for Crunchbase ODM lookup, Playwright job-post scraping, layoffs.fyi CSV parsing, and leadership-change normalization. Added contract tests that prove the artifact carries per-signal confidence scores and that the source helpers parse representative inputs.
+
+**Why the enrichment artifact sits above the evidence layer:** The raw loaders still do one job each â€” emit facts. The new artifact is a separate reviewer-facing summary that turns those facts into a structured, per-signal view without collapsing the provenance trail.
+
+**Why the live-facing helper names matter:** The rubric asked for concrete pipeline coverage, so the helper entrypoints name the real acquisition mode directly instead of hiding behind fixture-only loader names. That keeps the code honest about what is still synthetic and what is ready to be wired to approved live inputs.
+
+## 2026-04-23 â€” SMS warm-lead channel
+
+**What:** Implemented the SMS handler path with an Africa's Talking wrapper, inbound webhook normalization, a downstream event callback, and a warm-lead gate that blocks cold outreach. Added the channel-selection helper and FastAPI route wiring, plus contract tests for outbound and inbound SMS behavior.
+
+**Why SMS is gated behind prior email reply:** SMS is treated as a warm-lead channel, not a cold-outreach channel. The gate makes that hierarchy explicit in code so the caller cannot accidentally bypass it.
+
+**Why the webhook route normalizes payloads instead of dead-ending:** Inbound replies need a downstream interface, even if the immediate consumer is just a callback. Normalization gives the rest of the system a stable provider-neutral event shape.
+
+## 2026-04-23 â€” Synthetic end-to-end thread
+
+**What:** Added a demo orchestrator in `agent/core.py` plus a CLI runner at `scripts/run_one_prospect.py` that executes one full synthetic prospect thread: evidence collection, claim building, judgment, citation-backed email draft, gate pass, outbound send, inbound reply normalization, qualification, scheduling, HubSpot update, and Cal.com booking. The script writes a run artifact under `outputs/runs/<timestamp>/`.
+
+**Why the demo thread is synthetic but still useful:** The rubric wants one complete thread, and the safest way to prove it without depending on live credentials is to make the thread runnable in demo mode while preserving the same step ordering and artifact shape. That keeps the evidence honest and repeatable.
+
+**Why the gate needed one extra signature exception:** The first pass correctly rejected the signature line as a “factual sentence.” Treating the project signature as a signature, not a claim, keeps citation enforcement strict without making normal email signoffs impossible.

@@ -43,6 +43,7 @@ submission_checklist.md
 
 # Licensed seed materials — do not redistribute
 Challenge_Documents/
+data/tenacious_sales_data/
 data/bench/bench_summary.json
 
 # Do keep these empty-dir markers
