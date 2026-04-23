@@ -17,12 +17,13 @@ CREATE TABLE IF NOT EXISTS claims (
     claim_id      TEXT PRIMARY KEY,
     company_id    TEXT NOT NULL,
     kind          TEXT NOT NULL
-                  CHECK(kind IN ('funding_round','hiring_surge','leadership_change','layoff_event')),
+                  CHECK(kind IN ('funding_round','hiring_surge','leadership_change','layoff_event','company_metadata')),
     assertion     TEXT NOT NULL,
     tier          TEXT NOT NULL
                   CHECK(tier IN ('verified','corroborated','inferred','below_threshold')),
     built_at      TEXT NOT NULL,
-    evidence_ids  TEXT NOT NULL
+    evidence_ids  TEXT NOT NULL,
+    payload       TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_claims_company ON claims(company_id);
 CREATE INDEX IF NOT EXISTS idx_claims_tier    ON claims(tier);

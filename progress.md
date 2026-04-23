@@ -118,6 +118,50 @@ These are failure modes the architecture does NOT solve. Naming them prevents ac
 - **Job-title-aware signal mining.** Current claims layer counts job posts; titles are stored in payload but not yet used for segment-relevant feature extraction. Phase 5 judgment may add this; flagged here as known omission, not bug.
 - **Leadership-state aging philosophical correctness.** Treating "new CTO" as decay-eligible at >7d is a defensible approximation, not a real epistemic stance. Real fix would split `leadership_change` (fact, doesn't decay) from `leadership_transition_window` (judgment, decays fast). Deferred.
 
+## 2026-04-23 — Seed materials reconciliation (pre-Phase-5)
+
+**What:** Tenacious seed pack (`Challenge_Documents/tenacious_sales_data/seed/`) resolved three open questions and forced six adjustments against Phase-4 assumptions. Architecture unchanged — only constants, thresholds, and output shapes.
+
+**Open questions closed by seed:**
+- **AI maturity scoring** → structured object, not bare integer. Schema: `{score, confidence, justifications: [{signal, status, weight, confidence, source_url}, ...]}`. Six named signals: `ai_adjacent_open_roles`, `named_ai_ml_leadership`, `github_org_activity`, `executive_commentary`, `modern_data_ml_stack`, `strategic_communications`. Closes the Phase-0 "per-signal justification weights" gap.
+- **Segment priority on multi-match** → 5-step ladder: (1) layoff+funding → S2, (2) new CTO → S3, (3) capability gap + AI≥2 → S4, (4) funding alone → S1, (5) otherwise abstain. Deterministic classifier, no LLM.
+- **Abstain threshold** → `segment_confidence < 0.6`. Was deferred as "thin input → abstain" without a number; now explicit.
+
+**Six adjustments vs Phase-4 assumptions:**
+
+1. **S2 layoff-overrides-funding window is 120 days**, not "recent." Segment classifier must match the 120d window on `layoff_event` + fresh `funding_round`.
+2. **Hiring surge threshold split:** claims-layer `HIRING_SURGE_MIN_POSTINGS = 3` stays (the assertion is still real at 3 postings). **Segment 1 qualification requires ≥5 open eng roles** — a judgment-layer filter on top of the claim, not a change to the claim tier. S2's post-layoff "≥3 open eng roles" matches the existing constant.
+3. **S3 is narrower than the doc implied:** CTO/VP Eng change within 90 days AND headcount 50–500 AND no concurrent CFO/CEO transition. All three are judgment-layer filters on `leadership_change` claims.
+4. **AI maturity output is fixed by schema** — prompt must return the justifications array, not a scalar. LLM wrapper already returns strings; prompt + response parser own the structured shape.
+5. **Bench is real now.** Code reads `Challenge_Documents/tenacious_sales_data/seed/bench_summary.json` (36 engineers, 7 stacks, `fullstack_nestjs` committed to Modo Compass through Q3 2026). The Phase-4 example file becomes a placeholder-only demo. Availability claims must respect the committed-stack flag.
+6. **Forbidden phrases list is authoritative, not hand-rolled.** Phase-7 `forbidden_phrases.py` codes against the seed style guide: "top talent," "world-class," "A-players," "rockstar," "ninja," unsubstantiated "cost savings," "bench" in prospect-facing text, plus subject-line and signature rules. Defers the rich regex list to Phase 7 but locks the source-of-truth now.
+
+**Why these are constants-in-code, not live reads of seed files:** The seed pack is a one-time input. Translating its rules into constants in `agent/judgment/` and one bench-loader in `agent/evidence/sources/bench.py` keeps the judgment layer testable without file-system coupling. Exception: `bench_summary.json` is read at runtime because availability is a live fact, not a rule.
+
+**New artifacts not yet read (non-blocking for Phase 5):**
+- `schemas/competitor_gap_brief.schema.json` — Segment 4's output contract; Phase 5 `competitor_gap.py` can stub until Phase 6 needs it
+- `schemas/discovery_call_context_brief.md` — Phase 8 integration point for Cal.com booking
+- `seed/email_sequences/{cold,warm,reengagement}.md` — Phase 6 prompt inputs
+- 5 discovery transcripts — optional few-shot grounding for Phase 6
+
+## 2026-04-23 — Phase 5: Judgment layer
+
+**What:** Four judgment modules implemented. `segment.py` (deterministic 5-step ladder), `icp.py` (thin DB-writing wrapper), `competitor_gap.py` (schema-valid stub), `ai_maturity.py` (LLM-adjudicated scorer with parser). Plus rubric prompt at `agent/prompts/ai_maturity_rubric.md`. 28 new tests in `tests/test_judgment.py`. Total: 86/86 green (target was ~70).
+
+**Why the 5-step ladder is priority-ordered, not scored:** The ICP definition specifies strict priority: S2 dominates S1, S3 dominates S4. A scoring approach (sum weights, pick highest) would violate this — a company with a perfect S1 score but a marginal S2 layoff signal should still be S2. The ladder encodes priority as code structure (return on first match), not as weights that could be gamed by implementation drift.
+
+**Why competitor_gap.py ships as a stub:** The competitor_gap_brief schema requires 5–10 peer companies scored on the same AI maturity rubric. This requires either live web scraping (not shipped yet) or a fixture pack of peer-company data (not in scope for Phase 5). The stub returns a schema-valid empty shape so downstream code can depend on the type contract without crashing. Honest: `gap_quality_self_check.all_peer_evidence_has_source_url = false`.
+
+**Why ai_maturity.py exposes `parse_response()` as a public function:** The parser/validator is the testable surface — 12 tests exercise it against canned JSON without any LLM calls. The `judge()` function (which calls the LLM) is integration-tested separately. This separation keeps the 86-test suite free of network/cost dependencies.
+
+**Why absent signals get weight ≤ "low" and unknown gets weight 0:** This is the Phase 5 decision on the memo's open question about absence semantics. "Absent" means we looked and found nothing — that IS weak evidence (a company with zero AI job postings probably isn't doing AI). "Unknown" means we couldn't check — that's missing data, not evidence of absence. The distinction prevents false-negative AI maturity scores from blocking S4 pitches to companies we simply haven't fully scraped yet.
+
+**Bonus fix: builder now persists claim payload.** `_build_payload()` existed in `agent/claims/builder.py` but was never passed to `db.insert_claim`. The judgment layer needs structured payload data (amounts, dates, headcounts) to classify segments. One-line fix: added `payload=_build_payload(kind, relevant)` to the insert call. All existing claims tests still pass — the payload column was always nullable.
+
+**Why segment confidence uses filter-count, not tier-weight:** Confidence = (qualifying filters fired) / (total qualifying filters for that segment). Simple, auditable, and matches the ICP definition's instruction: "confidence based on how many qualifying filters fired versus how many relied on weak or inferred signals." Tier bonuses (+0.05 per verified/corroborated claim) are additive — they reward evidence quality without dominating filter-count.
+
+**Evidence test fix:** `test_collector_round_trip_via_db` and `test_collector_ignores_underscore_prefixed_keys` expected 5 evidence rows; now expect 6 after the company_metadata fixture addition in Phase 4.5.
+
 ## Next up
 
-Phase 5 — judgment layer. ICP and segment classifiers (deterministic, read claims only), plus AI-maturity (LLM-adjudicated via `integrations/llm.complete` with claim_id citations). Cost discipline lever now wired (R10).
+Phase 6 — actions layer. Email drafting with tier-inherited mood, channel selection, scheduling. The competitor_gap stub will be filled when peer-company fixtures or live scraping ships.

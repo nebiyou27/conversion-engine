@@ -12,13 +12,16 @@ BELOW_THRESHOLD = "below_threshold"
 
 ALL_TIERS = (VERIFIED, CORROBORATED, INFERRED, BELOW_THRESHOLD)
 
-CLAIM_KINDS = ("funding_round", "hiring_surge", "leadership_change", "layoff_event")
+CLAIM_KINDS = (
+    "funding_round", "hiring_surge", "leadership_change", "layoff_event", "company_metadata",
+)
 
 PRIMARY: dict[str, frozenset[str]] = {
     "funding_round":     frozenset({"crunchbase"}),
     "hiring_surge":      frozenset({"job_posts"}),
     "leadership_change": frozenset({"leadership"}),
     "layoff_event":      frozenset({"layoffs"}),
+    "company_metadata":  frozenset({"company_metadata"}),
 }
 
 SECONDARY: dict[str, frozenset[str]] = {
@@ -26,6 +29,7 @@ SECONDARY: dict[str, frozenset[str]] = {
     "hiring_surge":      frozenset({"crunchbase"}),
     "leadership_change": frozenset(),
     "layoff_event":      frozenset(),
+    "company_metadata":  frozenset(),
 }
 
 VERIFIED_MAX_AGE_DAYS = 7

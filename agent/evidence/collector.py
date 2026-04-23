@@ -6,14 +6,21 @@ from __future__ import annotations
 
 import sqlite3
 
-from agent.evidence.sources import crunchbase, job_posts, layoffs, leadership
+from agent.evidence.sources import (
+    company_metadata,
+    crunchbase,
+    job_posts,
+    layoffs,
+    leadership,
+)
 from storage import db
 
 _LOADERS = {
-    "crunchbase": crunchbase.load,
-    "job_posts":  job_posts.load,
-    "layoffs":    layoffs.load,
-    "leadership": leadership.load,
+    "crunchbase":       crunchbase.load,
+    "job_posts":        job_posts.load,
+    "layoffs":          layoffs.load,
+    "leadership":       leadership.load,
+    "company_metadata": company_metadata.load,
 }
 
 

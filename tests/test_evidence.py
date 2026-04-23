@@ -101,12 +101,12 @@ def test_fact_without_source_url_raises():
 
 def test_collector_round_trip_via_db(conn, acme_fixture):
     ids = collector.collect(acme_fixture, conn)
-    # 1 crunchbase + 3 job_posts + 0 layoffs + 1 leadership = 5
-    assert len(ids) == 5
+    # 1 crunchbase + 3 job_posts + 0 layoffs + 1 leadership + 1 company_metadata = 6
+    assert len(ids) == 6
 
     rows = db.get_evidence(conn, ids)
-    assert len(rows) == 5
-    assert {r["source_type"] for r in rows} == {"crunchbase", "job_posts", "leadership"}
+    assert len(rows) == 6
+    assert {r["source_type"] for r in rows} == {"crunchbase", "job_posts", "leadership", "company_metadata"}
     assert all(r["company_id"] == "acme" for r in rows)
     assert all(r["method"] == "fixture" for r in rows)
     assert all(r["source_url"].startswith("https://example.com/") for r in rows)
@@ -141,4 +141,4 @@ def test_collector_ignores_underscore_prefixed_keys(conn, acme_fixture):
     # _note at the fixture root is not in sources; make sure _-prefixed section keys are skipped too.
     acme_fixture["sources"]["_provenance"] = {"anything": "that would crash a loader"}
     ids = collector.collect(acme_fixture, conn)
-    assert len(ids) == 5  # same as clean run; _provenance was skipped
+    assert len(ids) == 6  # same as clean run; _provenance was skipped

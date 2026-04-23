@@ -92,12 +92,17 @@ def insert_claim(
     assertion: str,
     tier: str,
     evidence_ids: list[str],
+    payload: dict | None = None,
 ) -> str:
     claim_id = _uid()
     conn.execute(
-        "INSERT INTO claims (claim_id, company_id, kind, assertion, tier, built_at, evidence_ids) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?)",
-        (claim_id, company_id, kind, assertion, tier, _now(), json.dumps(evidence_ids)),
+        "INSERT INTO claims (claim_id, company_id, kind, assertion, tier, built_at, "
+        "evidence_ids, payload) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (
+            claim_id, company_id, kind, assertion, tier, _now(),
+            json.dumps(evidence_ids),
+            json.dumps(payload) if payload is not None else None,
+        ),
     )
     conn.commit()
     return claim_id

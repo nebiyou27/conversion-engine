@@ -45,6 +45,12 @@
         "headcount": 35,
         "source_url": "https://example.com/news/contradicted-co-layoff-report"
       }
-    ]
+    ],
+    "company_metadata": {
+      "headcount": 1200,
+      "hq_country": "United States",
+      "founded_year": 2015,
+      "source_url": "https://example.com/crunchbase/contradicted-co"
+    }
   }
 }

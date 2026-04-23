@@ -36,6 +36,12 @@
         "source_url": "https://example.com/news/acme-new-cto"
       }
     ],
-    "layoffs": []
+    "layoffs": [],
+    "company_metadata": {
+      "headcount": 50,
+      "hq_country": "United States",
+      "founded_year": 2021,
+      "source_url": "https://example.com/crunchbase/acme"
+    }
   }
 }
