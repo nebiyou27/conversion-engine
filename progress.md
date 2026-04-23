@@ -224,3 +224,11 @@ Phase 6 — actions layer. Email drafting with tier-inherited mood, channel sele
 **Why the factory hook matters:** The live scraping path needs to be usable in production and still testable without a real browser in CI. Injecting the factory lets us verify the browser flow without depending on the external package being installed in the test runner.
 
 **Why this is the first live source to wire:** Job posts are the most obviously routeable signal in the enrichment set and the least ambiguous to validate with rendered HTML. That makes it the right place to start before tackling the more source-specific CSV and ODM paths.
+
+## 2026-04-23 â€” Layoffs CSV wiring
+
+**What:** Added a live-facing layoffs CSV entrypoint with a `fetch_layoffs_csv()` helper and a `load_live_layoffs_csv()` alias. The parser now has a fetch layer that reads public CSV text without any login or captcha-bypass logic, and the enrichment tests cover the fetch path.
+
+**Why layoffs stayed CSV-first:** Layoffs data is the cleanest source in the set to keep public and auditable. A CSV fetch path is enough to prove the ingestion contract while staying within the no-login, no-bypass rule.
+
+**Why the helper split matters:** The fixture loader still handles synthetic tests, while the live-facing helper makes the public CSV ingestion path obvious and separately testable. That keeps the repo honest about what is simulated versus externally fetched.

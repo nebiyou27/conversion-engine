@@ -35,6 +35,22 @@ class _FakeSession:
         return self.response
 
 
+class _FakeCsvSession:
+    def __init__(self, text: str):
+        self.text = text
+        self.last_url: str | None = None
+
+    def get(self, url: str, timeout: int = 30):
+        self.last_url = url
+        return _FakeTextResponse(self.text)
+
+
+@dataclass
+class _FakeTextResponse:
+    text: str
+    status_code: int = 200
+
+
 class _FakePage:
     def __init__(self, html: str):
         self._html = html
@@ -187,6 +203,20 @@ def test_layoffs_csv_parser_emits_facts():
     assert len(facts) == 1
     assert facts[0].kind == "layoff_event"
     assert "12" in facts[0].summary
+
+
+def test_layoffs_csv_fetcher_parses_public_csv():
+    session = _FakeCsvSession("company,date,laid_off,source_url\nAcme,2026-04-10,12,https://example.com/layoffs/acme\n")
+
+    facts = layoffs.fetch_layoffs_csv(
+        "https://layoffs.fyi/public.csv",
+        company_id="acme",
+        session=session,
+    )
+
+    assert session.last_url == "https://layoffs.fyi/public.csv"
+    assert len(facts) == 1
+    assert facts[0].source_type == "layoffs"
 
 
 def test_leadership_detection_normalizes_dict_input():

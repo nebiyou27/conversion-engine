@@ -83,3 +83,33 @@ def parse_layoffs_csv(
             method="csv",
         ))
     return facts
+
+
+def load_live_layoffs_csv(
+    csv_text: str,
+    *,
+    company_id: str,
+    source_url: str = "https://layoffs.fyi",
+) -> list[Fact]:
+    """Live-facing alias for layoffs.fyi CSV ingestion."""
+    return parse_layoffs_csv(csv_text, company_id=company_id, source_url=source_url)
+
+
+def fetch_layoffs_csv(
+    url: str,
+    *,
+    company_id: str,
+    session: Any | None = None,
+) -> list[Fact]:
+    """Fetch layoffs.fyi CSV content and parse it.
+
+    This keeps scraping limited to public CSV retrieval with no login or
+    captcha-bypass logic.
+    """
+    import requests
+
+    requester = session or requests
+    response = requester.get(url, timeout=30)
+    if response.status_code >= 400:
+        raise RuntimeError(f"Layoffs CSV fetch failed: {response.status_code} {response.text}")
+    return parse_layoffs_csv(response.text, company_id=company_id, source_url=url)
