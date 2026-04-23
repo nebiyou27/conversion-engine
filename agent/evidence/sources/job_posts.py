@@ -118,13 +118,13 @@ def scrape_job_posts(
     company_id: str,
     page: Any | None = None,
     playwright: Any | None = None,
+    playwright_factory: Any | None = None,
     max_posts: int = 25,
 ) -> list[Fact]:
     """Scrape a public jobs page using Playwright with no login or captcha bypass."""
     if page is None:
         if playwright is None:
-            from playwright.sync_api import sync_playwright
-            playwright = sync_playwright()
+            playwright = (playwright_factory or _sync_playwright_factory)()
 
         with playwright as p:
             browser = p.chromium.launch(headless=True)
@@ -145,3 +145,28 @@ def scrape_job_posts(
         source_url=url,
         max_posts=max_posts,
     )
+
+
+def load_live_job_posts(
+    url: str,
+    *,
+    company_id: str,
+    max_posts: int = 25,
+    playwright_factory: Any | None = None,
+) -> list[Fact]:
+    """Live-facing alias for Playwright-based job-post scraping."""
+    return scrape_job_posts(
+        url,
+        company_id=company_id,
+        playwright_factory=playwright_factory,
+        max_posts=max_posts,
+    )
+
+
+def _sync_playwright_factory():
+    try:
+        from playwright.sync_api import sync_playwright
+    except ModuleNotFoundError as exc:  # pragma: no cover - environment dependent
+        raise RuntimeError("playwright package is not installed") from exc
+
+    return sync_playwright()

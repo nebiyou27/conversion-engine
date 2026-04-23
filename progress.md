@@ -217,3 +217,10 @@ Phase 6 — actions layer. Email drafting with tier-inherited mood, channel sele
 **Why the demo thread is synthetic but still useful:** The rubric wants one complete thread, and the safest way to prove it without depending on live credentials is to make the thread runnable in demo mode while preserving the same step ordering and artifact shape. That keeps the evidence honest and repeatable.
 
 **Why the gate needed one extra signature exception:** The first pass correctly rejected the signature line as a “factual sentence.” Treating the project signature as a signature, not a claim, keeps citation enforcement strict without making normal email signoffs impossible.
+## 2026-04-23 â€” Job-post source wiring
+
+**What:** Tightened the job-post source so the Playwright path is a first-class live entrypoint instead of just a parsing helper. Added a configurable Playwright factory hook for testability, a live-facing `load_live_job_posts()` alias, and a browser-automation dependency entry in `requirements.txt`.
+
+**Why the factory hook matters:** The live scraping path needs to be usable in production and still testable without a real browser in CI. Injecting the factory lets us verify the browser flow without depending on the external package being installed in the test runner.
+
+**Why this is the first live source to wire:** Job posts are the most obviously routeable signal in the enrichment set and the least ambiguous to validate with rendered HTML. That makes it the right place to start before tackling the more source-specific CSV and ODM paths.

@@ -47,6 +47,46 @@ class _FakePage:
         return self._html
 
 
+class _FakeBrowser:
+    def __init__(self, html: str):
+        self._page = _FakePage(html)
+        self.closed = False
+
+    def new_page(self):
+        return self._page
+
+    def close(self):
+        self.closed = True
+
+
+class _FakeChromium:
+    def __init__(self, html: str):
+        self._html = html
+        self.last_launch_kwargs: dict | None = None
+
+    def launch(self, **kwargs):
+        self.last_launch_kwargs = kwargs
+        return _FakeBrowser(
+            """
+            <html><body>
+              <a href="https://example.com/jobs/acme/staff">Staff Backend Engineer</a>
+              <a href="https://example.com/about">About us</a>
+            </body></html>
+            """
+        )
+
+
+class _FakePlaywright:
+    def __init__(self, html: str):
+        self.chromium = _FakeChromium(html)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+
 def _conn(tmp_path):
     c = db.connect(tmp_path / "test.db")
     db.init(c)
@@ -120,6 +160,22 @@ def test_job_posts_playwright_helper_parses_rendered_html():
     assert len(facts) == 1
     assert facts[0].kind == "job_posting"
     assert "Staff Backend Engineer" in facts[0].summary
+
+
+def test_job_posts_playwright_factory_wires_browser_path():
+    fake = _FakePlaywright("")
+
+    facts = job_posts.scrape_job_posts(
+        "https://example.com/careers",
+        company_id="acme",
+        playwright_factory=lambda: fake,
+        max_posts=5,
+    )
+
+    assert fake.chromium.last_launch_kwargs == {"headless": True}
+    assert len(facts) == 1
+    assert facts[0].source_type == "job_posts"
+    assert facts[0].source_url == "https://example.com/jobs/acme/staff"
 
 
 def test_layoffs_csv_parser_emits_facts():
