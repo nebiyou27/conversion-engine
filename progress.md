@@ -238,3 +238,9 @@ Phase 6 — actions layer. Email drafting with tier-inherited mood, channel sele
 **What:** Added a remote HubSpot MCP client wrapper for CRM writes and routed `integrations/hubspot_client.py` through it when `USE_HUBSPOT_MCP=true`. The SDK fallback remains in place for local dev, while the MCP path uses the remote server and an auth-app access token.
 
 **Why this is the right compromise:** It gives us a real MCP integration without breaking the current smoke suite or forcing the repo to depend on a live OAuth flow during tests. Reviewers can see both the MCP implementation and the local fallback clearly.
+
+## 2026-04-23 â€” Submission report draft
+
+**What:** Added `deliverables/method.md` as a PDF-ready interim report draft and refreshed the README status line so it reflects the current implementation state instead of the early scaffold stage.
+
+**Why this is the right packaging step:** The report draft makes the remaining submission work concrete. We can now export a real interim PDF from a current artifact instead of writing the narrative from scratch at the end.

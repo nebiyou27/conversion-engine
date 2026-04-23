@@ -4,19 +4,19 @@ AI agent for automated, evidence-backed sales outreach on behalf of Tenacious Co
 
 ## Status
 
-Phase 0 complete — repo scaffolded. Day 0 smoke tests and Acts I–II work in progress.
+Core implementation is in place. Evidence, judgment, actions, gating, SMS, CRM/calendar, and MCP routing are all wired; the remaining work is submission packaging and final report polish.
 
-See `PRD.md` for acceptance criteria and `progress.md` for decision log.
+See `PRD.md` for acceptance criteria and `progress.md` for the decision log.
 
 ## Architecture
 
-Epistemic layering — the system is organized by the kind of truth claim each layer handles, not by function. See `CLAUDE.md` Section 2 for the full contract.
+Epistemic layering - the system is organized by the kind of truth claim each layer handles, not by function. See `CLAUDE.md` Section 2 for the full contract.
 
 ```
-EVIDENCE  →  CLAIMS  →  JUDGMENT  →  ACTIONS  →  GATE
-raw facts    tiered       interp.     drafts    pre-send
-             assertions   over         with      validation
-                          claims       citations
+EVIDENCE  ->  CLAIMS  ->  JUDGMENT  ->  ACTIONS  ->  GATE
+raw facts     tiered      interp.     drafts     pre-send
+              assertions  over        with       validation
+                          claims      citations
 ```
 
 ## Rubric Implementation Map
@@ -30,7 +30,7 @@ raw facts    tiered       interp.     drafts    pre-send
 
 ## CRM
 
-HubSpot writes now support two paths:
+HubSpot writes support two paths:
 
 - `USE_HUBSPOT_MCP=true` routes contact create and update operations through the remote HubSpot MCP server at `https://mcp.hubspot.com/`.
 - `HUBSPOT_TOKEN` remains as a local SDK fallback for development and smoke testing.
@@ -56,16 +56,16 @@ cp .env.example .env
 python scripts/day0_check.py
 
 # 5. Run a single end-to-end prospect
-python scripts/run_one_prospect.py  # (Phase 8 — not yet implemented)
+python scripts/run_one_prospect.py
 ```
 
 ## Key files
 
-- `CLAUDE.md` — architecture, rules, skills index (read first)
-- `PRD.md` — what we're building + acceptance criteria
-- `progress.md` — decision log
-- `deliverables/` — reviewer-facing artifacts (baseline, method, memo)
-- `.claude/skills/` — project-scoped skills: `claim-audit`, `probe-author`, `gate-check`
+- `CLAUDE.md` - architecture, rules, skills index (read first)
+- `PRD.md` - what we are building and the acceptance criteria
+- `progress.md` - decision log
+- `deliverables/` - reviewer-facing artifacts
+- `.claude/skills/` - project-scoped skills: `claim-audit`, `probe-author`, `gate-check`
 
 ## Safety
 
