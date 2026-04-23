@@ -18,6 +18,7 @@ from agent.evidence import collector
 from storage import db
 
 NOW = datetime(2026, 4, 22, 12, 0, 0, tzinfo=timezone.utc)
+SHADOW_FIXTURE_PATH = Path("data/fixtures/companies/shadow_startup.json")
 
 
 @pytest.fixture
@@ -40,6 +41,10 @@ def _ev(source_type: str, source_url: str, event_key: str, event_date: str) -> d
         "method": "fixture",
         "raw_payload": json.dumps({event_key: event_date, "kind": "x"}),
     }
+
+
+def _actionable_claims(claims: list[dict]) -> list[dict]:
+    return [c for c in claims if c["tier"] != tiers.BELOW_THRESHOLD]
 
 
 # --- Pure tier logic ---
@@ -110,6 +115,28 @@ def test_independence_same_source_url_counts_once():
 
 
 # --- Builder end-to-end ---
+
+
+def test_builder_on_shadow_startup_fixture_emits_zero_actionable_claims(conn):
+    fixture = json.loads(SHADOW_FIXTURE_PATH.read_text(encoding="utf-8"))
+    collector.collect(fixture, conn)
+    ids = builder.build(conn, fixture["company_id"], now=NOW)
+    claims = db.get_claims(conn, ids)
+
+    assert len(claims) == 2
+    assert not _actionable_claims(claims)
+    assert {c["kind"] for c in claims} == {"funding_round", "leadership_change"}
+    assert all(c["tier"] == tiers.BELOW_THRESHOLD for c in claims)
+
+
+def test_builder_shadow_startup_fixture_skips_under_threshold_hiring_surge(conn):
+    fixture = json.loads(SHADOW_FIXTURE_PATH.read_text(encoding="utf-8"))
+    collector.collect(fixture, conn)
+    ids = builder.build(conn, fixture["company_id"], now=NOW)
+    claims = db.get_claims(conn, ids)
+
+    assert all(c["kind"] != "hiring_surge" for c in claims)
+    assert len(_actionable_claims(claims)) == 0
 
 def test_builder_on_acme_fixture_emits_expected_tiers(conn):
     fixture = json.loads(

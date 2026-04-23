@@ -1,0 +1,36 @@
+{
+  "_note": "SYNTHETIC FIXTURE for thin-input abstain-path tests. The signals are intentionally stale or under-threshold so the builder only writes audit rows and never actionable claims.",
+  "company_id": "shadow-startup",
+  "name": "Shadow Startup",
+  "sources": {
+    "crunchbase": {
+      "funding_round": {
+        "round": "Seed Extension",
+        "amount_usd": 3000000,
+        "announced_on": "2026-01-12",
+        "source_url": "https://example.com/crunchbase/shadow-seed-extension"
+      }
+    },
+    "job_posts": [
+      {
+        "title": "Founding Engineer",
+        "posted_on": "2026-04-18",
+        "source_url": "https://example.com/jobs/shadow/founding-engineer"
+      },
+      {
+        "title": "Operations Lead",
+        "posted_on": "2026-04-17",
+        "source_url": "https://example.com/jobs/shadow/operations-lead"
+      }
+    ],
+    "leadership": [
+      {
+        "event": "new_ceo",
+        "person": "Taylor Roe",
+        "effective": "2026-03-01",
+        "source_url": "https://example.com/news/shadow-new-ceo"
+      }
+    ],
+    "layoffs": []
+  }
+}
