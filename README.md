@@ -64,7 +64,7 @@ python scripts/run_one_prospect.py
 To collect the rubric-required email + SMS timings, run the dedicated measurement script in live mode:
 
 ```bash
-python scripts/measure_email_sms_latency.py --runs 20 --live
+python scripts/measure_email_sms_latency.py --runs 20 --live --sink-phone +2547XXXXXXXX
 ```
 
 Required env vars for live mode:
@@ -72,7 +72,7 @@ Required env vars for live mode:
 - `RESEND_API_KEY`
 - `AFRICASTALKING_USERNAME`
 - `AFRICASTALKING_API_KEY`
-- `STAFF_SINK_PHONE_NUMBER`
+- `STAFF_SINK_PHONE_NUMBER` if you do not pass `--sink-phone`
 
 The script writes:
 

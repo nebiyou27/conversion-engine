@@ -256,3 +256,9 @@ Phase 6 — actions layer. Email drafting with tier-inherited mood, channel sele
 **What:** Added `scripts/measure_email_sms_latency.py` and documented the live-mode command in `README.md`. The script records per-run email send, email reply normalization, SMS send, SMS reply normalization, and total wall-clock timings into a JSONL log plus a summary JSON file.
 
 **Why this is the right measurement shape:** The rubric asks for p50/p95 from real runs of the email + SMS flow. Timing each step separately makes the final report more transparent and gives us a reusable artifact if the reviewers ask how the numbers were derived.
+
+## 2026-04-23 â€” Latency harness sink-phone fix
+
+**What:** Added a `--sink-phone` override to the latency harness so live runs do not depend on `STAFF_SINK_PHONE_NUMBER` being present in `.env`. The harness now cleanly separates the Africa's Talking sender ID from the sink recipient number.
+
+**Why this mattered:** The previous live invocation failed because the SMS wrapper had no sink destination to route to. The override makes the command self-contained and avoids accidental dependence on local env drift.

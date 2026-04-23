@@ -13,6 +13,9 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
 from agent.actions.email_draft import build_commitment_email
 from agent.handlers import email as email_handler
 from agent.handlers import sms as sms_handler
@@ -50,11 +53,24 @@ def _percentile(values: list[float], pct: float) -> float:
     return values[lower] * (1 - weight) + values[upper] * weight
 
 
-def _require_env(name: str) -> str:
-    value = os.getenv(name)
-    if not value:
-        raise SystemExit(f"{name} is required for live latency measurement")
-    return value
+def _require_env(*names: str) -> str:
+    for name in names:
+        value = os.getenv(name)
+        if value:
+            return value
+    raise SystemExit(f"{names[0]} is required for live latency measurement")
+
+
+def _resolve_sink_phone(override: str | None) -> str:
+    if override:
+        return override
+    value = os.getenv("STAFF_SINK_PHONE_NUMBER")
+    if value:
+        return value
+    raise SystemExit(
+        "STAFF_SINK_PHONE_NUMBER is required for live latency measurement "
+        "(pass --sink-phone or set it in .env)"
+    )
 
 
 def _build_email_subject(company_name: str) -> str:
@@ -71,7 +87,7 @@ def _build_email_body(company_name: str) -> str:
     return draft["body"]
 
 
-def _run_single_iteration(*, run_index: int, live: bool) -> RunLatency:
+def _run_single_iteration(*, run_index: int, live: bool, sink_phone: str | None) -> RunLatency:
     company_name = f"Latency Prospect {run_index}"
     email_body = _build_email_body(company_name)
     subject = _build_email_subject(company_name)
@@ -101,11 +117,11 @@ def _run_single_iteration(*, run_index: int, live: bool) -> RunLatency:
     sms_send_start = time.perf_counter()
     if live:
         sms_result = sms_handler.send_warm_lead_sms(
-            _require_env("STAFF_SINK_PHONE_NUMBER"),
+            _resolve_sink_phone(sink_phone),
             f"Thanks for the email, following up by SMS for {company_name}.",
             prior_email_reply=True,
             is_warm_lead=True,
-            sender_id=os.getenv("AFRICASTALKING_SENDER_ID"),
+            sender_id=os.getenv("AFRICASTALKING_SENDER_ID") or os.getenv("AT_SHORTCODE"),
         )
         sms_message_id = str(sms_result.get("message_id") or sms_result.get("raw") or f"sms-{run_index}")
     else:
@@ -117,7 +133,7 @@ def _run_single_iteration(*, run_index: int, live: bool) -> RunLatency:
         {
             "event": "inbound.reply",
             "message_id": sms_message_id,
-            "from": _require_env("STAFF_SINK_PHONE_NUMBER") if live else "+254700000000",
+            "from": _resolve_sink_phone(sink_phone) if live else "+254700000000",
             "to": "sales@tenacious.co",
             "text": "Got it, thanks.",
         }
@@ -166,6 +182,11 @@ def main() -> int:
     parser.add_argument("--runs", type=int, default=20, help="Number of runs to record.")
     parser.add_argument("--live", action="store_true", help="Use live providers instead of demo mode.")
     parser.add_argument(
+        "--sink-phone",
+        default=None,
+        help="Phone number that receives the warm-lead SMS during live measurement.",
+    )
+    parser.add_argument(
         "--output-dir",
         default="outputs/runs",
         help="Directory where run artifacts and latency logs should be written.",
@@ -177,9 +198,9 @@ def main() -> int:
 
     if args.live:
         _require_env("RESEND_API_KEY")
-        _require_env("AFRICASTALKING_USERNAME")
-        _require_env("AFRICASTALKING_API_KEY")
-        _require_env("STAFF_SINK_PHONE_NUMBER")
+        _require_env("AT_USERNAME", "AFRICASTALKING_USERNAME")
+        _require_env("AT_API_KEY", "AFRICASTALKING_API_KEY")
+        _resolve_sink_phone(args.sink_phone)
 
     output_dir = Path(args.output_dir) / f"latency-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')}"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -189,7 +210,7 @@ def main() -> int:
 
     with log_path.open("w", encoding="utf-8") as fh:
         for i in range(1, args.runs + 1):
-            record = _run_single_iteration(run_index=i, live=args.live)
+            record = _run_single_iteration(run_index=i, live=args.live, sink_phone=args.sink_phone)
             runs.append(record)
             fh.write(json.dumps(asdict(record), sort_keys=True) + "\n")
             fh.flush()
