@@ -76,6 +76,48 @@ Append-only. Date every entry.
 
 **Minor Phase-2 extension:** added `kind` column + CHECK to claims table, `kind` param to `db.insert_claim`. Three existing test_storage.py tests updated to pass `kind="funding_round"` etc. Same pattern as tier CHECK; no schema drift.
 
+## 2026-04-23 — Debt payment: 3 fixtures + LLM wrapper
+
+**What:** Three coverage-extending fixtures (`shadow_startup`, `contradicted_co`, `silent_sophisticate`) and `integrations/llm.py` — the OpenRouter wrapper with cost ledger and per-run budget ceiling. 53/53 tests green (44 claims/storage/evidence + 9 LLM contract).
+
+**Why fixtures bracket behavior space, not happy paths:**
+- `shadow_startup` — exercises 4 distinct abstain mechanisms in one fixture (stale primary, under-count threshold, stale single-primary, absent)
+- `contradicted_co` — funding + layoff coexist; locks the invariant that claims layer surfaces both independently (resolution is Phase 5 segment-classifier work)
+- `silent_sophisticate` — strong firmographics + zero AI signal; instantiates the memo's named Skeptic's Appendix risk so the answer is a real trace, not a hypothetical. The no-AI-keywords guard test prevents future contributors from silently invalidating the false-negative scenario.
+
+**Why a single LLM wrapper for everything:** Every LLM call going through `integrations/llm.complete()` means three guarantees compound — cost is tracked, Langfuse trace exists, budget ceiling enforced. Bypassing the wrapper means losing all three. Tests lock the contract.
+
+**Why "check before, add after" budget ordering:** The call that crosses the ceiling completes; the next call is blocked. Failing mid-call is harder to reason about than failing at the next gate. `test_complete_completes_call_then_blocks_next_when_over_ceiling` locks this.
+
+**Why hardcoded pricing table, not OpenRouter cost-in-response:** The cost-in-response feature requires an experimental flag and is Anthropic-routed-model-specific. A small explicit table (PRICING dict) for the 3 models we use is cheaper to read and easier to update. Unknown models pass through with cost=0 — explicit ignorance over hidden assumptions.
+
+**Why Langfuse failures are silent:** Tracing is observability, not correctness. A Langfuse outage must not block agent work. `_log_call` catches everything, comment explains why.
+
+**Why default budget is $0.50/run, env-overridable:** Per-run ceiling protects against runaway loops. $0.50 is ~570 haiku tool-calls or ~10 sonnet drafts — enough headroom for honest iteration, tight enough to fail loud on a stuck loop. `LLM_BUDGET_USD` overrides for τ²-Bench full runs.
+
+**Cost discipline tier table** (model selection by phase):
+
+| Phase / use | Model | OpenRouter ID | Rationale |
+|---|---|---|---|
+| Phase 5 — AI maturity | haiku | `anthropic/claude-haiku-4.5` | LLM-as-judge with rubric, not reasoning-heavy |
+| Phase 6 — drafting (iteration) | haiku | `anthropic/claude-haiku-4.5` | structured input → templated output |
+| Phase 6 — drafting (memo / demo) | sonnet | `anthropic/claude-sonnet-4.5` | only on evidenced runs |
+| Phase 7 — shadow review | haiku | `anthropic/claude-haiku-4.5` | adversarial search, not generative |
+| Phase 8 — τ²-Bench (smoke) | haiku | `anthropic/claude-haiku-4.5` | $0.50 budget cap → ~3 tasks for harness validation |
+| Phase 8 — τ²-Bench (final) | sonnet | `anthropic/claude-sonnet-4.5` | 2 trials × 30 tasks; explicit budget bump via env var |
+
+## Named non-goals
+
+These are failure modes the architecture does NOT solve. Naming them prevents accidental scope-drift and gives the memo's Skeptic's Appendix concrete material.
+
+- **"Technically correct but useless" emails.** A draft that passes citation-coverage, tier-mood, and forbidden-phrase checks may still be a forgettable email. The system guarantees correctness; it does not guarantee compellingness. No probe in the library catches this.
+- **Real-time scraping.** All evidence is fixture-driven this week. The collector contract supports `method` field for "api"/"scrape", but no live scrapers ship pre-approval.
+- **Real prospect contact.** `ALLOW_REAL_PROSPECT_CONTACT=false` by default; staff-sink override is the only channel.
+- **Subjective tone evaluation.** Shadow review catches unsupported claims, not stylistic missteps. Tone calibration requires hand-labeled samples — out of scope for the week, named in the memo.
+- **Cross-thread leakage prevention.** Multi-prospect concurrent runs are not in scope for the interim deliverable; `run_id` threading exists in the LLM wrapper but not yet plumbed through evidence/claims.
+- **Job-title-aware signal mining.** Current claims layer counts job posts; titles are stored in payload but not yet used for segment-relevant feature extraction. Phase 5 judgment may add this; flagged here as known omission, not bug.
+- **Leadership-state aging philosophical correctness.** Treating "new CTO" as decay-eligible at >7d is a defensible approximation, not a real epistemic stance. Real fix would split `leadership_change` (fact, doesn't decay) from `leadership_transition_window` (judgment, decays fast). Deferred.
+
 ## Next up
 
-Phase 5 — judgment layer. ICP and segment classifiers (deterministic, read claims only), plus AI-maturity (LLM-adjudicated with claim_id citations). First LLM call of the project — cost discipline (R10) matters.
+Phase 5 — judgment layer. ICP and segment classifiers (deterministic, read claims only), plus AI-maturity (LLM-adjudicated via `integrations/llm.complete` with claim_id citations). Cost discipline lever now wired (R10).
