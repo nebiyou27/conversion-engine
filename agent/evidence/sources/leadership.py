@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from typing import Any, Iterable
 
 from agent.evidence.schema import EvidenceFormatError, Fact
 
@@ -40,3 +41,31 @@ def load(section, *, company_id: str) -> list[Fact]:
             retrieved_at=item.get("retrieved_at") or _now(),
         ))
     return facts
+
+
+def detect_leadership_changes(
+    section: Any,
+    *,
+    company_id: str,
+    source_url: str | None = None,
+) -> list[Fact]:
+    """Normalize a leadership feed into Facts.
+
+    This accepts the same shape as the fixture loader but provides a clearer
+    live-facing name for the change-detection step.
+    """
+    if isinstance(section, dict):
+        items: list[dict[str, Any]] = [section]
+    else:
+        items = list(section) if section is not None else []
+
+    if source_url:
+        normalized: list[dict[str, Any]] = []
+        for item in items:
+            if isinstance(item, dict) and "source_url" not in item:
+                normalized.append({**item, "source_url": source_url})
+            else:
+                normalized.append(item)
+        items = normalized
+
+    return load(items, company_id=company_id)
