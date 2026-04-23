@@ -56,11 +56,10 @@ The official baseline artifacts from the challenge documents are checked into th
 
 - The interim PDF still needs to be exported from this draft.
 - The 20-interaction latency sample is not yet collected.
-- The competitor gap brief is still a stub for submission purposes.
+- The competitor gap brief is present as a reviewer-facing artifact, but it is still seed-backed rather than live-scraped.
 
 ## Remaining-Day Plan
 
 1. Export this draft into the required PDF submission.
 2. Collect the latency sample and record p50/p95.
-3. Produce a competitor gap brief for one test prospect.
-4. Do one last README and artifact polish pass.
+3. Do one last README and artifact polish pass.

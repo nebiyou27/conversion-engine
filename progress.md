@@ -244,3 +244,9 @@ Phase 6 — actions layer. Email drafting with tier-inherited mood, channel sele
 **What:** Added `deliverables/method.md` as a PDF-ready interim report draft and refreshed the README status line so it reflects the current implementation state instead of the early scaffold stage.
 
 **Why this is the right packaging step:** The report draft makes the remaining submission work concrete. We can now export a real interim PDF from a current artifact instead of writing the narrative from scratch at the end.
+
+## 2026-04-23 â€” Competitor gap brief
+
+**What:** Added a reviewer-facing competitor gap brief under `deliverables/competitor_gap_brief.json` with a matching short markdown summary. The artifact is seed-backed and aligned to the challenge schema, so the submission package now includes the required one-prospect research brief.
+
+**Why this is the right interim state:** The brief is honest about being seed-backed rather than live-scraped, which keeps the package credible while still satisfying the reviewer-facing artifact requirement.
