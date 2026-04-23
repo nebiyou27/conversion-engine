@@ -162,6 +162,19 @@ These are failure modes the architecture does NOT solve. Naming them prevents ac
 
 **Evidence test fix:** `test_collector_round_trip_via_db` and `test_collector_ignores_underscore_prefixed_keys` expected 5 evidence rows; now expect 6 after the company_metadata fixture addition in Phase 4.5.
 
+## 2026-04-23 — Act I baseline: tau2-bench smoke run
+
+**What:** Ran the first `tau2-bench` baseline with haiku 4.5 on both agent and user sides. Result was `0.50` average reward: 2/3 tasks solved, 1 infra-skipped. The skipped task hit an OpenAI auth failure because a third component is still reading a placeholder API key (`your_key_here`) instead of the OpenRouter-backed key.
+
+**What failed:**
+- `exchange_delivered_order_items` missed at the agent-logic level, not infra.
+- One task passed cleanly.
+- One task failed after 3 retries due to auth, likely from the judge / NL-assertion path or another default OpenAI initializer.
+
+**Why this matters:** The baseline is usable, but it is not yet a fair read on model quality until the infra path is fully pointed at OpenRouter. The reward number is therefore a mix of real behavior and one environment issue.
+
+**Next fix:** Trace the remaining OpenAI reference in `tau2-bench` and either point it to `OPENROUTER_API_KEY` + `OPENAI_BASE_URL=https://openrouter.ai/api/v1`, or reconfigure that component to use the same OpenRouter-backed model path as the rest of the run.
+
 ## Next up
 
 Phase 6 — actions layer. Email drafting with tier-inherited mood, channel selection, scheduling. The competitor_gap stub will be filled when peer-company fixtures or live scraping ships.
