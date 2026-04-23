@@ -1,0 +1,50 @@
+{
+  "_note": "SYNTHETIC FIXTURE for contradicted-state tests. Both funding and layoff signals are real and tier-positive — the contradiction must be resolved at the judgment layer (segment classification), not at claims. Week 10 data handling policy: no real prospect data in fixtures.",
+  "company_id": "contradicted-co",
+  "name": "Contradicted Co",
+  "sources": {
+    "crunchbase": {
+      "funding_round": {
+        "round": "Series A",
+        "amount_usd": 18000000,
+        "announced_on": "2026-04-18",
+        "source_url": "https://example.com/crunchbase/contradicted-co-series-a"
+      }
+    },
+    "job_posts": [
+      {
+        "title": "Senior Backend Engineer",
+        "posted_on": "2026-04-20",
+        "source_url": "https://example.com/jobs/contradicted-co/senior-backend"
+      },
+      {
+        "title": "Staff Platform Engineer",
+        "posted_on": "2026-04-18",
+        "source_url": "https://example.com/jobs/contradicted-co/staff-platform"
+      },
+      {
+        "title": "Engineering Manager",
+        "posted_on": "2026-04-15",
+        "source_url": "https://example.com/jobs/contradicted-co/em"
+      },
+      {
+        "title": "Senior SRE",
+        "posted_on": "2026-04-12",
+        "source_url": "https://example.com/jobs/contradicted-co/senior-sre"
+      }
+    ],
+    "leadership": [],
+    "layoffs": [
+      {
+        "event_on": "2026-04-20",
+        "headcount": 35,
+        "source_url": "https://example.com/layoffs-fyi/contradicted-co"
+      },
+      {
+        "event_on": "2026-04-19",
+        "headcount": 35,
+        "source_url": "https://example.com/news/contradicted-co-layoff-report"
+      }
+    ]
+  }
+}

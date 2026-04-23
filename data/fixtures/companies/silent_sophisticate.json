@@ -1,0 +1,44 @@
+{
+  "_note": "SYNTHETIC FIXTURE for the silent-sophisticate case. Strong company firmographics (Series C, active senior engineering hiring) with ZERO public AI signal. Purpose: Phase 5's AI-maturity scorer must abstain (inferred + low confidence), not score 0. Do not add AI/ML/LLM/data-science vocabulary to any job post title — the no-keyword test enforces this invariant.",
+  "company_id": "silent-sophisticate",
+  "name": "Veridian Logistics",
+  "sources": {
+    "crunchbase": {
+      "funding_round": {
+        "round": "Series C",
+        "amount_usd": 75000000,
+        "announced_on": "2026-04-18",
+        "source_url": "https://example.com/crunchbase/veridian-series-c"
+      }
+    },
+    "job_posts": [
+      {
+        "title": "Staff Backend Engineer (Go)",
+        "posted_on": "2026-04-21",
+        "source_url": "https://example.com/jobs/veridian/staff-backend-go"
+      },
+      {
+        "title": "Principal Platform Engineer",
+        "posted_on": "2026-04-19",
+        "source_url": "https://example.com/jobs/veridian/principal-platform"
+      },
+      {
+        "title": "Senior Site Reliability Engineer",
+        "posted_on": "2026-04-17",
+        "source_url": "https://example.com/jobs/veridian/senior-sre"
+      },
+      {
+        "title": "Engineering Manager, Logistics Systems",
+        "posted_on": "2026-04-15",
+        "source_url": "https://example.com/jobs/veridian/em-logistics"
+      },
+      {
+        "title": "Staff Security Engineer",
+        "posted_on": "2026-04-12",
+        "source_url": "https://example.com/jobs/veridian/staff-security"
+      }
+    ],
+    "leadership": [],
+    "layoffs": []
+  }
+}

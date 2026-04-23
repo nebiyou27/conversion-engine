@@ -7,6 +7,7 @@ are the regression suite for over-claiming prevention.
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -19,6 +20,14 @@ from storage import db
 
 NOW = datetime(2026, 4, 22, 12, 0, 0, tzinfo=timezone.utc)
 SHADOW_FIXTURE_PATH = Path("data/fixtures/companies/shadow_startup.json")
+SILENT_SOPHISTICATE_FIXTURE_PATH = Path("data/fixtures/companies/silent_sophisticate.json")
+
+# Word-bounded for short tokens (ai/ml/llm) to avoid false positives like "available";
+# substring for multi-word phrases.
+AI_KEYWORDS_RE = re.compile(
+    r"\b(ai|ml|llm)\b|machine learning|deep learning|data scientist|applied scientist",
+    re.IGNORECASE,
+)
 
 
 @pytest.fixture
@@ -158,6 +167,25 @@ def test_builder_on_acme_fixture_emits_expected_tiers(conn):
     assert "layoff_event" not in by_kind
 
 
+def test_builder_on_contradicted_co_emits_both_funding_and_layoff_claims(conn):
+    # Both funding and layoff signals are real and tier-positive.
+    # Claims layer must surface both independently; contradiction resolution
+    # is segment-classifier work (Phase 5), not claim-builder work.
+    fixture = json.loads(
+        Path("data/fixtures/companies/contradicted_co.json").read_text(encoding="utf-8")
+    )
+    collector.collect(fixture, conn)
+    ids = builder.build(conn, fixture["company_id"], now=NOW)
+    claims = db.get_claims(conn, ids)
+    by_kind = {c["kind"]: c for c in claims}
+
+    actionable = {tiers.VERIFIED, tiers.CORROBORATED}
+    assert by_kind["funding_round"]["tier"] in actionable
+    assert by_kind["layoff_event"]["tier"] in actionable
+    assert by_kind["hiring_surge"]["tier"] in actionable
+    assert "leadership_change" not in by_kind
+
+
 def test_builder_hiring_surge_below_postings_threshold_not_emitted(conn):
     for url in ("https://j1", "https://j2"):
         db.insert_evidence(
@@ -190,4 +218,48 @@ def test_claims_kind_check_constraint(conn):
         db.insert_claim(
             conn, company_id="acme", kind="not_a_real_kind",
             assertion="x", tier="verified", evidence_ids=[],
+        )
+
+
+# --- silent_sophisticate fixture: false-negative AI-maturity case ---
+# The fixture exists to prove that strong firmographics + absent AI signal
+# produces actionable funding/hiring claims while passing through the absence
+# of AI vocabulary faithfully — neither suppressed nor fabricated.
+
+def test_silent_sophisticate_fixture_contains_no_ai_keywords():
+    # Guard: future contributors must not 'improve' the fixture by adding AI titles.
+    # If any AI keyword leaks into a job title, the false-negative builder test
+    # below silently stops proving what it claims to prove.
+    fixture = json.loads(SILENT_SOPHISTICATE_FIXTURE_PATH.read_text(encoding="utf-8"))
+    for post in fixture["sources"]["job_posts"]:
+        assert not AI_KEYWORDS_RE.search(post["title"]), (
+            f"AI keyword leaked into fixture job title: {post['title']!r} — "
+            "fixture invariant violated"
+        )
+
+
+def test_builder_on_silent_sophisticate_emits_funding_and_hiring_no_ai_signal(conn):
+    fixture = json.loads(SILENT_SOPHISTICATE_FIXTURE_PATH.read_text(encoding="utf-8"))
+    collector.collect(fixture, conn)
+    ids = builder.build(conn, fixture["company_id"], now=NOW)
+    claims = db.get_claims(conn, ids)
+    by_kind = {c["kind"]: c for c in claims}
+
+    actionable = {tiers.VERIFIED, tiers.CORROBORATED}
+    assert by_kind["funding_round"]["tier"] in actionable
+    assert by_kind["hiring_surge"]["tier"] in actionable
+    assert "leadership_change" not in by_kind
+    assert "layoff_event" not in by_kind
+
+    # Claims layer must not smuggle AI vocabulary into evidence payloads.
+    rows = conn.execute(
+        "SELECT raw_payload FROM evidence "
+        "WHERE company_id = ? AND source_type = 'job_posts'",
+        (fixture["company_id"],),
+    ).fetchall()
+    assert len(rows) >= 4, "fixture should yield at least 4 job_posts evidence rows"
+    for r in rows:
+        payload = json.loads(r["raw_payload"])
+        assert not AI_KEYWORDS_RE.search(payload["title"]), (
+            f"AI keyword in evidence payload: {payload['title']!r}"
         )
