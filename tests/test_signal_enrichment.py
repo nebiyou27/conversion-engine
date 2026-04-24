@@ -205,6 +205,23 @@ def test_layoffs_csv_parser_emits_facts():
     assert "12" in facts[0].summary
 
 
+def test_layoffs_csv_parser_accepts_team_csv_headers_and_filters_company():
+    facts = layoffs.parse_layoffs_csv(
+        "\n".join([
+            "Company,Location_HQ,Industry,Laid_Off_Count,Percentage,Date,Source,Country,Stage,Funds_Raised_USD",
+            "Acko,\"Mumbai, Non-U.S.\",Finance,60,0.05,2026-04-20,https://example.com/acko,India,Unknown,143",
+            "Meta,SF Bay Area,Consumer,8000,0.1,2026-04-17,https://example.com/meta,United States,Post-IPO,26000",
+        ]),
+        company_id="meta",
+        company_name="Meta",
+    )
+
+    assert len(facts) == 1
+    assert facts[0].summary == "Meta laid off 8000 on 2026-04-17"
+    assert facts[0].source_url == "https://example.com/meta"
+    assert facts[0].payload["company"] == "Meta"
+
+
 def test_layoffs_csv_fetcher_parses_public_csv():
     session = _FakeCsvSession("company,date,laid_off,source_url\nAcme,2026-04-10,12,https://example.com/layoffs/acme\n")
 
