@@ -19,7 +19,9 @@ from agent.gate.citation_check import check as citation_check
 from agent.gate.forbidden_phrases import check as forbidden_check
 from agent.gate.shadow_review import check as shadow_check
 from agent.handlers import email as email_handler
+from agent.judgment import ai_maturity
 from agent.judgment import competitor_gap, icp, segment
+from integrations.llm import BudgetLedger
 from integrations.calcom_client import BookingResult
 from storage import db
 
@@ -112,6 +114,8 @@ def run_synthetic_thread(
 
     conn = db.connect(run_dir / "run.db")
     db.init(conn)
+    run_id = run_dir.name
+    ledger = BudgetLedger(run_id=run_id)
 
     evidence_ids = collector.collect(fixture, conn)
     claim_ids = []
@@ -120,9 +124,13 @@ def run_synthetic_thread(
 
     rows = [dict(r) for r in conn.execute("SELECT * FROM claims WHERE company_id = ?", (company_id,)).fetchall()]
 
-    segment_result = segment.classify(rows, now=_now(), ai_maturity_score=2)
-    icp_result = icp.judge(conn, company_id, now=_now(), ai_maturity_score=2)
-    ai_result = _build_demo_ai_maturity_response()
+    if os.getenv("DEMO_MODE", "true").lower() == "true":
+        ai_result = _build_demo_ai_maturity_response()
+    else:
+        ai_result = ai_maturity.judge(conn, company_id, run_id=run_id, ledger=ledger)
+
+    segment_result = segment.classify(rows, now=_now(), ai_maturity_score=ai_result["score"])
+    icp_result = icp.judge(conn, company_id, now=_now(), ai_maturity_score=ai_result["score"])
     gap_result = competitor_gap.judge(conn, company_id, prospect_domain="acme.example", prospect_sector="saas", ai_maturity_score=ai_result["score"])
     enrichment_artifact = enrichment.build_enrichment_artifact(conn, company_id, company_name=company_name)
 
@@ -203,8 +211,14 @@ def run_synthetic_thread(
         "icp": icp_result,
         "ai_maturity": {
             **ai_result,
-            "source": "hardcoded_demo_stub",
-            "limitation": "Synthetic thread uses a fixed AI maturity response; agent.judgment.ai_maturity.judge is tested separately.",
+            **(
+                {
+                    "source": "hardcoded_demo_stub",
+                    "limitation": "Synthetic thread uses a fixed AI maturity response when DEMO_MODE=true; agent.judgment.ai_maturity.judge is tested separately.",
+                }
+                if os.getenv("DEMO_MODE", "true").lower() == "true"
+                else {"source": "llm_qwen"}
+            ),
         },
         "competitor_gap": gap_result,
         "enrichment": enrichment_artifact,
@@ -231,6 +245,7 @@ def run_synthetic_thread(
     (run_dir / "draft.md").write_text(f"# {draft['subject']}\n\n{draft['body']}\n", encoding="utf-8")
     (run_dir / "gate_report.json").write_text(_safe_json(run_summary["gate_report"]), encoding="utf-8")
     (run_dir / "run.json").write_text(_safe_json(run_summary), encoding="utf-8")
+    (run_dir / "invoice_summary.json").write_text(_safe_json(ledger.get_summary()), encoding="utf-8")
     conn.close()
 
     return ThreadResult(

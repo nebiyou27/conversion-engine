@@ -402,10 +402,23 @@ class TestAiMaturityParser:
             assert j["status"] == "absent"
             assert j["weight"] == "low"
 
+    def test_all_absent_forces_score_zero_and_low_confidence(self):
+        raw = json.dumps({
+            "score": 2,
+            "confidence": 0.9,
+            "justifications": [
+                {"signal": "ai_adjacent_open_roles", "status": "absent", "weight": "high", "confidence": "high", "source_url": None},
+                {"signal": "named_ai_ml_leadership", "status": "unknown", "weight": "high", "confidence": "high", "source_url": None},
+            ],
+        })
+        result = ai_maturity.parse_response(raw)
+        assert result["score"] == 0
+        assert result["confidence"] == 0.3
+
     def test_markdown_fenced_json_extracted(self):
         raw = '```json\n{"score": 1, "confidence": 0.5, "justifications": []}\n```'
         result = ai_maturity.parse_response(raw)
-        assert result["score"] == 1
+        assert result["score"] == 0
 
     def test_invalid_score_raises(self):
         raw = json.dumps({"score": 5, "confidence": 0.5, "justifications": []})
@@ -422,11 +435,23 @@ class TestAiMaturityParser:
             ai_maturity.parse_response(raw)
 
     def test_confidence_clamped_to_bounds(self):
-        raw = json.dumps({"score": 1, "confidence": 1.5, "justifications": []})
+        raw = json.dumps({
+            "score": 1,
+            "confidence": 1.5,
+            "justifications": [
+                {"signal": "ai_adjacent_open_roles", "status": "1 ML role open", "weight": "high", "confidence": "high", "source_url": "https://example.com/jobs"}
+            ],
+        })
         result = ai_maturity.parse_response(raw)
         assert result["confidence"] == 1.0
 
-        raw2 = json.dumps({"score": 0, "confidence": -0.5, "justifications": []})
+        raw2 = json.dumps({
+            "score": 1,
+            "confidence": -0.5,
+            "justifications": [
+                {"signal": "ai_adjacent_open_roles", "status": "1 ML role open", "weight": "high", "confidence": "high", "source_url": "https://example.com/jobs"}
+            ],
+        })
         result2 = ai_maturity.parse_response(raw2)
         assert result2["confidence"] == 0.0
 
@@ -447,7 +472,7 @@ class TestAiMaturityParser:
     def test_default_confidence_when_omitted(self):
         raw = json.dumps({"score": 0, "justifications": []})
         result = ai_maturity.parse_response(raw)
-        assert result["confidence"] == 0.5  # default
+        assert result["confidence"] == 0.3  # silent-company cap
 
     def test_build_user_message_with_claims(self, conn):
         """Smoke test: _build_user_message produces non-empty string."""

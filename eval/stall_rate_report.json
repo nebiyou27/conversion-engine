@@ -1,0 +1,9 @@
+{
+  "definition": "stalled = no outbound action within 300s of inbound reply normalization",
+  "input_dir": "outputs\\runs\\latency-20260423-201603",
+  "n": 20,
+  "stall_rate": 0.0,
+  "stall_threshold_seconds": 300,
+  "stalled_count": 0,
+  "stalled_run_indices": []
+}

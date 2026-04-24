@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from datetime import datetime, timezone
 
 import pytest
 
@@ -46,6 +47,45 @@ def test_job_posts_loader_emits_one_fact_per_posting(acme_fixture):
     assert len(facts) == 3
     assert all(f.source_type == "job_posts" for f in facts)
     assert all(f.kind == "job_posting" for f in facts)
+
+
+def test_job_post_velocity_counts_current_and_prior_windows():
+    now = datetime(2026, 4, 25, 12, 0, 0, tzinfo=timezone.utc)
+    facts = job_posts.load(
+        [
+            {"title": "ML Engineer", "posted_on": "2026-04-20T00:00:00+00:00", "source_url": "https://example.com/jobs/1"},
+            {"title": "Data Engineer", "posted_on": "2026-03-01T00:00:00+00:00", "source_url": "https://example.com/jobs/2"},
+            {"title": "Backend Engineer", "posted_on": "2026-01-15T00:00:00+00:00", "source_url": "https://example.com/jobs/3"},
+        ],
+        company_id="acme",
+    )
+
+    velocity = job_posts.compute_60d_velocity(facts, now=now)
+    assert velocity == {
+        "window_days": 60,
+        "curr_count": 2,
+        "prior_count": 1,
+        "delta_pct": 100.0,
+    }
+
+
+def test_domain_specific_scrapers_build_expected_public_urls(monkeypatch):
+    seen_urls: list[str] = []
+
+    def fake_scrape(url, **kwargs):
+        seen_urls.append(url)
+        return []
+
+    monkeypatch.setattr(job_posts, "scrape_job_posts", fake_scrape)
+    job_posts.scrape_builtin("acme", company_id="acme")
+    job_posts.scrape_wellfound("acme", company_id="acme")
+    job_posts.scrape_linkedin_public("acme", company_id="acme")
+
+    assert seen_urls == [
+        "https://builtin.com/company/acme/jobs",
+        "https://wellfound.com/company/acme/jobs",
+        "https://www.linkedin.com/jobs/search/?keywords=acme",
+    ]
 
 
 def test_layoffs_empty_list_returns_empty(acme_fixture):

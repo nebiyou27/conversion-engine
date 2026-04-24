@@ -139,6 +139,7 @@ def test_complete_records_cost_to_ledger():
     assert resp.cost_usd == pytest.approx(0.000875)
     assert ledger.spent_usd == pytest.approx(0.000875)
     assert ledger.calls == 1
+    assert ledger.per_call_log[0]["model"] == "anthropic/claude-haiku-4.5"
 
 
 def test_complete_returns_typed_response():
@@ -152,9 +153,23 @@ def test_complete_returns_typed_response():
 
     assert isinstance(resp, LLMResponse)
     assert resp.text == "hello world"
-    assert resp.model == MODELS["haiku"]  # default
+    assert resp.model == MODELS["qwen"]  # default
     assert resp.input_tokens == 10
     assert resp.output_tokens == 5
+
+
+def test_ledger_summary_breaks_down_models():
+    ledger = BudgetLedger(run_id="r1", ceiling_usd=10.0)
+    ledger.add(0.1, model="m1", input_tokens=10, output_tokens=5)
+    ledger.add(0.2, model="m1", input_tokens=20, output_tokens=15)
+    ledger.add(0.3, model="m2", input_tokens=30, output_tokens=25)
+
+    summary = ledger.get_summary()
+    assert summary["spent_usd"] == pytest.approx(0.6)
+    assert summary["calls"] == 3
+    assert summary["model_breakdown"]["m1"]["calls"] == 2
+    assert summary["model_breakdown"]["m1"]["input_tokens"] == 30
+    assert summary["model_breakdown"]["m2"]["spent_usd"] == pytest.approx(0.3)
 
 
 def test_complete_unknown_model_costs_zero_and_does_not_charge_ledger():

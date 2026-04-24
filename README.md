@@ -78,6 +78,35 @@ python scripts/day0_check.py
 python scripts/run_one_prospect.py
 ```
 
+## Run Order
+
+1. `python -m pytest -q`
+2. `python scripts/day0_check.py`
+3. `python scripts/run_one_prospect.py`
+4. `python eval/stall_rate.py`
+5. `python scripts/measure_email_sms_latency.py --runs 20 --live --sink-phone +2547XXXXXXXX`
+
+The live latency command is only needed when provider credentials and staff
+sink routing are configured.
+
+## Directory Index
+
+| Path | Purpose |
+|---|---|
+| `agent/` | Evidence, claims, judgment, actions, gates, handlers, and orchestration. |
+| `api/` | Webhook/server route wrappers. |
+| `Challenge_Documents/` | Supplied challenge baselines and reference artifacts. |
+| `data/` | Fixtures, schemas, local bench summaries, and SQLite data. |
+| `deliverables/` | Reviewer-facing method, baseline, competitor-gap, and evidence graph artifacts. |
+| `docs/` | Architecture, methodology, handoff notes, and execution plans. |
+| `eval/` | Measurement and benchmark scripts. |
+| `integrations/` | Provider clients for LLM, email, SMS, CRM, calendar, and Langfuse. |
+| `outputs/` | Generated run artifacts and latency measurements. |
+| `probes/` | Failure taxonomy and probe library. |
+| `scripts/` | Operator scripts for smoke runs and latency collection. |
+| `storage/` | SQLite schema and append-only storage API. |
+| `tests/` | Unit and contract tests. |
+
 ## Latency Measurement
 
 To collect the rubric-required email + SMS timings, run the dedicated measurement script in live mode:

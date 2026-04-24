@@ -30,6 +30,8 @@ load_dotenv()
 MODELS: dict[str, str] = {
     "haiku":  "anthropic/claude-haiku-4.5",
     "sonnet": "anthropic/claude-sonnet-4.5",
+    "qwen": "qwen/qwen3-next-80b-a3b-thinking",
+    "deepseek": "deepseek/deepseek-chat-v3.1",
 }
 
 # Per-million-token pricing on OpenRouter (USD). Source: openrouter.ai/models.
@@ -39,6 +41,8 @@ PRICING: dict[str, tuple[float, float]] = {
     "anthropic/claude-haiku-4.5":  (0.25,  1.25),
     "anthropic/claude-sonnet-4.5": (3.00, 15.00),
     "openai/gpt-4o-mini":          (0.15,  0.60),
+    "qwen/qwen3-next-80b-a3b-thinking": (0.14, 1.40),
+    "deepseek/deepseek-chat-v3.1": (0.27, 1.10),
 }
 
 DEFAULT_BUDGET_USD = 0.50
@@ -79,6 +83,7 @@ class BudgetLedger:
         self.ceiling_usd = ceiling_usd
         self.spent_usd = 0.0
         self.calls = 0
+        self.per_call_log: list[dict] = []
 
     def check(self) -> None:
         if self.spent_usd >= self.ceiling_usd:
@@ -87,9 +92,47 @@ class BudgetLedger:
                 f">= ceiling_usd={self.ceiling_usd:.4f} ({self.calls} calls)"
             )
 
-    def add(self, cost_usd: float) -> None:
+    def add(
+        self,
+        cost_usd: float,
+        *,
+        model: str | None = None,
+        input_tokens: int | None = None,
+        output_tokens: int | None = None,
+        metadata: dict | None = None,
+    ) -> None:
         self.spent_usd += cost_usd
         self.calls += 1
+        self.per_call_log.append({
+            "call_index": self.calls,
+            "model": model,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "cost_usd": cost_usd,
+            "metadata": metadata or {},
+        })
+
+    def get_summary(self) -> dict:
+        model_breakdown: dict[str, dict[str, float | int]] = {}
+        for call in self.per_call_log:
+            model = call.get("model") or "unknown"
+            bucket = model_breakdown.setdefault(
+                model,
+                {"calls": 0, "input_tokens": 0, "output_tokens": 0, "spent_usd": 0.0},
+            )
+            bucket["calls"] = int(bucket["calls"]) + 1
+            bucket["input_tokens"] = int(bucket["input_tokens"]) + int(call.get("input_tokens") or 0)
+            bucket["output_tokens"] = int(bucket["output_tokens"]) + int(call.get("output_tokens") or 0)
+            bucket["spent_usd"] = float(bucket["spent_usd"]) + float(call.get("cost_usd") or 0.0)
+
+        return {
+            "run_id": self.run_id,
+            "ceiling_usd": self.ceiling_usd,
+            "spent_usd": self.spent_usd,
+            "calls": self.calls,
+            "model_breakdown": model_breakdown,
+            "per_call_log": self.per_call_log,
+        }
 
 
 # --- Client + cost helpers ---
@@ -167,7 +210,7 @@ def complete(
     *,
     run_id: str,
     ledger: BudgetLedger,
-    model: str = MODELS["haiku"],
+    model: str = MODELS["qwen"],
     max_tokens: int = 500,
     temperature: float = 0.0,
     client: OpenAI | None = None,
@@ -192,7 +235,13 @@ def complete(
     output_tokens = response.usage.completion_tokens
     cost = _cost(model, input_tokens, output_tokens)
 
-    ledger.add(cost)
+    ledger.add(
+        cost,
+        model=model,
+        input_tokens=input_tokens,
+        output_tokens=output_tokens,
+        metadata=metadata,
+    )
     _log_call(
         run_id=run_id,
         model=model,

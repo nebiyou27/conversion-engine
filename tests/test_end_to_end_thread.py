@@ -19,6 +19,7 @@ def test_run_synthetic_thread_produces_complete_artifacts(tmp_path):
     assert (run_dir / "run.json").exists()
     assert (run_dir / "draft.md").exists()
     assert (run_dir / "gate_report.json").exists()
+    assert (run_dir / "invoice_summary.json").exists()
 
     run_data = json.loads((run_dir / "run.json").read_text(encoding="utf-8"))
     assert run_data["demo_mode"] is True
@@ -28,3 +29,7 @@ def test_run_synthetic_thread_produces_complete_artifacts(tmp_path):
     assert run_data["email_reply_event"]["ok"] is True
     assert run_data["segment"]["primary_segment_match"] != "abstain"
     assert result.booking_id
+
+    invoice = json.loads((run_dir / "invoice_summary.json").read_text(encoding="utf-8"))
+    assert invoice["run_id"] == run_dir.name
+    assert invoice["spent_usd"] == 0.0

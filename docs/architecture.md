@@ -10,6 +10,26 @@ raw facts  tiered    segment     drafts    pre-send
            claims    decisions   actions   validation
 ```
 
+```mermaid
+flowchart LR
+  subgraph ENRICH [Signal Enrichment]
+    C1[Crunchbase ODM]
+    C2[layoffs.fyi CSV]
+    C3[Job Posts: BuiltIn/Wellfound/LinkedIn]
+    C4[Leadership Detection]
+  end
+  ENRICH --> CLAIMS[Claims Builder + Tiers]
+  CLAIMS --> JUDGE[Judgment: ICP/Segment/AI Maturity/Gap]
+  JUDGE --> LLM[Qwen3-80B Backbone]
+  JUDGE --> DRAFT[Email/SMS Draft]
+  DRAFT --> GATE[Gate: Citation + Shadow + Phrase]
+  GATE -->|pass| SEND[Resend / Africa's Talking]
+  GATE -->|fail| HQ[Human Queue]
+  SEND --> CRM[HubSpot MCP]
+  SEND --> CAL[Cal.com]
+  SEND --> LF[Langfuse]
+```
+
 ## Layer Contracts
 
 | Layer | Directory | Contract |

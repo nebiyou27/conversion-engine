@@ -1,13 +1,27 @@
-"""Job-board fixture loader. Emits one Fact per posting."""
+"""Job-board fixture loader. Emits one Fact per posting.
+
+Compliance notes:
+  - Public job listings only. No login, no session cookies, no CAPTCHA bypass.
+  - Before adding a new domain, verify robots.txt allows unauthenticated read
+    of the public careers / jobs path.
+  - As of 2026-04, BuiltIn, Wellfound, and LinkedIn public /jobs pages permit
+    read access; we scrape only the rendered page DOM, never private profiles.
+  - Failed loads abstain silently rather than retrying aggressively.
+"""
 from __future__ import annotations
 
 from html import unescape
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from typing import Any
+import json
 import re
+from urllib.parse import quote_plus
 
 from agent.evidence.schema import EvidenceFormatError, Fact
+
+SUPPORTED_DOMAINS = ["builtin.com", "wellfound.com", "linkedin.com/jobs"]
+JOB_VELOCITY_WINDOW_DAYS = 60
 
 
 def _now() -> str:
@@ -110,6 +124,125 @@ def extract_job_posts_from_html(
             method="playwright",
         ))
     return facts
+
+
+def _safe_scrape(url: str, *, company_id: str, playwright_factory: Any | None, max_posts: int) -> list[Fact]:
+    try:
+        return scrape_job_posts(
+            url,
+            company_id=company_id,
+            playwright_factory=playwright_factory,
+            max_posts=max_posts,
+        )
+    except Exception:
+        return []
+
+
+def scrape_builtin(
+    company_slug: str,
+    *,
+    company_id: str | None = None,
+    playwright_factory: Any | None = None,
+    max_posts: int = 25,
+) -> list[Fact]:
+    """Scrape a company's public BuiltIn jobs page."""
+    resolved_company_id = company_id or company_slug
+    url = f"https://builtin.com/company/{quote_plus(company_slug)}/jobs"
+    return _safe_scrape(url, company_id=resolved_company_id, playwright_factory=playwright_factory, max_posts=max_posts)
+
+
+def scrape_wellfound(
+    company_slug: str,
+    *,
+    company_id: str | None = None,
+    playwright_factory: Any | None = None,
+    max_posts: int = 25,
+) -> list[Fact]:
+    """Scrape a company's public Wellfound jobs page."""
+    resolved_company_id = company_id or company_slug
+    url = f"https://wellfound.com/company/{quote_plus(company_slug)}/jobs"
+    return _safe_scrape(url, company_id=resolved_company_id, playwright_factory=playwright_factory, max_posts=max_posts)
+
+
+def scrape_linkedin_public(
+    company_slug: str,
+    *,
+    company_id: str | None = None,
+    playwright_factory: Any | None = None,
+    max_posts: int = 25,
+) -> list[Fact]:
+    """Scrape public LinkedIn jobs search results for a company."""
+    resolved_company_id = company_id or company_slug
+    url = f"https://www.linkedin.com/jobs/search/?keywords={quote_plus(company_slug)}"
+    return _safe_scrape(url, company_id=resolved_company_id, playwright_factory=playwright_factory, max_posts=max_posts)
+
+
+def _parse_datetime(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        dt = datetime.fromisoformat(value)
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
+
+
+def compute_60d_velocity(facts: list[Fact], *, now: datetime | None = None) -> dict:
+    """Job-post count delta: postings in last 60 days vs. prior 60-day window.
+
+    Returns {window_days: 60, curr_count, prior_count, delta_pct}.
+    """
+    now = now or datetime.now(timezone.utc)
+    curr_start = now - timedelta(days=JOB_VELOCITY_WINDOW_DAYS)
+    prior_start = now - timedelta(days=JOB_VELOCITY_WINDOW_DAYS * 2)
+
+    curr_urls: set[str] = set()
+    prior_urls: set[str] = set()
+    for fact in facts:
+        if fact.source_type != "job_posts":
+            continue
+        posted_at = _parse_datetime(str(fact.payload.get("posted_on") or ""))
+        if posted_at is None:
+            continue
+        if posted_at >= curr_start:
+            curr_urls.add(fact.source_url)
+        elif prior_start <= posted_at < curr_start:
+            prior_urls.add(fact.source_url)
+
+    curr_count = len(curr_urls)
+    prior_count = len(prior_urls)
+    if prior_count == 0:
+        delta_pct = None if curr_count == 0 else 100.0
+    else:
+        delta_pct = ((curr_count - prior_count) / prior_count) * 100.0
+    return {
+        "window_days": JOB_VELOCITY_WINDOW_DAYS,
+        "curr_count": curr_count,
+        "prior_count": prior_count,
+        "delta_pct": delta_pct,
+    }
+
+
+def compute_60d_velocity_from_rows(rows: list[dict], *, now: datetime | None = None) -> dict:
+    facts: list[Fact] = []
+    for row in rows:
+        payload_raw = row.get("raw_payload")
+        payload = {}
+        if payload_raw:
+            payload = json.loads(payload_raw) if isinstance(payload_raw, str) else payload_raw
+        facts.append(Fact(
+            company_id=row.get("company_id", ""),
+            source_type=row.get("source_type", ""),
+            kind=payload.get("kind", "job_posting"),
+            summary=row.get("fact", ""),
+            payload=payload,
+            source_url=row.get("source_url", ""),
+            retrieved_at=row.get("retrieved_at") or _now(),
+            method=row.get("method", "fixture"),
+        ))
+    return compute_60d_velocity(facts, now=now)
 
 
 def scrape_job_posts(

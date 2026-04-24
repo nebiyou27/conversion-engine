@@ -11,6 +11,7 @@ import sqlite3
 from datetime import datetime, timedelta, timezone
 
 from agent.claims import confidence, tiers
+from agent.evidence.sources import job_posts
 from storage import db
 
 
@@ -38,7 +39,7 @@ def _meets_surge_threshold(rows: list[dict], now: datetime) -> bool:
     return len(urls) >= tiers.HIRING_SURGE_MIN_POSTINGS
 
 
-def _build_payload(kind: str, rows: list[dict]) -> dict:
+def _build_payload(kind: str, rows: list[dict], *, now: datetime | None = None) -> dict:
     """Structured fields the judgment layer filters on. Populated from primary rows only.
 
     The judgment layer reads claim.payload instead of the linked evidence rows, so R2
@@ -60,6 +61,7 @@ def _build_payload(kind: str, rows: list[dict]) -> dict:
         return {
             "postings_count": len({r["source_url"] for r in primaries}),
             "titles": [p.get("title") for p in postings if p.get("title")],
+            "velocity_60d": job_posts.compute_60d_velocity_from_rows(primaries, now=now),
         }
     if kind == "leadership_change":
         for r in primaries:
@@ -155,7 +157,7 @@ def build(
             assertion=_render_assertion(kind, relevant),
             tier=tier,
             evidence_ids=[r["evidence_id"] for r in relevant],
-            payload=_build_payload(kind, relevant),
+            payload=_build_payload(kind, relevant, now=now),
         )
         claim_ids.append(cid)
     return claim_ids

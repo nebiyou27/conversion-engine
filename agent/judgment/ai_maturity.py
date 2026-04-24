@@ -130,6 +130,10 @@ def _validate(result: dict) -> dict:
             "source_url": None,
         })
 
+    if all(j["status"] in {"absent", "unknown"} for j in validated_justifications):
+        score = 0
+        confidence = min(confidence, 0.3)
+
     return {
         "score": score,
         "confidence": confidence,

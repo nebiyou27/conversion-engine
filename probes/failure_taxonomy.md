@@ -17,10 +17,8 @@ Trigger rates are pending evaluation runs; until then, they are marked
 | AI maturity validity | P24, P25, P26 | Segment 4 pitch based on malformed or invented reasoning | Structured parser and rubric constraints | not_measured |
 | Stub leakage | P27, P30 | Reviewer distrust from demo artifacts presented as production | Explicit stub/demo labels in artifacts | not_measured |
 
-## Target Failure Candidate
+## Target Failure
 
-The highest-cost candidate is unsupported factual content escaping the gate,
-especially when phrased as a question. Questions are allowed for inferred
-claims, but citation is orthogonal to mood. The mechanism under test is the
-citation gate's removal of the blanket question exemption while preserving
-explicit operational CTA exemptions.
+The selected target is **signal over-claiming under defensive replies**. See
+`probes/target_failure_mode.md` for the ACV arithmetic, rejected alternatives,
+and why this failure is the best mechanism target.
