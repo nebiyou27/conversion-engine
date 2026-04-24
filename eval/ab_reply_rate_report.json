@@ -1,0 +1,2674 @@
+{
+  "definition": "LLM-judged likely CTO reply to first-touch outbound email",
+  "delta_pp_signal_grounded_minus_generic": -9.38,
+  "details": [
+    {
+      "body": "Hi, I noticed Acme Data\u2019s hiring surge ({claim_id:296e1c63-aca1-46dd-8153-4778d7903146}), Series B close ({claim_id:8e235838-2f3d-4604-9aa3-1cf2f631a7c3}), and AI maturity score of 2 suggest you\u2019re building specialized capabilities \u2014 but the competitor gap signal is suggestive ({confidence:medium}). With Jane Doe\u2019s CTO role effective March 2026, this may be the window to align tooling with actual hiring velocity. No pitch \u2014 just a quick 10-min chat to see if current gaps match your priorities?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00029755,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00016345000000000002,
+      "judge_reason": "The email is concise, data-driven, and directly relevant to the CTO's strategic priorities, referencing specific company developments (hiring surge, Series B, AI maturity) and a future leadership change. It avoids a sales pitch and proposes a brief, low-commitment conversation, making it plausible the CTO would engage to discuss aligning tooling with hiring velocity.",
+      "judge_reply": true,
+      "subject": "Acme Data\u2019s hiring surge + Series B \u2014 timing for AI capability gaps?",
+      "trial_index": 1,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, Acme Data\u2019s hiring surge ({claim_id:296e1c63-aca1-46dd-8153-4778d7903146}) and $50M Series B ({claim_id:8e235838-2f3d-4604-9aa3-1cf2f631a7c3}) suggest you're scaling AI capabilities. AI maturity is at level 2 with a Staff ML Engineer role open, but competitor signals indicate a specialized gap. Jane Doe\u2019s CTO role starts March 2026 \u2014 timing may matter as you formalize tech strategy. No pitch \u2014 just curious if you\u2019ve mapped the talent needed to close that gap. Open to a 10-min chat if useful.",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00030085,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00012443,
+      "judge_reason": "The email is concise, well-researched, and directly relevant to the CTO's role, focusing on strategic hiring and AI capabilities without a sales pitch, making a brief response plausible.",
+      "judge_reply": true,
+      "subject": "Acme Data: AI hiring surge + new funding",
+      "trial_index": 2,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, Acme\u2019s recent Series B ($50M) and 3 new engineering roles in 60 days \u2014 including a Senior ML Engineer \u2014 suggest a push to close a capability gap {claim_id:296e1c63-aca1-46dd-8153-4778d7903146}. AI maturity is at level 2 with clear adjacent hiring signals {claim_id:296e1c63-aca1-46dd-8153-4778d7903146}, but leadership change is still below threshold {claim_id:8437f145-4417-4a4b-b88f-3ed229fa792b}. With new capital and a hiring ramp, now may be the window to align tooling with technical direction. Open to a 10-min call this week if you\u2019re evaluating how teams are scaling AI infrastructure?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00034815,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00015673000000000003,
+      "judge_reason": "The email is highly relevant, data-driven, and addresses a strategic topic (AI infrastructure scaling) that a CTO would care about. It references specific, credible signals (Series B funding, recent hiring, AI maturity) and proposes a concise, low-commitment next step (10-min call).",
+      "judge_reply": true,
+      "subject": "Acme\u2019s hiring surge + new funding may shift AI priorities",
+      "trial_index": 3,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Acme Data has a verified hiring surge ({claim_id:296e1c63-aca1-46dd-8153-4778d7903146}) and Series B funding ({claim_id:8e235838-2f3d-4604-9aa3-1cf2f631a7c3}), with AI maturity at level 2 ({ai_maturity:2}). Competitor signals suggest a specialized capability gap \u2014 likely why you\u2019re hiring a Staff Backend Engineer and Senior ML Engineer. Jane Doe becomes CTO on March 15, 2026 \u2014 this is the first window to align tech strategy before her onboarding. Can I share 2 concrete examples of how teams like yours filled similar gaps in 60 days? 5-minute call?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00031515000000000004,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00012767,
+      "judge_reason": "The email is well-researched, references specific claims and data, addresses a timely strategic opportunity (CTO transition and hiring surge), and offers concrete value with a low-commitment ask.",
+      "judge_reply": true,
+      "subject": "Acme Data\u2019s AI hiring surge \u2014 timing around new CTO?",
+      "trial_index": 4,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, saw Acme Data hired 3 roles in 30 days {296e1c63-aca1-46dd-8153-4778d7903146}, raised $50M {8e235838-2f3d-4604-9aa3-1cf2f631a7c3}, and has a new CTO starting March 2026 {8437f145-4417-4a4b-b88f-3ed229fa792b}. AI maturity is at level 2 with ML roles open {ai_maturity}, and the gap signal suggests specialized capability needs. Timing may matter as the new CTO onboards. No pitch\u2014just wondering if you\u2019re evaluating tools to close that gap. Open to a 10-min chat if useful.",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00033165,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00019287999999999998,
+      "judge_reason": "The email is concise, personalized with specific data points about the company's recent hiring, funding, and new CTO timeline, and it ties these observations to a potential business need (AI maturity gap). It avoids a direct pitch, instead framing the outreach as a genuine inquiry about evaluating tools, which reduces pressure. The offer of a brief, low-commitment chat is reasonable for a busy CTO, especially given the relevance to their role and the timing around the new CTO's onboarding.",
+      "judge_reply": true,
+      "subject": "Acme Data: Hiring surge + new CTO timing",
+      "trial_index": 5,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, your recent hiring surge ({claim_id:296e1c63-aca1-46dd-8153-4778d7903146}) and AI maturity (score 2, {claim_id:8e235838-2f3d-4604-9aa3-1cf2f631a7c3}) suggest a gap in specialized AI capability \u2014 consistent with your segment\u2019s pattern. Jane Doe\u2019s incoming CTO role ({claim_id:8437f145-4417-4a4b-b88f-3ed229fa792b}) may be a timing signal. No hype: just a data point. If you\u2019re evaluating tools to close this gap, I can share one example from a similar team. 2-minute call next week?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00032505,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00015133,
+      "judge_reason": "The email is concise, data-driven, and references specific claims about the company's hiring and AI maturity, which shows research. It avoids hype, offers a relevant example, and proposes a low-commitment next step (2-minute call), making it plausible for a busy CTO to consider responding.",
+      "judge_reply": true,
+      "subject": "Acme Data's hiring surge + AI maturity suggest a capability gap",
+      "trial_index": 6,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi Jane, Acme\u2019s hiring surge ({claim_id:296e1c63-aca1-46dd-8153-4778d7903146}), Series B close ({claim_id:8e235838-2f3d-4604-9aa3-1cf2f631a7c3}), and AI maturity score of 2 suggest you\u2019re building specialized capabilities \u2014 but the gap is suggestive, not confirmed ({competitor_gap:medium}). With your start date on March 15, now\u2019s the time to validate where engineering effort is most needed. I can share a 2-min diagnostic on how similar teams prioritized their AI stack. Open to a 10-min chat next week?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00029865,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00014037,
+      "judge_reason": "The email is personalized, references specific and plausible company developments (hiring surge, Series B, AI maturity), acknowledges uncertainty with a competitor gap, offers value with a diagnostic, and proposes a low-time-commitment next step, making it likely the CTO would engage.",
+      "judge_reply": true,
+      "subject": "Acme\u2019s hiring surge + AI maturity point to a capability gap",
+      "trial_index": 7,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi Jane, Acme Data\u2019s hiring surge ({claim_id:296e1c63-aca1-46dd-8153-4778d7903146}) and Series B close ({claim_id:8e235838-2f3d-4604-9aa3-1cf2f631a7c3}) signal active scaling. Your incoming CTO role (effective 2026-03-15) aligns with a verified AI maturity score of 2 and a suggestive capability gap ({competitor_gap:medium}). Timing matters now\u2014onboarding support before Q3 ramp could reduce hiring friction. Happy to share a 1-pager on how others closed similar gaps. Open to a 10-min chat next week?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00030744999999999997,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00012474,
+      "judge_reason": "The email is concise, relevant to the CTO's upcoming role, and provides specific, data-backed insights about the company's hiring and scaling, making it plausible the CTO would engage for strategic alignment.",
+      "judge_reply": true,
+      "subject": "Acme Data: CTO transition + hiring surge alignment",
+      "trial_index": 8,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi [First Name], I work with CTOs who are balancing system reliability with rapid feature delivery. At Acme Data, I imagine you\u2019re seeing similar trade-offs between scaling infrastructure and keeping deployments smooth. No pitch\u2014just wondering if you\u2019ve got 10 minutes this week to compare notes on what\u2019s working (or not) in your current setup. Happy to work around your calendar.",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012386000000000002,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.924e-05,
+      "judge_reason": "The email is personalized, relevant to the CTO's role, focuses on a genuine industry challenge, and proposes a low-commitment, peer-to-peer conversation without an immediate sales pitch.",
+      "judge_reply": true,
+      "subject": "Quick question about your data pipeline",
+      "trial_index": 1,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I noticed Acme Data handles a lot of moving parts in your data pipeline. I help CTOs reduce the noise from tools that promise automation but deliver complexity. No pitch\u2014just a 10-minute chat to see if there\u2019s a simple friction point we could smooth out. If it doesn\u2019t feel useful, we\u2019ll end it there. Are you free next Tuesday or Wednesday?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012716000000000002,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.704e-05,
+      "judge_reason": "The email is concise, personalized, respects the CTO's time, offers value without a hard sell, and proposes a specific, low-commitment next step.",
+      "judge_reply": true,
+      "subject": "Quick question about your data pipeline",
+      "trial_index": 2,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I work with CTOs who are balancing reliability and cost in their data pipelines. If you're looking to reduce infrastructure overhead without sacrificing performance, I\u2019d be happy to share one simple adjustment most teams overlook. No pitch\u2014just a practical idea you can test this week. Free 10 minutes this week? I\u2019ll send over a link that takes 30 seconds to click.",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012716000000000002,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010256000000000001,
+      "judge_reason": "The email is concise, relevant to a CTO's role, offers a specific and practical value proposition without an immediate sales pitch, and respects the recipient's time with a clear, low-commitment ask.",
+      "judge_reply": true,
+      "subject": "Quick question about your data pipeline",
+      "trial_index": 3,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I noticed Acme Data handles a lot of data volume \u2014 if you're dealing with latency or tool sprawl in your pipeline, I might be able to help cut the noise. No pitch, just a 10-minute chat to see if there\u2019s a fit. If it\u2019s not a priority now, no worries \u2014 just say so and I\u2019ll leave you alone.",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012386000000000002,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011491,
+      "judge_reason": "The email is concise, relevant to the CTO's role, offers value by addressing potential pain points (latency, tool sprawl), respects their time with a short call request, and provides an easy opt-out, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your data pipeline",
+      "trial_index": 4,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I noticed Acme Data handles a lot of data at scale. I help CTOs reduce complexity in their pipelines without adding new tools or teams. No pitch\u2014just a 15-minute chat to see if there\u2019s a simple tweak worth making. If it\u2019s not relevant, no hard feelings. Are you open to a quick call next week?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00011946000000000001,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.598e-05,
+      "judge_reason": "The email is concise, personalized, respects the CTO's time, offers value without pressure, and focuses on a relevant problem (data complexity at scale), making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your data infrastructure",
+      "trial_index": 5,
+      "variant": "generic"
+    },
+    {
+      "body": "I help CTOs at companies like Acme Data reduce latency in their API layers without adding complexity. No pitch\u2014just a 10-minute chat to see if there\u2019s a simple tweak worth making. If it\u2019s not relevant, no problem. Just reply \"no\" and I\u2019ll leave you alone.",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00010406,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.822e-05,
+      "judge_reason": "The email is concise, relevant to the CTO's role, offers a low-commitment value proposition focused on reducing latency without complexity, and respects the recipient's time with a clear opt-out.",
+      "judge_reply": true,
+      "subject": "Quick question about your API scaling",
+      "trial_index": 6,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I help CTOs at companies like Acme Data reduce latency spikes during peak API traffic without adding infrastructure. No pitch\u2014just a quick question: are you still manually tuning rate limits and caching layers, or have you automated that layer yet? If it\u2019s still manual, I can send over one example of how another team cut response times by 40% in two weeks, no code changes needed. Just say the word.",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013596000000000002,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00012095,
+      "judge_reason": "The email is personalized, addresses a specific pain point (latency spikes during peak API traffic), offers a relevant example of value (40% reduction in response times), and is concise with a clear call to action, making it plausible for a CTO to respond.",
+      "judge_reply": true,
+      "subject": "Quick question about your API scaling",
+      "trial_index": 7,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I noticed Acme Data relies heavily on API-driven workflows. Many teams like yours hit hidden latency or downtime that doesn\u2019t show up in standard monitoring. We help CTOs spot and fix those quiet failures without adding complexity. No pitch\u2014just a 10-minute chat to see if it\u2019s relevant to your current stack. Free if it doesn\u2019t help. Want to jump on a quick call this week?",
+      "company_id": "acme",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013156,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011240000000000001,
+      "judge_reason": "The email is personalized, addresses a specific pain point (hidden API latency/downtime) relevant to a CTO, offers value without immediate commitment, and proposes a low-effort next step (10-minute chat).",
+      "judge_reply": true,
+      "subject": "Quick question about your API reliability",
+      "trial_index": 8,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi, I noticed Contradicted Co raised $18M ({claim_id:0b264f32-6412-4ee1-8475-54b08d1163a5}) just days after laying off 35 ({claim_id:4f60e3fc-9076-48f7-bbf0-7b4097cdcc8a}) \u2014 and now hiring 4 senior engineering roles ({claim_id:d277c0d3-f26f-469f-a8cf-435f00eedd51}). That timing suggests a pivot in engineering priorities. With AI maturity signals currently low and no clear competitor gap, you're likely rebuilding with intent. If you're evaluating tools to accelerate this phase without adding headcount friction, I can share one data point from a similar rebuild. Open to a 10-min call this week? No pitch \u2014 just context.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00034526,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00016831,
+      "judge_reason": "The email demonstrates specific, timely research on the company's recent funding, layoffs, and hiring, directly addressing the CTO's likely current priorities. It frames the outreach as offering relevant insights from a similar situation, positioning it as a value-add rather than a generic pitch, and respects the CTO's time with a concise, low-commitment ask.",
+      "judge_reply": true,
+      "subject": "Quick question on Contradicted Co's engineering rebuild",
+      "trial_index": 1,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Contradicted Co raised $18M ({claim_id:0b264f32-6412-4ee1-8475-54b08d1163a5}) and laid off 35 ({claim_id:4f60e3fc-9076-48f7-bbf0-7b4097cdcc8a})\u2014then immediately posted 4 senior engineering roles ({claim_id:d277c0d3-f26f-469f-a8cf-435f00eedd51}). That timing suggests a rebuild, not a retreat. AI maturity signals are low, and no clear competitor gap is established. If you're retooling engineering capacity or tooling, I can share how another mid-market team streamlined their platform post-restructure\u2014no pitch, just one example. Free 10-min slot this week?",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00033866,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00012875,
+      "judge_reason": "The email is concise, relevant, and demonstrates insight into the company's recent actions, offering value without a hard pitch, which aligns with a CTO's interest in strategic opportunities and industry intelligence.",
+      "judge_reply": true,
+      "subject": "Quick question on Contradicted Co's engineering shift",
+      "trial_index": 2,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Contradicted Co raised $18M ({claim_id:0b264f32-6412-4ee1-8475-54b08d1163a5}) just two days after laying off 35 ({claim_id:4f60e3fc-9076-48f7-bbf0-7b4097cdcc8a}), yet you\u2019re hiring 4 senior engineering roles ({claim_id:d277c0d3-f26f-469f-a8cf-435f00eedd51}). That mismatch is unusual \u2014 and common as teams rebuild post-layoff. AI maturity signals are low, per your absent AI-adjacent roles. No clear competitor gap either. If you\u2019re re-architecting for scale now, a quick 10-min chat on engineering velocity might help. No pitch \u2014 just context from similar teams. Free next Tuesday or Wednesday?",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00035956,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00014812,
+      "judge_reason": "The email is well-researched, directly addresses the CTO's role and current company events, raises a relevant and insightful point about engineering scale and AI maturity, and proposes a low-commitment, value-focused conversation without a sales pitch.",
+      "judge_reply": true,
+      "subject": "Contradicted Co: Funding + layoff + hiring surge \u2014 timing on engineering scale?",
+      "trial_index": 3,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, your recent Series A ($18M, {0b264f32-6412-4ee1-8475-54b08d1163a5}) and 35-person layoff ({4f60e3fc-9076-48f7-bbf0-7b4097cdcc8a}) suggest a restructuring phase \u2014 yet you're hiring senior engineering roles ({d277c0d3-f26f-469f-a8cf-435f00eedd51}). That mismatch may signal rebuilding infrastructure or tooling. AI maturity signals are low ({ai_maturity: 0.3}), and no competitor gap is established. If you\u2019re evaluating platforms to stabilize engineering velocity post-layoff, I can share how others in segment_2_mid_market_restructure handled similar transitions. 15-minute call this week? No pitch \u2014 just context.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00034746,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.0001823,
+      "judge_reason": "The email highlights internal contradictions (funding, layoffs, hiring) and low AI maturity, which could come across as overly critical or presumptuous. A CTO might perceive this as unsolicited analysis of sensitive strategic decisions, potentially causing defensiveness rather than engagement. The tone is analytical but risks alienating by pointing out perceived mismatches without establishing trust or clear relevance to the CTO's immediate priorities.",
+      "judge_reply": false,
+      "subject": "Contradicted Co: Funding + layoff + hiring surge timing",
+      "trial_index": 4,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, your recent Series A ({claim_id:0b264f32-6412-4ee1-8475-54b08d1163a5}) and 35-person layoff ({claim_id:4f60e3fc-9076-48f7-bbf0-7b4097cdcc8a}) suggest a restructure is underway \u2014 yet you're still hiring senior engineering roles ({claim_id:d277c0d3-f26f-469f-a8cf-435f00eedd51}). That mismatch often signals operational friction. AI maturity is low ({ai_maturity:0.3}), and no competitor gap is established. If you\u2019re evaluating tooling to stabilize post-layoff velocity, now\u2019s the time. No pitch \u2014 just a 10-min chat to see if this aligns with your current priorities?",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00034086,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00015648000000000002,
+      "judge_reason": "The email demonstrates deep research into the company's recent events (Series A, layoffs, hiring), identifies a plausible operational challenge, and offers a relevant, non-pushy value proposition focused on stabilizing engineering velocity post-layoff\u2014a priority likely top-of-mind for a CTO in this situation.",
+      "judge_reply": true,
+      "subject": "Contradicted Co: Post-funding engineering restructure",
+      "trial_index": 5,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Contradicted Co raised $18M {0b264f32-6412-4ee1-8475-54b08d1163a5} just days after laying off 35 {4f60e3fc-9076-48f7-bbf0-7b4097cdcc8a}\u2014and now hiring 4 senior engineering roles {d277c0d3-f26f-469f-a8cf-435f00eedd51}. This timing suggests a targeted rebuild, not just cost-cutting. AI maturity signals are absent, so tooling gaps may be emerging. No competitor gap is established, but restructuring teams often need clarity on platform priorities. If you're mapping engineering capacity to new goals, I can share how similar teams prioritized tooling in the first 60 days. 15-minute call this week? No pitch\u2014just context.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00035296000000000004,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00013805000000000002,
+      "judge_reason": "The email is well-researched, relevant to the CTO's role, offers specific insights about the company's recent actions, and proposes a concise, no-pressure call to share valuable context, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Contradicted Co: Post-funding engineering rebuild",
+      "trial_index": 6,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, your recent Series A ($18M, {0b264f32-6412-4ee1-8475-54b08d1163a5}) and 35-person layoff ({4f60e3fc-9076-48f7-bbf0-7b4097cdcc8a}) suggest a restructuring phase\u2014especially with 4 new engineering hires in 30 days ({d277c0d3-f26f-469f-a8cf-435f00eedd51}). AI maturity signals are low, and no competitor gap is established. Timing may matter now as you rebuild engineering capacity post-layoff. If you\u2019re evaluating tools to stabilize velocity without bloating headcount, I can share how one team cut onboarding time by 40% in 6 weeks. Open to a 10-min chat this week?",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00034526,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00019390000000000002,
+      "judge_reason": "The email references sensitive internal details (layoffs, funding, hiring) in a way that may feel intrusive or overly analytical, potentially putting the CTO on the defensive. The tone is presumptuous ('AI maturity signals are low', 'no competitor gap'), which could be perceived as critical rather than helpful. While the offer is specific, the approach risks alienating a busy CTO who is likely focused on internal restructuring and may not welcome unsolicited advice framed this way.",
+      "judge_reply": false,
+      "subject": "Contradicted Co: Funding + Layoff + Hiring Surge",
+      "trial_index": 7,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Contradicted Co raised $18M ({claim_id:0b264f32-6412-4ee1-8475-54b08d1163a5}) just after laying off 35 ({claim_id:4f60e3fc-9076-48f7-bbf0-7b4097cdcc8a}) \u2014 and is now hiring 4 engineering roles ({claim_id:d277c0d3-f26f-469f-a8cf-435f00eedd51}). That timing suggests a rebuild is underway. AI maturity signals are low, and no clear competitor gap exists. If you're prioritizing stable engineering throughput over rapid scaling, I can share a brief example of how another post-restructure team streamlined tooling without adding headcount. No pitch \u2014 just one use case, 3 mins.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00033866,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00014249,
+      "judge_reason": "The email is concise, data-driven, and directly relevant to the CTO's role, highlighting a potential operational challenge (rebuilding engineering capacity) and offering a specific, low-commitment value proposition (a brief use case) without a hard pitch.",
+      "judge_reply": true,
+      "subject": "Rebuilding engineering capacity at Contradicted Co?",
+      "trial_index": 8,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "I know how much uptime matters when your team depends on APIs every day. We help teams like yours reduce unexpected outages by 40%+ without rewriting code. No pitch. Just a 10-minute call to see if it\u2019s worth looking at. If not, no problem \u2014 I\u2019ll keep it short. Are you free next Tuesday or Wednesday?",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00011515000000000001,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.0001092,
+      "judge_reason": "The email is concise, personalized to the CTO's role, addresses a relevant pain point (API uptime), offers a clear value proposition (40%+ reduction in outages), respects their time with a short call, and provides specific scheduling options.",
+      "judge_reply": true,
+      "subject": "Quick question about your API reliability",
+      "trial_index": 1,
+      "variant": "generic"
+    },
+    {
+      "body": "I know how much uptime and stability matter when you're scaling. We help teams like yours reduce unexpected API failures without adding complexity. No pitch, no demo\u2014just a 10-minute chat to see if there\u2019s a fit. If not, no hard feelings. Are you open to a quick call next week?",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00010525000000000001,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010953000000000002,
+      "judge_reason": "The email is generic, lacks personalization, and does not demonstrate specific knowledge of the CTO's current challenges or infrastructure. It immediately proposes a call without offering value upfront, which busy CTOs often find inefficient and are unlikely to prioritize.",
+      "judge_reply": false,
+      "subject": "Quick question about your API reliability",
+      "trial_index": 2,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I\u2019m reaching out because I work with CTOs who are managing complex systems and need simpler ways to maintain reliability without adding overhead. No pitch\u2014just wondering if you\u2019re currently evaluating any tools to reduce operational noise in your stack. If it\u2019s worth 10 minutes to compare notes, I\u2019m happy to jump on a quick call. Either way, thanks for your time.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012615,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010555000000000002,
+      "judge_reason": "The email is concise, relevant to the CTO's role, focuses on a common pain point (operational noise), offers value without immediate sales pressure, and respects their time with a low-commitment ask.",
+      "judge_reply": true,
+      "subject": "Quick question about your current infra",
+      "trial_index": 3,
+      "variant": "generic"
+    },
+    {
+      "body": "I noticed Contradicted Co is scaling infrastructure rapidly \u2014 curious if your team still handles deployments manually or through fragmented tooling. Many CTOs we talk to end up spending more time coordinating releases than shipping features. No pitch, just a 10-minute chat to see if there\u2019s a simpler way. If it\u2019s not a priority now, no worries \u2014 just reply with \"later\" and I\u2019ll circle back in a few months.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013385,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010165,
+      "judge_reason": "The email is concise, relevant to the CTO's role, acknowledges the company's growth, and offers a low-commitment option, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your current deployment workflow",
+      "trial_index": 4,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I help CTOs reduce deployment friction without adding new tools or processes. At Contradicted Co, I imagine you\u2019re balancing speed and stability daily. No pitch\u2014just wondering if you\u2019ve found a way to make releases feel less unpredictable. If so, I\u2019d be curious to hear how. If not, I can share one thing that helped another CTO last week. Either way, happy to keep it short.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013605,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010744,
+      "judge_reason": "The email is personalized, shows understanding of the CTO's role, asks an open-ended question about a relevant pain point, and offers value without being overly salesy, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your current deployment process",
+      "trial_index": 5,
+      "variant": "generic"
+    },
+    {
+      "body": "I noticed Contradicted Co relies heavily on external APIs. If even a small percentage of calls fail silently, it adds up fast \u2014 especially under load. I help CTOs reduce that noise with a lightweight monitoring layer that catches failures before they impact users. No setup. No integration headaches. Just visibility. If you\u2019ve ever wished you could see which API calls are actually breaking, I\u2019d be happy to send you a 2-minute screenshot of what that looks like.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013935,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011348000000000002,
+      "judge_reason": "The email is concise, addresses a relevant technical pain point (API reliability under load), offers a specific and low-effort value proposition (a 2-minute screenshot), and demonstrates understanding of the CTO's role and challenges.",
+      "judge_reply": true,
+      "subject": "Quick question about your API reliability",
+      "trial_index": 6,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I'm reaching out because I work with CTOs who are managing evolving infrastructure needs\u2014especially when scaling gets messy. No pitch, no demo. Just wondering if you're happy with how your team handles deployment consistency today. If it\u2019s a pain point, I can share one simple tweak a similar team used to cut deployment errors by half. No pressure\u2014just thought it might help. If you're open to a 5-minute chat, let me know a time that works.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00014815,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010410000000000001,
+      "judge_reason": "The email is concise, relevant to the CTO's role, offers value without pressure, and focuses on a common pain point (deployment consistency), making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your current infra",
+      "trial_index": 7,
+      "variant": "generic"
+    },
+    {
+      "body": "I noticed Contradicted Co is scaling infrastructure rapidly \u2014 curious if your team still handles deployments manually or through scripts that slow down releases. No pitch, just a simple question: Would a lighter alternative to your current process save you time each week? If it's not a priority now, I'll leave you be. If it is, I can send one example of how another team cut deployment time by 40% without new hires. Just say yes or no.",
+      "company_id": "contradicted-co",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013935,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010690000000000001,
+      "judge_reason": "The email is concise, relevant to the CTO's role, asks a specific question about deployment processes, offers value without a hard pitch, and respects the recipient's time by allowing a simple yes/no response.",
+      "judge_reply": true,
+      "subject": "Quick question about your current deployment workflow",
+      "trial_index": 8,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi, I noticed Taylor Roe became CEO effective March 1 ({claim_id:41af5a14-d033-485b-8536-c2ec83d0f05f}) and the Seed Extension closed in Jan 2026 ({claim_id:3d5c6b69-ba28-45db-a434-19233226bbf8}). With AI maturity signals currently absent and no clear competitor gap established, this may be a window to align tech strategy early under new leadership. No hype \u2014 just a quick 10-minute chat to see if there\u2019s a fit. Free next Tuesday or Wednesday?",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00023998000000000002,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011388,
+      "judge_reason": "The email is concise, relevant to the CTO's role, references specific and timely events (CEO change, funding), offers a low-commitment call, and demonstrates research without hype.",
+      "judge_reply": true,
+      "subject": "Following up on recent leadership change at Shadow Startup",
+      "trial_index": 1,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Shadow Startup\u2019s Seed Extension ($3M) closes Jan 2026 {3d5c6b69-ba28-45db-a434-19233226bbf8} and Taylor Roe joins as CEO Mar 2026 {41af5a14-d033-485b-8536-c2ec83d0f05f}. With no active AI signals or established competitor gaps, your tech priorities may be in flux. If you\u2019re evaluating infrastructure or tooling ahead of the new leadership ramp-up, I can share a short, zero-pressure comparison of what similar teams implemented during transitions. Open to a 10-min call next week?",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00025428,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00018231,
+      "judge_reason": "The email lacks personalization and demonstrates a superficial understanding of the CTO's role. It references specific funding and leadership changes but fails to connect these to concrete technical challenges or opportunities relevant to a CTO. The vague mention of 'infrastructure or tooling' and 'AI signals' without specific insights makes it feel generic and speculative. A CTO, especially one preparing for a leadership transition, would likely prioritize strategic, well-researched outreach over broad, unsolicited comparisons.",
+      "judge_reply": false,
+      "subject": "Quick question on your 2026 roadmap",
+      "trial_index": 2,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Shadow Startup\u2019s Seed Extension ($3M) closed Jan 2026 {3d5c6b69-ba28-45db-a434-19233226bbf8} and Taylor Roe joined as CEO Mar 2026 {41af5a14-d033-485b-8536-c2ec83d0f05f}. With AI maturity signals currently absent and no established competitor gap, you may be evaluating technical priorities early in the cycle. No hype \u2014 just wondering if you\u2019re mapping infrastructure needs for the next 6\u201312 months. Open to a 10-min chat if helpful. No pressure.",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00024768,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011465000000000001,
+      "judge_reason": "The email is concise, personalized with specific details about the company's funding and leadership, demonstrates understanding of the CTO's potential priorities, and offers a low-commitment, relevant conversation.",
+      "judge_reply": true,
+      "subject": "Quick question on Shadow Startup's next steps",
+      "trial_index": 3,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Shadow Startup\u2019s Seed Extension closed in Jan 2026 ({claim_id: 3d5c6b69-ba28-45db-a434-19233226bbf8}) and Taylor Roe became CEO effective March 2026 ({claim_id: 41af5a14-d033-485b-8536-c2ec83d0f05f}). Both are below-threshold signals with low AI maturity confidence. With new leadership in place, timing may matter as priorities shift. No competitor gap is established yet. If you\u2019re evaluating technical direction now, I can share one practical observation on how similar teams started structuring AI efforts \u2014 no pitch, just a thread. Free 10min next week?",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00026748,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00013684,
+      "judge_reason": "The email is concise, relevant, and personalized with specific, verifiable claims about the company's recent changes. It offers value without being pushy, respects the CTO's time, and proposes a low-commitment next step, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question on Shadow Startup\u2019s next steps",
+      "trial_index": 4,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Shadow Startup\u2019s Seed Extension ($3M) closes Jan 2026 ({claim_id: 3d5c6b69-ba28-45db-a434-19233226bbf8}) and Taylor Roe joins as CEO Mar 2026 ({claim_id: 41af5a14-d033-485b-8536-c2ec83d0f05f}). With AI maturity signals currently absent and no clear competitor gap established, the next 60 days could be a window to align tech strategy before new leadership fully ramps up. No pitch\u2014just wondering if you\u2019re prioritizing any specific infrastructure or tooling shifts right now? Happy to share one relevant example if it helps.",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00026308,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00013055,
+      "judge_reason": "The email is concise, well-researched with specific details (funding round, leadership change), relevant to the CTO's role, and asks a direct, non-pushy question about tech strategy priorities, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about Shadow Startup's next steps",
+      "trial_index": 5,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi there, I noticed Shadow Startup\u2019s Seed Extension ($3M) closed in Jan 2026 {3d5c6b69-ba28-45db-a434-19233226bbf8} and Taylor Roe became CEO in March 2026 {41af5a14-d033-485b-8536-c2ec83d0f05f}. With new leadership and no clear AI maturity signals or competitor gap established, you may be evaluating technical priorities now. No hype \u2014 just wondering if you\u2019re open to a 10-minute chat this week to align on what\u2019s top of mind for the engineering team?",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00024438000000000004,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00013254000000000003,
+      "judge_reason": "The email lacks personalization, references specific internal details without clear relevance to the recipient, and comes across as speculative rather than offering concrete value. A CTO would likely ignore this as it feels like a generic, data-driven outreach without a compelling reason to engage.",
+      "judge_reply": false,
+      "subject": "Quick question on Shadow Startup's next steps",
+      "trial_index": 6,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Shadow Startup\u2019s Seed Extension ($3M) closed Jan 2026 {3d5c6b69-ba28-45db-a434-19233226bbf8} and Taylor Roe became CEO effective March 2026 {41af5a14-d033-485b-8536-c2ec83d0f05f}. With AI maturity signals currently low and no established competitor gap, the new leadership may be evaluating tech priorities. No high-confidence signals suggest urgency, but timing could align with early product direction-setting. Happy to share a one-pager on how early-stage CTOs are structuring AI teams \u2014 no pitch, just examples. Open to a 10-min chat next week?",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00026528,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011982,
+      "judge_reason": "The email is personalized, relevant to the CTO's role, references specific and timely company events, offers value without a hard pitch, and proposes a low-commitment next step.",
+      "judge_reply": true,
+      "subject": "Quick question about Shadow Startup's next moves",
+      "trial_index": 7,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Shadow Startup\u2019s Seed Extension ($3M) closed Jan 2026 {3d5c6b69-ba28-45db-a434-19233226bbf8} and Taylor Roe steps in as CEO Mar 1 {41af5a14-d033-485b-8536-c2ec83d0f05f} \u2014 timing that often shifts technical priorities. AI maturity signals are currently low, and no clear competitor gap is established. If you\u2019re evaluating how to structure engineering or AI adoption under the new leadership, I can share one concrete example of how a similar team realigned in 60 days. Open to a 10-min chat this week?",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00025648,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00013963999999999998,
+      "judge_reason": "The email is concise, relevant to the CTO's role, references specific and timely company developments (funding and leadership change), offers a concrete value proposition (example of team realignment in 60 days), and proposes a low-commitment next step (10-minute chat).",
+      "judge_reply": true,
+      "subject": "Quick question about Shadow Startup's next moves",
+      "trial_index": 8,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi [First Name], I\u2019m reaching out because we help CTOs at companies like Shadow Startup reduce unexpected downtime without adding headcount. No pitch\u2014just a 10-minute chat to see if there\u2019s a simple way to smooth out your ops. If it\u2019s not relevant, no worries. If it is, I\u2019m free Tuesday or Wednesday afternoon. Let me know what works.",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012267,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.0001009,
+      "judge_reason": "The email is concise, personalized, respects the CTO's time, offers a clear value proposition (reducing downtime without adding headcount), and provides specific, low-commitment options for engagement.",
+      "judge_reply": true,
+      "subject": "Quick question about your current infrastructure",
+      "trial_index": 1,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I noticed Shadow Startup relies heavily on API uptime. Most teams I talk to are spending too much time patching intermittent failures instead of building features. We help CTOs reduce those outages without adding headcount or overhauling infrastructure. No pitch\u2014just a 10-minute chat to see if it\u2019s worth exploring. Free if it\u2019s not relevant. Are you open to a quick call next week?",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013146999999999999,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010171000000000001,
+      "judge_reason": "The email is concise, personalized, addresses a relevant pain point for a CTO (API uptime and resource allocation), offers value without pressure, and proposes a low-commitment next step.",
+      "judge_reply": true,
+      "subject": "Quick question about your API reliability",
+      "trial_index": 2,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I help CTOs at companies like Shadow Startup reduce time spent on patching and scaling legacy systems. No pitch\u2014just a simple question: are you still manually managing deployments across environments? If so, I can share a 90-second example of how another team cut that work in half. No meeting needed unless it\u2019s useful.",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00011497,
+      "judge_attempts": 1,
+      "judge_cost_usd": 8.338e-05,
+      "judge_reason": "The email is concise, relevant to the CTO's role, offers value without pressure, and addresses a common pain point in infrastructure management.",
+      "judge_reply": true,
+      "subject": "Quick question about your infrastructure",
+      "trial_index": 3,
+      "variant": "generic"
+    },
+    {
+      "body": "I noticed Shadow Startup is scaling quickly \u2014 if you're managing growing infrastructure complexity, I can share how teams like yours simplify deployment without adding headcount. No pitch, no demo \u2014 just one practical idea you can test this week. If it\u2019s relevant, I\u2019ll send it over. Otherwise, no worries.",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00010287000000000001,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011418000000000001,
+      "judge_reason": "The email is concise, personalized, and offers a specific, low-commitment value proposition relevant to a CTO's challenges with scaling infrastructure. It respects the prospect's time by avoiding a pitch and focusing on a practical idea, increasing the likelihood of a response.",
+      "judge_reply": true,
+      "subject": "Quick question about your infrastructure",
+      "trial_index": 4,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I help CTOs at companies like Shadow Startup reduce complexity in their deployment pipelines without adding new tools. No pitch\u2014just a quick question: are you still managing deployments manually or through scripts that are hard to scale? If so, I can share one straightforward change that helped another CTO cut deployment time by 40% last month. No demo needed. Just a 10-minute chat if it\u2019s useful.",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013477,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00012234,
+      "judge_reason": "The email is concise, personalized, addresses a specific pain point (deployment complexity), offers a tangible benefit (40% time reduction), respects the CTO's time (10-minute chat, no demo), and references a relevant peer company, making it plausible for a CTO to respond.",
+      "judge_reply": true,
+      "subject": "Quick question about your current infrastructure",
+      "trial_index": 5,
+      "variant": "generic"
+    },
+    {
+      "body": "I help CTOs of companies like Shadow Startup reduce API latency without adding infrastructure complexity. No pitch\u2014just a 10-minute chat to see if there\u2019s a simple fix you\u2019re not seeing. If it doesn\u2019t apply, I\u2019ll get out of your way. Free next week\u2014let me know a time that works.",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00010837000000000001,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.16e-05,
+      "judge_reason": "The email is concise, personalized, relevant to the CTO's role, offers value without a hard sell, and respects their time with a low-commitment request.",
+      "judge_reply": true,
+      "subject": "Quick question about your API scaling",
+      "trial_index": 6,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I\u2019m reaching out because we help CTOs at companies like Shadow Startup reduce operational noise without adding complexity. No pitch\u2014just a simple question: are you currently spending more time managing tools than improving them? If so, I can share one thing that\u2019s helped others cut through the noise. No meeting needed unless it\u2019s useful. Just reply \"yes\" and I\u2019ll send it over.",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012817000000000001,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.702000000000002e-05,
+      "judge_reason": "The email is concise, personalized, relevant to the CTO's role, offers value without a hard pitch, and respects their time by not requiring a meeting.",
+      "judge_reply": true,
+      "subject": "Quick question about your current infrastructure",
+      "trial_index": 7,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I noticed Shadow Startup is building something with high API throughput. If you're hitting latency or connection limits at scale, we\u2019ve helped teams reduce middleware overhead by 40% without rewriting core systems. No pitch\u2014just a 10-minute chat to see if it\u2019s relevant. Free to jump on a call next week?",
+      "company_id": "shadow-startup",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00011277,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.905000000000001e-05,
+      "judge_reason": "The email is concise, relevant to the CTO's role, offers a specific value proposition (reducing middleware overhead by 40%), and respects their time with a low-commitment request.",
+      "judge_reply": true,
+      "subject": "Quick question about your API scaling",
+      "trial_index": 8,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi, I noticed Veridian just closed $75M Series C ({claim_id:8712cfec-8c0f-4755-ab23-05843ef69b36}) and has launched 5 new engineering roles in 30 days ({claim_id:7f20a03c-5d03-4417-8237-4bab152fe3e7}). With AI maturity signals still low and no clear competitor gap established, now may be the time to align engineering scale with infrastructure readiness. No pitch \u2014 just wondering if you're mapping hiring velocity to platform capacity. Open to a 10-min chat if it\u2019s relevant.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00025792,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00015917,
+      "judge_reason": "The email is concise, relevant, and demonstrates research into the company's recent funding and hiring activity. It raises a strategic question about aligning engineering scale with infrastructure readiness, which is a key concern for a CTO. The tone is non-pitchy and offers a low-commitment 10-minute chat, making it plausible for a busy CTO to consider responding.",
+      "judge_reply": true,
+      "subject": "Veridian\u2019s hiring surge \u2014 scaling engineering post-Series C?",
+      "trial_index": 1,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi [First Name], Veridian\u2019s hiring surge ({claim_id:7f20a03c-5d03-4417-8237-4bab152fe3e7}) and $75M Series C ({claim_id:8712cfec-8c0f-4755-ab23-05843ef69b36}) suggest immediate scale needs. AI maturity signals are absent or low-confidence \u2014 no AI-adjacent roles yet. With funding fresh and engineering roles open, infrastructure decisions are likely active now. No clear competitor gap established. Could a 10-minute chat on platform scaling priorities help? I\u2019ll send one calendar link \u2014 no pitch, just context.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00026672,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00014508000000000001,
+      "judge_reason": "The email is well-researched, references specific and recent company developments (hiring surge, Series C funding), ties these to a relevant pain point (infrastructure scaling), and proposes a low-commitment, value-oriented conversation focused on the CTO's priorities rather than a sales pitch.",
+      "judge_reply": true,
+      "subject": "Veridian\u2019s hiring surge + Series C \u2014 timing for platform scaling?",
+      "trial_index": 2,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, your Series C close ({claim_id: 8712cfec-8c0f-4755-ab23-05843ef69b36}) and 5 new engineering roles in 30 days ({claim_id: 7f20a03c-5d03-4417-8237-4bab152fe3e7}) suggest active scaling. AI maturity signals are low (no AI-adjacent hires yet), and no clear competitor gap is established. With capital recently in hand, now may be the moment to align infrastructure priorities before onboarding ramps up. No pitch \u2014 just curious if you\u2019re mapping platform needs to this hiring wave. Open to a 10-min chat if it\u2019s relevant.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00027662,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00014560000000000002,
+      "judge_reason": "The email is concise, relevant, and demonstrates research into the company's recent funding and hiring. It raises a strategic question about infrastructure alignment with scaling, which is a key concern for a CTO, and offers a low-commitment, no-pitch conversation, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Veridian\u2019s hiring surge & Series C \u2014 timing for platform scaling?",
+      "trial_index": 3,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi [First Name], Veridian just hired 5 engineering roles in 30 days {7f20a03c-5d03-4417-8237-4bab152fe3e7} and closed $75M Series C {8712cfec-8c0f-4755-ab23-05843ef69b36}. With AI maturity signals currently absent, scaling infrastructure ahead of growth may be urgent. No competitor gap is established, so focus is likely internal. If your team is evaluating tools to reduce onboarding friction or ops overhead during this hiring spike, I can share how one CTO at a similar stage reduced deployment latency by 40% in 6 weeks \u2014 no pitch, just a 10-min demo if useful. Happy to send a short link if you\u2019re open.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00029642000000000004,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00013535,
+      "judge_reason": "The email is personalized, relevant to the CTO's role, and addresses a timely concern about scaling infrastructure during rapid growth. It offers value with a case study and a low-commitment demo, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Veridian\u2019s hiring surge \u2014 scaling infrastructure before Series C?",
+      "trial_index": 4,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, your team just posted 5 engineering roles in 30 days ({claim_id:7f20a03c-5d03-4417-8237-4bab152fe3e7}) and closed a $75M Series C ({claim_id:8712cfec-8c0f-4755-ab23-05843ef69b36}). With AI maturity signals absent and no clear competitor gap, your team may be scaling infrastructure fast without tactical automation. No need for a demo\u2014just 10 minutes to see if our platform reduces onboarding friction for new hires in logistics systems. Available Thursday or Friday?",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00025352,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00017191000000000003,
+      "judge_reason": "The email makes assumptions about the company's strategy ('scaling infrastructure fast without tactical automation') and lacks AI maturity signals, which could come across as presumptuous or misinformed. For a CTO, especially after a Series C, the focus is likely on strategic execution, not unsolicited advice on automation. The request for a meeting without a clear, compelling value proposition tailored to Veridian's specific needs reduces the likelihood of a response.",
+      "judge_reply": false,
+      "subject": "Veridian Logistics: Hiring surge after Series C",
+      "trial_index": 5,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, your Series C close on 2026-04-18 ({claim_id:8712cfec-8c0f-4755-ab23-05843ef69b36}) and 5 engineering postings in 30 days ({claim_id:7f20a03c-5d03-4417-8237-4bab152fe3e7}) suggest urgent scaling needs. AI maturity signals are absent \u2014 no adjacent roles or tooling observed. Timing may matter now: new capital often accelerates infrastructure decisions before Q3 hiring ramps. No competitor gap is established, so you\u2019re likely building from scratch. If you\u2019re evaluating how to systematize engineering growth without adding headcount, I can share one low-friction example from a similar team. Open to a 10-min chat next week?",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00029972,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00013946,
+      "judge_reason": "The email is highly personalized, references specific and credible data (Series C close date, engineering postings), demonstrates industry insight, and offers a low-friction, relevant value proposition tied to the CTO's likely current priorities around scaling efficiently.",
+      "judge_reply": true,
+      "subject": "Veridian\u2019s hiring surge \u2014 scaling engineering under Series C?",
+      "trial_index": 6,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, your Series C close on April 18 ({claim_id: 8712cfec-8c0f-4755-ab23-05843ef69b36}) and 5 recent engineering hires in 30 days ({claim_id: 7f20a03c-5d03-4417-8237-4bab152fe3e7}) suggest scaling is active. AI maturity signals are low (no AI-adjacent roles yet), so infrastructure or tooling gaps may be emerging as you onboard talent. No clear competitor gap established, but timing may matter now as new hires ramp. Happy to share how one team streamlined onboarding without adding headcount \u2014 8-minute chat next week? No pitch, just context.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00027882,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00013462,
+      "judge_reason": "The email is personalized, data-driven, and relevant to the CTO's role, highlighting specific company developments (Series C, hiring surge) and offering actionable, non-pitch value (onboarding efficiency insights) in a concise and respectful manner.",
+      "judge_reply": true,
+      "subject": "Veridian\u2019s hiring surge \u2014 scaling engineering under Series C?",
+      "trial_index": 7,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi, I noticed Veridian\u2019s hiring surge ({claim_id:7f20a03c-5d03-4417-8237-4bab152fe3e7}) and recent $75M Series C ({claim_id:8712cfec-8c0f-4755-ab23-05843ef69b36}) \u2014 both verified signals. With AI maturity currently low (no active AI roles) and no clear competitor gap, the timing may matter now as engineering headcount ramps up. No hype \u2014 just a quick question: Are you evaluating how to align platform scalability with this growth phase? Happy to share a 10-min benchmark if useful.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00026342,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00014371000000000002,
+      "judge_reason": "The email is concise, data-driven, and directly relevant to the CTO's responsibilities regarding platform scalability during a growth phase. It references verified signals (hiring surge, Series C funding) and offers a specific, low-commitment value (10-min benchmark), making a response plausible.",
+      "judge_reply": true,
+      "subject": "Veridian\u2019s hiring surge + Series C \u2014 timing on platform scale?",
+      "trial_index": 8,
+      "variant": "signal_grounded"
+    },
+    {
+      "body": "Hi [First Name], I help CTOs at companies like Veridian Logistics streamline infrastructure scaling without adding headcount or complexity. Right now, many teams are spending too much time managing legacy systems instead of building new features. I'm not selling anything\u2014just wondering if you're currently wrestling with any of that? If so, I can share one simple adjustment that helped another CTO cut operational noise by 40% in 6 weeks. No pitch. Just a quick chat if it's relevant.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00014696000000000004,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00014154000000000003,
+      "judge_reason": "The email is personalized, addresses a common pain point for CTOs (legacy systems and scaling), offers a specific, quantifiable benefit (40% reduction in operational noise), and positions the sender as a helpful resource rather than making a direct sales pitch. This approach is likely to resonate with a busy CTO who values efficiency and practical solutions.",
+      "judge_reply": true,
+      "subject": "Quick question about your infrastructure scale",
+      "trial_index": 1,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I work with CTOs at companies like Veridian Logistics who are balancing system reliability with growing scale. No pitch\u2014just wondering if right now, you're more focused on reducing operational friction in your current stack, or planning for the next phase of growth? Either way, I\u2019ve got a 10-minute template that\u2019s helped others clarify their next step. Happy to send it over if it\u2019s useful.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013156,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.399000000000001e-05,
+      "judge_reason": "The email is personalized, relevant to the CTO's role, offers value without a hard pitch, and is concise and respectful of their time.",
+      "judge_reply": true,
+      "subject": "Quick question about your infrastructure priorities",
+      "trial_index": 2,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I'm reaching out because I've worked with CTOs at logistics companies like Veridian who needed to simplify their infrastructure scaling without adding headcount. No pitch\u2014just a quick 10-minute chat to see if there's a shared approach worth exploring. If it's not a priority now, I'll keep it brief and disappear. Either way, just say the word and I'll send over a slot.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00013156,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011107,
+      "judge_reason": "The email is personalized, respects the CTO's time, offers a low-commitment conversation, and addresses a relevant pain point (infrastructure scaling without adding headcount) for a logistics CTO, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your infrastructure scaling",
+      "trial_index": 3,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I'm reaching out because I work with CTOs at companies like Veridian Logistics who are looking to simplify their infrastructure without adding complexity. No pitch \u2014 just a quick 15-minute chat to see if there\u2019s an overlap in what you\u2019re dealing with and what we\u2019ve helped others solve. If it\u2019s not a priority now, no problem. Just let me know a time that works, or skip it entirely. Either way, thanks for your time.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00014366000000000002,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011756999999999999,
+      "judge_reason": "The email is concise, respectful of the CTO's time, mentions a relevant company (Veridian Logistics), focuses on a common pain point (infrastructure simplification), and offers a low-commitment option, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your current infrastructure",
+      "trial_index": 4,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I\u2019m reaching out because I work with CTOs at companies like Veridian Logistics who are simplifying how they manage scale without adding complexity. No pitch\u2014just wondering if you\u2019ve got 10 minutes this week to talk about what\u2019s working (or not) in your current setup? I\u2019ll keep it practical.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00011176,
+      "judge_attempts": 1,
+      "judge_cost_usd": 9.461000000000002e-05,
+      "judge_reason": "The email is personalized, references a relevant company, respects the CTO's time, and focuses on practical insights rather than a sales pitch, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your infrastructure",
+      "trial_index": 5,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I\u2019m reaching out because I work with CTOs who are balancing reliability and cost in their infrastructure. No pitch\u2014just wondering if you\u2019ve got bandwidth this week for a 10-minute chat about what\u2019s working (or not) in your current setup. If now isn\u2019t good, I\u2019ll follow up in a couple weeks. Either way, thanks for your time.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012496,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00011792000000000001,
+      "judge_reason": "The email is concise, respectful of the CTO's time, and focuses on a relevant pain point (balancing reliability and cost). It avoids a hard pitch, offers a short call, and provides an easy opt-out, making a response plausible.",
+      "judge_reply": true,
+      "subject": "Quick question about your infrastructure stack",
+      "trial_index": 6,
+      "variant": "generic"
+    },
+    {
+      "body": "I know how much uptime matters for logistics systems. We help teams like yours reduce API downtime without adding complexity. No sales pitch\u2014just a 10-minute call to see if it\u2019s worth exploring. If you\u2019ve got 10 minutes free next week, I\u2019ll send over a calendar link.",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00010186,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00010237000000000001,
+      "judge_reason": "The email is concise, relevant to the CTO's role, addresses a key pain point (API uptime), offers value without a hard sell, and respects their time with a low-commitment request.",
+      "judge_reply": true,
+      "subject": "Quick question about your API reliability",
+      "trial_index": 7,
+      "variant": "generic"
+    },
+    {
+      "body": "Hi [First Name], I work with CTOs at companies like Veridian Logistics who are managing growing infrastructure demands without adding headcount. If you\u2019re looking to simplify deployment or reduce operational overhead without major rewrites, I\u2019d be happy to share how others have approached it\u2014no pitch, just a 10-minute chat. Are you open to a quick call next week?",
+      "company_id": "silent-sophisticate",
+      "draft_attempts": 1,
+      "draft_cost_usd": 0.00012056,
+      "judge_attempts": 1,
+      "judge_cost_usd": 0.00012651,
+      "judge_reason": "The email is generic, lacks personalization beyond the name, and makes a vague claim about working with CTOs at a named company without establishing credibility. It requests a call without offering specific value or demonstrating understanding of the prospect's unique challenges, making it unlikely a busy CTO would prioritize a response.",
+      "judge_reply": false,
+      "subject": "Quick question about your infrastructure scale",
+      "trial_index": 8,
+      "variant": "generic"
+    }
+  ],
+  "fixtures": [
+    "data\\fixtures\\companies\\acme_series_b.json",
+    "data\\fixtures\\companies\\contradicted_co.json",
+    "data\\fixtures\\companies\\shadow_startup.json",
+    "data\\fixtures\\companies\\silent_sophisticate.json"
+  ],
+  "judge_question": "Would a busy CTO reply?",
+  "ledger": {
+    "calls": 128,
+    "ceiling_usd": 0.5,
+    "model_breakdown": {
+      "deepseek/deepseek-chat-v3.1": {
+        "calls": 64,
+        "input_tokens": 13492,
+        "output_tokens": 4052,
+        "spent_usd": 0.00810004
+      },
+      "qwen/qwen3-next-80b-a3b-instruct": {
+        "calls": 64,
+        "input_tokens": 29960,
+        "output_tokens": 9849,
+        "spent_usd": 0.013530300000000004
+      }
+    },
+    "per_call_log": [
+      {
+        "call_index": 1,
+        "cost_usd": 0.00029755,
+        "input_tokens": 935,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 1,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 194
+      },
+      {
+        "call_index": 2,
+        "cost_usd": 0.00016345000000000002,
+        "input_tokens": 255,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 1,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 86
+      },
+      {
+        "call_index": 3,
+        "cost_usd": 0.00030085,
+        "input_tokens": 935,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 2,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 197
+      },
+      {
+        "call_index": 4,
+        "cost_usd": 0.00012443,
+        "input_tokens": 249,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 2,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 52
+      },
+      {
+        "call_index": 5,
+        "cost_usd": 0.00034815,
+        "input_tokens": 935,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 3,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 240
+      },
+      {
+        "call_index": 6,
+        "cost_usd": 0.00015673000000000003,
+        "input_tokens": 279,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 3,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 74
+      },
+      {
+        "call_index": 7,
+        "cost_usd": 0.00031515000000000004,
+        "input_tokens": 935,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 4,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 210
+      },
+      {
+        "call_index": 8,
+        "cost_usd": 0.00012767,
+        "input_tokens": 261,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 4,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 52
+      },
+      {
+        "call_index": 9,
+        "cost_usd": 0.00033165,
+        "input_tokens": 935,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 5,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 225
+      },
+      {
+        "call_index": 10,
+        "cost_usd": 0.00019287999999999998,
+        "input_tokens": 254,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 5,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 113
+      },
+      {
+        "call_index": 11,
+        "cost_usd": 0.00032505,
+        "input_tokens": 935,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 6,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 219
+      },
+      {
+        "call_index": 12,
+        "cost_usd": 0.00015133,
+        "input_tokens": 259,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 6,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 74
+      },
+      {
+        "call_index": 13,
+        "cost_usd": 0.00029865,
+        "input_tokens": 935,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 7,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 195
+      },
+      {
+        "call_index": 14,
+        "cost_usd": 0.00014037,
+        "input_tokens": 251,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 7,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 66
+      },
+      {
+        "call_index": 15,
+        "cost_usd": 0.00030744999999999997,
+        "input_tokens": 935,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 8,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 203
+      },
+      {
+        "call_index": 16,
+        "cost_usd": 0.00012474,
+        "input_tokens": 242,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 8,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 54
+      },
+      {
+        "call_index": 17,
+        "cost_usd": 0.00012386000000000002,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 1,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 100
+      },
+      {
+        "call_index": 18,
+        "cost_usd": 9.924e-05,
+        "input_tokens": 172,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 1,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 48
+      },
+      {
+        "call_index": 19,
+        "cost_usd": 0.00012716000000000002,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 2,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 103
+      },
+      {
+        "call_index": 20,
+        "cost_usd": 9.704e-05,
+        "input_tokens": 172,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 2,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 46
+      },
+      {
+        "call_index": 21,
+        "cost_usd": 0.00012716000000000002,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 3,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 103
+      },
+      {
+        "call_index": 22,
+        "cost_usd": 0.00010256000000000001,
+        "input_tokens": 168,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 3,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 52
+      },
+      {
+        "call_index": 23,
+        "cost_usd": 0.00012386000000000002,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 4,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 100
+      },
+      {
+        "call_index": 24,
+        "cost_usd": 0.00011491,
+        "input_tokens": 173,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 4,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 62
+      },
+      {
+        "call_index": 25,
+        "cost_usd": 0.00011946000000000001,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 5,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 96
+      },
+      {
+        "call_index": 26,
+        "cost_usd": 9.598e-05,
+        "input_tokens": 164,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 5,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 47
+      },
+      {
+        "call_index": 27,
+        "cost_usd": 0.00010406,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 6,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 82
+      },
+      {
+        "call_index": 28,
+        "cost_usd": 9.822e-05,
+        "input_tokens": 156,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 6,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 51
+      },
+      {
+        "call_index": 29,
+        "cost_usd": 0.00013596000000000002,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 7,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 111
+      },
+      {
+        "call_index": 30,
+        "cost_usd": 0.00012095,
+        "input_tokens": 175,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 7,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 67
+      },
+      {
+        "call_index": 31,
+        "cost_usd": 0.00013156,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_draft",
+          "trial_index": 8,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 107
+      },
+      {
+        "call_index": 32,
+        "cost_usd": 0.00011240000000000001,
+        "input_tokens": 180,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "acme",
+          "name": "ab_reply_judge",
+          "trial_index": 8,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 58
+      },
+      {
+        "call_index": 33,
+        "cost_usd": 0.00034526,
+        "input_tokens": 964,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 1,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 235
+      },
+      {
+        "call_index": 34,
+        "cost_usd": 0.00016831,
+        "input_tokens": 273,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 1,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 86
+      },
+      {
+        "call_index": 35,
+        "cost_usd": 0.00033866,
+        "input_tokens": 964,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 2,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 229
+      },
+      {
+        "call_index": 36,
+        "cost_usd": 0.00012875,
+        "input_tokens": 265,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 2,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 52
+      },
+      {
+        "call_index": 37,
+        "cost_usd": 0.00035956,
+        "input_tokens": 964,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 3,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 248
+      },
+      {
+        "call_index": 38,
+        "cost_usd": 0.00014812,
+        "input_tokens": 296,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 3,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 62
+      },
+      {
+        "call_index": 39,
+        "cost_usd": 0.00034746,
+        "input_tokens": 964,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 4,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 237
+      },
+      {
+        "call_index": 40,
+        "cost_usd": 0.0001823,
+        "input_tokens": 280,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 4,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 97
+      },
+      {
+        "call_index": 41,
+        "cost_usd": 0.00034086,
+        "input_tokens": 964,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 5,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 231
+      },
+      {
+        "call_index": 42,
+        "cost_usd": 0.00015648000000000002,
+        "input_tokens": 274,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 5,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 75
+      },
+      {
+        "call_index": 43,
+        "cost_usd": 0.00035296000000000004,
+        "input_tokens": 964,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 6,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 242
+      },
+      {
+        "call_index": 44,
+        "cost_usd": 0.00013805000000000002,
+        "input_tokens": 275,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 6,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 58
+      },
+      {
+        "call_index": 45,
+        "cost_usd": 0.00034526,
+        "input_tokens": 964,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 7,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 235
+      },
+      {
+        "call_index": 46,
+        "cost_usd": 0.00019390000000000002,
+        "input_tokens": 270,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 7,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 110
+      },
+      {
+        "call_index": 47,
+        "cost_usd": 0.00033866,
+        "input_tokens": 964,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 8,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 229
+      },
+      {
+        "call_index": 48,
+        "cost_usd": 0.00014249,
+        "input_tokens": 267,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 8,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 64
+      },
+      {
+        "call_index": 49,
+        "cost_usd": 0.00011515000000000001,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 1,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 92
+      },
+      {
+        "call_index": 50,
+        "cost_usd": 0.0001092,
+        "input_tokens": 160,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 1,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 60
+      },
+      {
+        "call_index": 51,
+        "cost_usd": 0.00010525000000000001,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 2,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 83
+      },
+      {
+        "call_index": 52,
+        "cost_usd": 0.00010953000000000002,
+        "input_tokens": 149,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 2,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 63
+      },
+      {
+        "call_index": 53,
+        "cost_usd": 0.00012615,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 3,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 102
+      },
+      {
+        "call_index": 54,
+        "cost_usd": 0.00010555000000000002,
+        "input_tokens": 175,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 3,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 53
+      },
+      {
+        "call_index": 55,
+        "cost_usd": 0.00013385,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 4,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 109
+      },
+      {
+        "call_index": 56,
+        "cost_usd": 0.00010165,
+        "input_tokens": 185,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 4,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 47
+      },
+      {
+        "call_index": 57,
+        "cost_usd": 0.00013605,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 5,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 111
+      },
+      {
+        "call_index": 58,
+        "cost_usd": 0.00010744,
+        "input_tokens": 182,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 5,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 53
+      },
+      {
+        "call_index": 59,
+        "cost_usd": 0.00013935,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 6,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 114
+      },
+      {
+        "call_index": 60,
+        "cost_usd": 0.00011348000000000002,
+        "input_tokens": 184,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 6,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 58
+      },
+      {
+        "call_index": 61,
+        "cost_usd": 0.00014815,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 7,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 122
+      },
+      {
+        "call_index": 62,
+        "cost_usd": 0.00010410000000000001,
+        "input_tokens": 190,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 7,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 48
+      },
+      {
+        "call_index": 63,
+        "cost_usd": 0.00013935,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_draft",
+          "trial_index": 8,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 114
+      },
+      {
+        "call_index": 64,
+        "cost_usd": 0.00010690000000000001,
+        "input_tokens": 180,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "contradicted-co",
+          "name": "ab_reply_judge",
+          "trial_index": 8,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 53
+      },
+      {
+        "call_index": 65,
+        "cost_usd": 0.00023998000000000002,
+        "input_tokens": 552,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 1,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 173
+      },
+      {
+        "call_index": 66,
+        "cost_usd": 0.00011388,
+        "input_tokens": 214,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 1,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 51
+      },
+      {
+        "call_index": 67,
+        "cost_usd": 0.00025428,
+        "input_tokens": 552,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 2,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 186
+      },
+      {
+        "call_index": 68,
+        "cost_usd": 0.00018231,
+        "input_tokens": 223,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 2,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 111
+      },
+      {
+        "call_index": 69,
+        "cost_usd": 0.00024768,
+        "input_tokens": 552,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 3,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 180
+      },
+      {
+        "call_index": 70,
+        "cost_usd": 0.00011465000000000001,
+        "input_tokens": 225,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 3,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 49
+      },
+      {
+        "call_index": 71,
+        "cost_usd": 0.00026748,
+        "input_tokens": 552,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 4,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 198
+      },
+      {
+        "call_index": 72,
+        "cost_usd": 0.00013684,
+        "input_tokens": 242,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 4,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 65
+      },
+      {
+        "call_index": 73,
+        "cost_usd": 0.00026308,
+        "input_tokens": 552,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 5,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 194
+      },
+      {
+        "call_index": 74,
+        "cost_usd": 0.00013055,
+        "input_tokens": 235,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 5,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 61
+      },
+      {
+        "call_index": 75,
+        "cost_usd": 0.00024438000000000004,
+        "input_tokens": 552,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 6,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 177
+      },
+      {
+        "call_index": 76,
+        "cost_usd": 0.00013254000000000003,
+        "input_tokens": 222,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 6,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 66
+      },
+      {
+        "call_index": 77,
+        "cost_usd": 0.00026528,
+        "input_tokens": 552,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 7,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 196
+      },
+      {
+        "call_index": 78,
+        "cost_usd": 0.00011982,
+        "input_tokens": 236,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 7,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 51
+      },
+      {
+        "call_index": 79,
+        "cost_usd": 0.00025648,
+        "input_tokens": 552,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 8,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 188
+      },
+      {
+        "call_index": 80,
+        "cost_usd": 0.00013963999999999998,
+        "input_tokens": 232,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 8,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 70
+      },
+      {
+        "call_index": 81,
+        "cost_usd": 0.00012267,
+        "input_tokens": 153,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 1,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 99
+      },
+      {
+        "call_index": 82,
+        "cost_usd": 0.0001009,
+        "input_tokens": 170,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 1,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 50
+      },
+      {
+        "call_index": 83,
+        "cost_usd": 0.00013146999999999999,
+        "input_tokens": 153,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 2,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 107
+      },
+      {
+        "call_index": 84,
+        "cost_usd": 0.00010171000000000001,
+        "input_tokens": 173,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 2,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 50
+      },
+      {
+        "call_index": 85,
+        "cost_usd": 0.00011497,
+        "input_tokens": 153,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 3,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 92
+      },
+      {
+        "call_index": 86,
+        "cost_usd": 8.338e-05,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 3,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 38
+      },
+      {
+        "call_index": 87,
+        "cost_usd": 0.00010287000000000001,
+        "input_tokens": 153,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 4,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 81
+      },
+      {
+        "call_index": 88,
+        "cost_usd": 0.00011418000000000001,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 4,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 66
+      },
+      {
+        "call_index": 89,
+        "cost_usd": 0.00013477,
+        "input_tokens": 153,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 5,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 110
+      },
+      {
+        "call_index": 90,
+        "cost_usd": 0.00012234,
+        "input_tokens": 172,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 5,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 69
+      },
+      {
+        "call_index": 91,
+        "cost_usd": 0.00010837000000000001,
+        "input_tokens": 153,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 6,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 86
+      },
+      {
+        "call_index": 92,
+        "cost_usd": 9.16e-05,
+        "input_tokens": 160,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 6,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 44
+      },
+      {
+        "call_index": 93,
+        "cost_usd": 0.00012817000000000001,
+        "input_tokens": 153,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 7,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 104
+      },
+      {
+        "call_index": 94,
+        "cost_usd": 9.702000000000002e-05,
+        "input_tokens": 176,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 7,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 45
+      },
+      {
+        "call_index": 95,
+        "cost_usd": 0.00011277,
+        "input_tokens": 153,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_draft",
+          "trial_index": 8,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 90
+      },
+      {
+        "call_index": 96,
+        "cost_usd": 9.905000000000001e-05,
+        "input_tokens": 155,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "shadow-startup",
+          "name": "ab_reply_judge",
+          "trial_index": 8,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 52
+      },
+      {
+        "call_index": 97,
+        "cost_usd": 0.00025792,
+        "input_tokens": 678,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 1,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 179
+      },
+      {
+        "call_index": 98,
+        "cost_usd": 0.00015917,
+        "input_tokens": 231,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 1,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 88
+      },
+      {
+        "call_index": 99,
+        "cost_usd": 0.00026672,
+        "input_tokens": 678,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 2,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 187
+      },
+      {
+        "call_index": 100,
+        "cost_usd": 0.00014508000000000001,
+        "input_tokens": 244,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 2,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 72
+      },
+      {
+        "call_index": 101,
+        "cost_usd": 0.00027662,
+        "input_tokens": 678,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 3,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 196
+      },
+      {
+        "call_index": 102,
+        "cost_usd": 0.00014560000000000002,
+        "input_tokens": 250,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 3,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 71
+      },
+      {
+        "call_index": 103,
+        "cost_usd": 0.00029642000000000004,
+        "input_tokens": 678,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 4,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 214
+      },
+      {
+        "call_index": 104,
+        "cost_usd": 0.00013535,
+        "input_tokens": 265,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 4,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 58
+      },
+      {
+        "call_index": 105,
+        "cost_usd": 0.00025352,
+        "input_tokens": 678,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 5,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 175
+      },
+      {
+        "call_index": 106,
+        "cost_usd": 0.00017191000000000003,
+        "input_tokens": 213,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 5,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 104
+      },
+      {
+        "call_index": 107,
+        "cost_usd": 0.00029972,
+        "input_tokens": 678,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 6,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 217
+      },
+      {
+        "call_index": 108,
+        "cost_usd": 0.00013946,
+        "input_tokens": 268,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 6,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 61
+      },
+      {
+        "call_index": 109,
+        "cost_usd": 0.00027882,
+        "input_tokens": 678,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 7,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 198
+      },
+      {
+        "call_index": 110,
+        "cost_usd": 0.00013462,
+        "input_tokens": 246,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 7,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 62
+      },
+      {
+        "call_index": 111,
+        "cost_usd": 0.00026342,
+        "input_tokens": 678,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 8,
+          "variant": "signal_grounded"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 184
+      },
+      {
+        "call_index": 112,
+        "cost_usd": 0.00014371000000000002,
+        "input_tokens": 243,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 8,
+          "variant": "signal_grounded"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 71
+      },
+      {
+        "call_index": 113,
+        "cost_usd": 0.00014696000000000004,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 1,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 121
+      },
+      {
+        "call_index": 114,
+        "cost_usd": 0.00014154000000000003,
+        "input_tokens": 182,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 1,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 84
+      },
+      {
+        "call_index": 115,
+        "cost_usd": 0.00013156,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 2,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 107
+      },
+      {
+        "call_index": 116,
+        "cost_usd": 9.399000000000001e-05,
+        "input_tokens": 177,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 2,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 42
+      },
+      {
+        "call_index": 117,
+        "cost_usd": 0.00013156,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 3,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 107
+      },
+      {
+        "call_index": 118,
+        "cost_usd": 0.00011107,
+        "input_tokens": 171,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 3,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 59
+      },
+      {
+        "call_index": 119,
+        "cost_usd": 0.00014366000000000002,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 4,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 118
+      },
+      {
+        "call_index": 120,
+        "cost_usd": 0.00011756999999999999,
+        "input_tokens": 191,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 4,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 60
+      },
+      {
+        "call_index": 121,
+        "cost_usd": 0.00011176,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 5,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 89
+      },
+      {
+        "call_index": 122,
+        "cost_usd": 9.461000000000002e-05,
+        "input_tokens": 163,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 5,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 46
+      },
+      {
+        "call_index": 123,
+        "cost_usd": 0.00012496,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 6,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 101
+      },
+      {
+        "call_index": 124,
+        "cost_usd": 0.00011792000000000001,
+        "input_tokens": 176,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 6,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 64
+      },
+      {
+        "call_index": 125,
+        "cost_usd": 0.00010186,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 7,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 80
+      },
+      {
+        "call_index": 126,
+        "cost_usd": 0.00010237000000000001,
+        "input_tokens": 151,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 7,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 56
+      },
+      {
+        "call_index": 127,
+        "cost_usd": 0.00012056,
+        "input_tokens": 154,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_draft",
+          "trial_index": 8,
+          "variant": "generic"
+        },
+        "model": "qwen/qwen3-next-80b-a3b-instruct",
+        "output_tokens": 97
+      },
+      {
+        "call_index": 128,
+        "cost_usd": 0.00012651,
+        "input_tokens": 163,
+        "metadata": {
+          "attempt": 1,
+          "company_id": "silent-sophisticate",
+          "name": "ab_reply_judge",
+          "trial_index": 8,
+          "variant": "generic"
+        },
+        "model": "deepseek/deepseek-chat-v3.1",
+        "output_tokens": 75
+      }
+    ],
+    "run_id": "ab-reply-rate-a4",
+    "spent_usd": 0.021630339999999998
+  },
+  "run_id": "ab-reply-rate-a4",
+  "sample_size_caveat": "n=32/arm is suggestive, not a production reply-rate estimate.",
+  "trials_per_fixture_per_variant": 8,
+  "variants": {
+    "generic": {
+      "n": 32,
+      "reply_count": 30,
+      "reply_rate": 0.9375
+    },
+    "signal_grounded": {
+      "n": 32,
+      "reply_count": 27,
+      "reply_rate": 0.84375
+    }
+  }
+}

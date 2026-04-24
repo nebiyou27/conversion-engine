@@ -17,6 +17,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
+import httpx
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -30,7 +31,7 @@ load_dotenv()
 MODELS: dict[str, str] = {
     "haiku":  "anthropic/claude-haiku-4.5",
     "sonnet": "anthropic/claude-sonnet-4.5",
-    "qwen": "qwen/qwen3-next-80b-a3b-thinking",
+    "qwen": "qwen/qwen3-next-80b-a3b-instruct",
     "deepseek": "deepseek/deepseek-chat-v3.1",
 }
 
@@ -41,7 +42,7 @@ PRICING: dict[str, tuple[float, float]] = {
     "anthropic/claude-haiku-4.5":  (0.25,  1.25),
     "anthropic/claude-sonnet-4.5": (3.00, 15.00),
     "openai/gpt-4o-mini":          (0.15,  0.60),
-    "qwen/qwen3-next-80b-a3b-thinking": (0.14, 1.40),
+    "qwen/qwen3-next-80b-a3b-instruct": (0.09, 1.10),
     "deepseek/deepseek-chat-v3.1": (0.27, 1.10),
 }
 
@@ -156,6 +157,10 @@ def _client() -> OpenAI:
         _default_client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=api_key,
+            # openai==1.54.x still constructs its default client with a
+            # deprecated proxies= kwarg. Supplying our own client keeps this
+            # compatible with httpx>=0.28 in the project environment.
+            http_client=httpx.Client(),
         )
     return _default_client
 
