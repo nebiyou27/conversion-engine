@@ -4,6 +4,10 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
+import pytest
+
+pytest.importorskip("mcp")
+
 from integrations.hubspot_mcp_client import HubSpotMCPClient
 
 

@@ -21,6 +21,8 @@ def test_run_synthetic_thread_produces_complete_artifacts(tmp_path):
     assert (run_dir / "gate_report.json").exists()
 
     run_data = json.loads((run_dir / "run.json").read_text(encoding="utf-8"))
+    assert run_data["demo_mode"] is True
+    assert run_data["ai_maturity"]["source"] == "hardcoded_demo_stub"
     assert run_data["gate_report"]["decision"] == "pass"
     assert run_data["booking"]["booking_url"]
     assert run_data["email_reply_event"]["ok"] is True

@@ -1,0 +1,97 @@
+{
+  "status": "phase_6_draft",
+  "updated_at": "2026-04-24",
+  "claim_contracts": [
+    {
+      "claim_kind": "funding_round",
+      "primary_sources": ["crunchbase"],
+      "secondary_sources": ["job_posts"],
+      "required_fields": ["round", "amount_usd", "announced_on", "source_url"],
+      "tier_logic_file": "agent/claims/confidence.py",
+      "downstream_uses": ["segment_1_series_a_b", "segment_2_mid_market_restructure", "email_draft"]
+    },
+    {
+      "claim_kind": "hiring_surge",
+      "primary_sources": ["job_posts"],
+      "secondary_sources": ["crunchbase"],
+      "required_fields": ["title", "posted_on", "source_url"],
+      "tier_logic_file": "agent/claims/confidence.py",
+      "downstream_uses": ["segment_1_series_a_b", "segment_2_mid_market_restructure", "segment_4_specialized_capability", "email_draft"]
+    },
+    {
+      "claim_kind": "leadership_change",
+      "primary_sources": ["leadership"],
+      "secondary_sources": [],
+      "required_fields": ["event", "person", "effective", "source_url"],
+      "tier_logic_file": "agent/claims/confidence.py",
+      "downstream_uses": ["segment_3_leadership_transition", "email_draft"]
+    },
+    {
+      "claim_kind": "layoff_event",
+      "primary_sources": ["layoffs"],
+      "secondary_sources": [],
+      "required_fields": ["event_on", "headcount", "source_url"],
+      "tier_logic_file": "agent/claims/confidence.py",
+      "downstream_uses": ["segment_2_mid_market_restructure", "segment_1_layoff_disqualifier", "email_draft"]
+    },
+    {
+      "claim_kind": "company_metadata",
+      "primary_sources": ["company_metadata"],
+      "secondary_sources": [],
+      "required_fields": ["headcount", "source_url"],
+      "tier_logic_file": "agent/claims/confidence.py",
+      "downstream_uses": ["segment_1_headcount_filter", "segment_3_headcount_filter", "hubspot_enrichment"]
+    }
+  ],
+  "judgment_contracts": [
+    {
+      "judgment": "segment",
+      "implementation": "agent/judgment/segment.py",
+      "mode": "deterministic",
+      "inputs": ["claims", "ai_maturity_score"],
+      "limitation": "S4 depends on an AI maturity score produced elsewhere."
+    },
+    {
+      "judgment": "ai_maturity",
+      "implementation": "agent/judgment/ai_maturity.py",
+      "mode": "llm_adjudicated_with_validated_json",
+      "inputs": ["claims"],
+      "limitation": "Synthetic thread uses a hardcoded demo stub and labels it as such."
+    },
+    {
+      "judgment": "competitor_gap",
+      "implementation": "agent/judgment/competitor_gap.py",
+      "mode": "stub",
+      "inputs": ["prospect sector", "prospect AI maturity score"],
+      "limitation": "No peer evidence is analyzed unless future work supplies it."
+    }
+  ],
+  "run_evidence": [
+    {
+      "run_id": "20260423-180101",
+      "mode": "synthetic_with_mocks",
+      "artifacts": [
+        "outputs/runs/20260423-180101/run.json",
+        "outputs/runs/20260423-180101/evidence.jsonl",
+        "outputs/runs/20260423-180101/claims.jsonl",
+        "outputs/runs/20260423-180101/gate_report.json"
+      ],
+      "limitations": [
+        "Email, HubSpot, and Cal.com are mocked in non-live mode.",
+        "AI maturity is hardcoded demo output in agent/core.py."
+      ]
+    },
+    {
+      "run_id": "latency-20260423-201603",
+      "mode": "live_staff_sink_or_sandbox",
+      "artifacts": [
+        "outputs/runs/latency-20260423-201603/latency_summary.json",
+        "outputs/runs/latency-20260423-201603/latency_log.jsonl"
+      ],
+      "limitations": [
+        "No real prospect contact.",
+        "Measures provider send and reply normalization timing only."
+      ]
+    }
+  ]
+}

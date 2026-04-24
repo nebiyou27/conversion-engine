@@ -2,19 +2,27 @@
 
 Prospect: `orrin-labs.example`
 
-This brief uses the challenge seed’s specialized-capability example and is the reviewer-facing research artifact for one test prospect.
+Status: framing draft.
 
-## Main takeaways
+The current code path for competitor gap judgment is a schema-valid stub. This
+brief should not be presented as measured peer analysis unless peer evidence
+rows and source URLs are added.
 
-- The strongest gap is dedicated AI/ML leadership at the executive level.
-- A second, medium-confidence gap is a dedicated MLOps or ML-platform engineering function.
-- A third, medium-confidence signal is public technical commentary on agentic or evaluation-framework work.
+## Draft Framing
 
-## Recommended framing
+- The likely gap to explore is dedicated AI/ML leadership at the executive
+  level.
+- A secondary question is whether MLOps or ML-platform ownership is explicit or
+  distributed across a broader data-platform role.
+- Public technical commentary on agentic or evaluation-framework work would
+  strengthen the case, but should not be assumed.
 
-Lead with the AI leadership gap as a question, not an accusation:
+## Outreach Constraint
 
-- Is the role still being scoped?
-- Is the remit intentionally distributed across the CTO?
+Lead with a question, not an accusation:
 
-Avoid over-claiming on the MLOps gap in the first touch. The public signal supports a question, not a hard assertion.
+- Is the AI leadership role still being scoped?
+- Is the remit intentionally distributed across the CTO or platform team?
+
+Do not use this brief as evidence for a factual competitor claim until the
+competitor-gap module consumes peer evidence with source URLs.

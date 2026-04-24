@@ -4,7 +4,15 @@ AI agent for automated, evidence-backed sales outreach on behalf of Tenacious Co
 
 ## Status
 
-Core implementation is in place. Evidence, judgment, actions, gating, SMS, CRM/calendar, and MCP routing are all wired; the remaining work is submission packaging and final report polish.
+Core agent logic is implemented and covered by tests. The repository includes a
+synthetic end-to-end thread that exercises evidence collection, claim building,
+judgment, draft generation, gates, reply normalization, booking flow, and CRM
+write-back using fixtures and provider mocks.
+
+Live verification currently exists for email/SMS latency only. HubSpot,
+Cal.com, HubSpot MCP, and Langfuse are implemented behind adapters and covered
+by contract/unit tests, but should not be described as fully
+production-verified.
 
 See `PRD.md` for acceptance criteria and `progress.md` for the decision log.
 
@@ -27,6 +35,17 @@ raw facts     tiered      interp.     drafts     pre-send
 | SMS Handler | `integrations/sms_client.py`, `agent/handlers/sms.py` | `tests/test_sms_handler.py` |
 | CRM + Calendar | `integrations/hubspot_client.py`, `integrations/hubspot_mcp_client.py`, `agent/actions/schedule.py` | `tests/test_crm_calendar.py`, `tests/test_hubspot_mcp_client.py` |
 | Signal Enrichment | `agent/evidence/sources/*.py`, `agent/evidence/enrichment.py` | `tests/test_signal_enrichment.py` |
+
+## Verification Matrix
+
+| Component | Current verification | Evidence | Limitation |
+|---|---|---|---|
+| Resend email | Live staff-sink latency run | `outputs/runs/latency-20260423-201603/latency_summary.json` | No real prospect contact |
+| Africa's Talking SMS | Sandbox/staff-sink latency run | same latency summary | No real prospect contact |
+| HubSpot SDK | Contract-tested | `tests/test_crm_calendar.py` | Provider writes mocked in tests |
+| HubSpot MCP | Unit-tested client | `tests/test_hubspot_mcp_client.py` | Remote MCP not exercised in CI |
+| Cal.com | Adapter + synthetic flow | `agent/actions/schedule.py`, `tests/test_crm_calendar.py` | Live booking endpoint not proven in test suite |
+| Langfuse | Wrapper implemented | `integrations/langfuse_client.py` | Current synthetic run does not prove remote trace delivery |
 
 ## CRM
 

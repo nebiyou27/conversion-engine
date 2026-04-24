@@ -194,13 +194,18 @@ def run_synthetic_thread(
         )
 
     run_summary = {
+        "demo_mode": not live,
         "company_id": company_id,
         "company_name": company_name,
         "evidence_ids": evidence_ids,
         "claim_ids": rows and [r["claim_id"] for r in rows] or [],
         "segment": segment_result,
         "icp": icp_result,
-        "ai_maturity": ai_result,
+        "ai_maturity": {
+            **ai_result,
+            "source": "hardcoded_demo_stub",
+            "limitation": "Synthetic thread uses a fixed AI maturity response; agent.judgment.ai_maturity.judge is tested separately.",
+        },
         "competitor_gap": gap_result,
         "enrichment": enrichment_artifact,
         "draft": draft,

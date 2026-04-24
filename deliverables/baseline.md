@@ -1,6 +1,7 @@
-# τ² retail baseline
+# tau2 retail baseline
 
 ## Summary
+
 - evaluated simulations: 150
 - infra errors: 0
 - total tasks: 30
@@ -11,5 +12,6 @@
 - p95 latency: 551.6491s
 
 ## Provenance
+
 - git commit: d11a97072c49d093f7b5a3e4fe9da95b490d43ba
 - trials per task: 5

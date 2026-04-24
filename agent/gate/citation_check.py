@@ -7,6 +7,10 @@ from typing import Any
 CITATION_RE = re.compile(r"\{([0-9a-fA-F-]{8,})\}")
 SALUTATION_RE = re.compile(r"^(hi|hello|dear|best|regards|thanks)\b", re.IGNORECASE)
 SIGNATURE_RE = re.compile(r"^(tenacious consulting|tenacious consulting and outsourcing)$", re.IGNORECASE)
+OPERATIONAL_QUESTION_RE = re.compile(
+    r"^(would you be open|are you open|could we|can we|does .+ work|is .+ a good time)\b",
+    re.IGNORECASE,
+)
 
 
 def _split_sentences(text: str) -> list[str]:
@@ -28,7 +32,7 @@ def check(body: str, claim_ids: list[str]) -> dict[str, Any]:
             continue
         if SIGNATURE_RE.match(sentence):
             continue
-        if sentence.endswith("?"):
+        if sentence.endswith("?") and OPERATIONAL_QUESTION_RE.match(sentence):
             continue
         if sentence_citations:
             continue
