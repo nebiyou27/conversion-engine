@@ -36,6 +36,31 @@ raw facts     tiered      interp.     drafts     pre-send
 | CRM + Calendar | `integrations/hubspot_client.py`, `integrations/hubspot_mcp_client.py`, `agent/actions/schedule.py` | `tests/test_crm_calendar.py`, `tests/test_hubspot_mcp_client.py` |
 | Signal Enrichment | `agent/evidence/sources/*.py`, `agent/evidence/enrichment.py` | `tests/test_signal_enrichment.py` |
 
+## Enrichment Module Outputs
+
+Every enrichment source writes raw `Fact` rows first. The reviewer-facing
+visibility layer in `agent/evidence/enrichment.py` then emits a single
+artifact with:
+
+- `signals[]`: one row per enrichment module with `signal`, `implementation`,
+  `status`, `confidence`, `evidence_count`, `latest_retrieved_at`, and
+  `source_urls`.
+- `per_signal_confidence`: compact `{signal: confidence}` map for demos,
+  CRM write-back, and reviewer inspection.
+- `evidence_count`: total raw evidence rows used to build the artifact.
+
+| Enrichment module | Raw facts emitted | Confidence behavior | Downstream use |
+|---|---|---|---|
+| Crunchbase firmographics | `funding_round` facts with round, amount, announcement date, source URL, and retrieved timestamp | Starts high when present; absent records stay low (`0.15`) rather than becoming proof of no funding | Series A/B timing, Segment 1 qualification, and funding-trigger citations |
+| Job posts | One `job_posting` fact per public posting with title, posted date/listing URL, source URL, and `method=playwright` for scraped pages | Starts moderate because public job pages are noisy; gains confidence with fresh and repeated rows | Hiring surge claims, AI-maturity justifications, and weak-hiring soft-language checks |
+| Layoffs | One `layoff_event` fact per matched CSV row with event date, headcount, company, source URL, and `method=csv` | Starts medium-high when present; absent or non-matching rows stay very low (`0.05`) to avoid phantom restructuring claims | Segment 2 mid-market restructuring detection and sensitive interrogative phrasing |
+| Leadership changes | `leadership_change` facts with event, person, effective date, source URL, and retrieved timestamp | Starts high when present; absent feed is low (`0.15`) and does not disprove a leadership change | Segment 3 leadership-transition routing and CTO/VP Eng timing claims |
+| Company metadata | `company_metadata` snapshot with headcount plus optional HQ country and founded year | Highest base confidence when present; absent metadata is `0.0` because it is structural context, not a behavioral signal | Headcount bounds, ICP filters, and CRM context |
+
+This section is intentionally about outputs, not provider completeness. The
+verification matrix below still distinguishes fixture-backed, unit-tested,
+contract-tested, and live-proven paths.
+
 ## Verification Matrix
 
 | Component | Current verification | Evidence | Limitation |

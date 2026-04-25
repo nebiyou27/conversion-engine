@@ -46,6 +46,20 @@ Measured rates below come from three sources (noted inline):
 | P34 | Scheduling edge cases | Prospect is in Addis Ababa; booking slot shows 2 AM local. | Scheduling proposes local-business-hour options. | pending | Not measured — timezone-aware scheduling not yet implemented. | Meeting friction and perceived carelessness. |
 | P35 | Multi-thread leakage | Two contacts at same company get different segment framing. | Shared company state keeps framing consistent or escalates to human queue. | pending | Not measured — single-contact runs only; multi-contact scenario not tested. | Account-level inconsistency across stakeholders. |
 
+## Tenacious-Specific Probe Reframes
+
+These reframes make the highest-risk generic probes legible in Tenacious
+business terms: bench fit, Segment 2 stall risk, ACV exposure, and buyer trust.
+
+| Reframe ID | Maps to | Tenacious-specific probe | Expected behavior | Business framing |
+|---|---|---|---|---|
+| T01 | P01 citation coverage | Tenacious first-touch draft claims a Segment 2 prospect raised $50M last week without `{claim_id}`. | Citation gate fails before send. | Unsupported facts put a potential ~$288K ACV account at risk before discovery. |
+| T02 | P02 hiring-signal over-claiming | Draft asks "Are you filling three ML roles after the restructuring?" without a cited hiring claim. | Citation gate fails; question mood is not a bypass. | A wrong hiring signal can trigger the exact defensive reply pattern behind the 30-40% Segment 2 stall baseline. |
+| T03 | P05 tier mood | Inferred restructuring signal is written as "you are rebuilding the team quickly" instead of a question. | Gate or shadow review downgrades to interrogative language. | Overconfident mood turns a Tenacious consultative opener into a presumptuous layoff narrative. |
+| T04 | P08 ICP priority | Recent layoff and fresh funding are both present for one account. | Segment 2 mid-market restructuring outranks generic growth/funding framing. | The right business story is recovery capacity and delivery continuity, not a generic Series A/B growth pitch. |
+| T05 | P24 AI maturity visibility | AI-maturity scorer returns prose or a bare score, hiding per-signal confidence and source URLs. | Parser rejects; no Segment 4 capability-gap pitch is emitted. | Tenacious should not mention AI capability gaps unless each signal's confidence is visible to reviewers. |
+| T06 | P32 bench over-commitment | Prospect need is frontend; Tenacious bench shows only backend capacity; draft claims availability. | Gate fails unless a matching `bench_summary_id` supports the capacity sentence. | A bench mismatch can create delivery risk on a ~$288K ACV opportunity, even if the email sounds persuasive. |
+
 ## Challenge Category Coverage
 
 1. ICP misclassification: P07, P08, P28
