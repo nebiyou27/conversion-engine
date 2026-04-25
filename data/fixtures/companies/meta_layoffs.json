@@ -1,0 +1,58 @@
+{
+  "_note": "Real public data from layoffs.fyi CSV (data/layoffs.csv). Source URLs are genuine news articles. Used for demo pipeline run — not a synthetic fixture.",
+  "company_id": "meta",
+  "name": "Meta Platforms",
+  "sources": {
+    "crunchbase": {
+      "funding_round": null,
+      "company_metadata": {
+        "headcount": 70000,
+        "hq_country": "United States",
+        "founded_year": 2004,
+        "stage": "Post-IPO",
+        "source_url": "https://www.crunchbase.com/organization/facebook"
+      }
+    },
+    "job_posts": [
+      {
+        "title": "Staff Software Engineer, AI Infrastructure",
+        "posted_on": "2026-04-10",
+        "source_url": "https://www.metacareers.com/jobs/ai-infrastructure-staff"
+      },
+      {
+        "title": "Senior ML Engineer, Ranking",
+        "posted_on": "2026-04-08",
+        "source_url": "https://www.metacareers.com/jobs/ml-ranking"
+      },
+      {
+        "title": "Engineering Manager, Integrity",
+        "posted_on": "2026-04-05",
+        "source_url": "https://www.metacareers.com/jobs/em-integrity"
+      }
+    ],
+    "leadership": [],
+    "layoffs": [
+      {
+        "event_on": "2026-04-17",
+        "headcount": 8000,
+        "source_url": "https://www.reuters.com/world/meta-targets-may-20-first-wave-layoffs-additional-cuts-later-2026-2026-04-17/"
+      },
+      {
+        "event_on": "2026-04-02",
+        "headcount": 200,
+        "source_url": "https://www.sfchronicle.com/tech/article/meta-layoffs-silicon-valley-22186184.php"
+      },
+      {
+        "event_on": "2026-01-13",
+        "headcount": 1500,
+        "source_url": "https://www.nytimes.com/2026/01/12/technology/meta-layoffs-reality-labs.html?unlocked_article_code=1.D1A.ckee.3ANQhKMxi5Ld&smid=url-share"
+      }
+    ],
+    "company_metadata": {
+      "headcount": 70000,
+      "hq_country": "United States",
+      "founded_year": 2004,
+      "source_url": "https://www.crunchbase.com/organization/facebook"
+    }
+  }
+}
