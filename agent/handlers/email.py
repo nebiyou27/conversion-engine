@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Literal
 
 from integrations import email_client
+from agent import router
 from agent.runtime import claim_once, log_event, stable_key
 
 EmailEventType = Literal["reply", "bounce", "delivery", "failed", "complaint", "unknown"]
@@ -97,6 +98,15 @@ def handle_webhook_payload(payload: Any) -> dict[str, Any]:
         log_event(logger, logging.INFO, "email_webhook_dispatch", event_type=event.event_type, message_id=event.message_id, event_key=event_key)
         _EVENT_HANDLER(event)
 
+    route = router.handoff(
+        event.raw.get("state") or event.raw.get("conversation_state"),
+        event.event_type,
+        source_channel="email",
+        email=event.sender,
+        name=event.raw.get("name"),
+        company=event.raw.get("company"),
+    )
+
     return {
         "ok": True,
         "event_type": event.event_type,
@@ -104,6 +114,12 @@ def handle_webhook_payload(payload: Any) -> dict[str, Any]:
         "handled": _EVENT_HANDLER is not None,
         "replayed": False,
         "event_key": event_key,
+        "routing": {
+            "previous_state": route.previous_state.value,
+            "next_state": route.next_state.value,
+            "channel": route.channel,
+            "booking_link": route.booking_link,
+        },
     }
 
 

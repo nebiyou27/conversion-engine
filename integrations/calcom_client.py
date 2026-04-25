@@ -6,6 +6,7 @@ import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
+from urllib.parse import urlencode
 
 import requests
 from dotenv import load_dotenv
@@ -26,6 +27,29 @@ def _configured_endpoint() -> str:
         or os.getenv("CALCOM_BOOKING_ENDPOINT")
         or os.getenv("CALCOM_BOOKING_URL", "")
     )
+
+
+def generate_booking_link(
+    *,
+    email: str | None = None,
+    name: str | None = None,
+    company: str | None = None,
+    source_channel: str | None = None,
+    base_url: str | None = None,
+) -> str:
+    """Generate a booking URL for handoff messages without creating a booking."""
+    url = base_url or os.getenv("CALCOM_BOOKING_URL", "https://cal.com/demo/discovery-call")
+    query = {
+        "email": email,
+        "name": name,
+        "company": company,
+        "source": source_channel,
+    }
+    query = {k: v for k, v in query.items() if v}
+    if not query:
+        return url
+    separator = "&" if "?" in url else "?"
+    return f"{url}{separator}{urlencode(query)}"
 
 
 @dataclass(frozen=True)

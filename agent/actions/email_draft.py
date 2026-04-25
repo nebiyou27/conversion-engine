@@ -2,10 +2,47 @@
 from __future__ import annotations
 
 from typing import Any
+import re
+
+
+class BenchCommitmentError(ValueError):
+    """Raised when a draft commits delivery capacity without bench support."""
+
+
+AVAILABILITY_RE = re.compile(
+    r"\b("
+    r"available engineers?|engineers? available|"
+    r"available in \d+|deploy(?:ment)? in \d+|start in \d+|"
+    r"capacity available|stack coverage|named engineers?"
+    r")\b",
+    re.I,
+)
+
+BENCH_CITATION_RE = re.compile(r"\{bench_summary:[^}]+\}|\bbench_summary_id\b", re.I)
 
 
 def _claim_citation(claim_id: str) -> str:
     return f"{{{claim_id}}}"
+
+
+def draft_references_availability(draft: str | dict[str, Any]) -> bool:
+    body = draft.get("body", "") if isinstance(draft, dict) else draft
+    return bool(AVAILABILITY_RE.search(str(body)))
+
+
+def bench_summary_citation_present(draft: str | dict[str, Any]) -> bool:
+    if isinstance(draft, dict):
+        if draft.get("bench_summary_id"):
+            return True
+        body = draft.get("body", "")
+    else:
+        body = draft
+    return bool(BENCH_CITATION_RE.search(str(body)))
+
+
+def enforce_bench_to_brief_guard(draft: dict[str, Any]) -> None:
+    if draft_references_availability(draft) and not bench_summary_citation_present(draft):
+        raise BenchCommitmentError("draft claims availability without bench_summary citation")
 
 
 def build_commitment_email(
@@ -14,6 +51,7 @@ def build_commitment_email(
     prospect_name: str | None,
     claim_rows: list[dict[str, Any]],
     segment_match: str,
+    bench_summary_id: str | None = None,
 ) -> dict[str, Any]:
     """Build a citation-backed commitment-path email."""
     salutation = f"Hi {prospect_name}," if prospect_name else f"Hi {company_name} team,"
@@ -61,10 +99,14 @@ def build_commitment_email(
     body = "\n".join(body_lines)
     subject = f"Quick note for {company_name}"
     claim_ids = [row["claim_id"] for row in claim_rows if row.get("claim_id")]
-    return {
+    draft = {
         "channel": "email",
         "path": "commitment",
         "subject": subject,
         "body": body,
         "claim_ids": claim_ids,
     }
+    if bench_summary_id:
+        draft["bench_summary_id"] = bench_summary_id
+    enforce_bench_to_brief_guard(draft)
+    return draft
