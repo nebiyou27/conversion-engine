@@ -10,11 +10,13 @@ from typing import Any
 
 SOURCE_IMPLEMENTATIONS = {
     "crunchbase": "Crunchbase ODM lookup",
-    "job_posts": "Playwright job-post scraping",
+    "job_posts": "Playwright scrapers (BuiltIn/Wellfound/LinkedIn) + Greenhouse and Lever ATS APIs",
     "layoffs": "layoffs.fyi CSV parsing",
     "leadership": "Leadership change detection",
     "company_metadata": "Company metadata snapshot",
 }
+
+HIRING_SOURCES_CHECKED = ["builtin", "wellfound", "linkedin", "greenhouse", "lever"]
 
 
 def _now() -> str:
@@ -88,6 +90,14 @@ def build_enrichment_artifact(
             "source_urls": [r["source_url"] for r in source_rows],
         })
 
+    from agent.evidence.hiring_brief import build_hiring_brief_from_rows
+    hiring_brief = build_hiring_brief_from_rows(
+        evidence_rows,
+        company_id=company_id,
+        sources_checked=HIRING_SOURCES_CHECKED,
+        now=now,
+    )
+
     return {
         "company_id": company_id,
         "company_name": company_name,
@@ -96,4 +106,5 @@ def build_enrichment_artifact(
         "signals": signals,
         "per_signal_confidence": {s["signal"]: s["confidence"] for s in signals},
         "evidence_count": len(evidence_rows),
+        "hiring_brief": hiring_brief,
     }
