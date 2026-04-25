@@ -124,7 +124,7 @@ def run_synthetic_thread(
 
     rows = [dict(r) for r in conn.execute("SELECT * FROM claims WHERE company_id = ?", (company_id,)).fetchall()]
 
-    if os.getenv("DEMO_MODE", "true").lower() == "true":
+    if os.getenv("DEMO_MODE", "false").lower() == "true":
         ai_result = _build_demo_ai_maturity_response()
     else:
         ai_result = ai_maturity.judge(conn, company_id, run_id=run_id, ledger=ledger)
@@ -216,7 +216,7 @@ def run_synthetic_thread(
                     "source": "hardcoded_demo_stub",
                     "limitation": "Synthetic thread uses a fixed AI maturity response when DEMO_MODE=true; agent.judgment.ai_maturity.judge is tested separately.",
                 }
-                if os.getenv("DEMO_MODE", "true").lower() == "true"
+                if os.getenv("DEMO_MODE", "false").lower() == "true"
                 else {"source": "llm_qwen"}
             ),
         },

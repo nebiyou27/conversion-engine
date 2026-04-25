@@ -7,7 +7,9 @@ from pathlib import Path
 from agent.core import run_synthetic_thread
 
 
-def test_run_synthetic_thread_produces_complete_artifacts(tmp_path):
+def test_run_synthetic_thread_produces_complete_artifacts(tmp_path, monkeypatch):
+    monkeypatch.setenv("DEMO_MODE", "true")
+
     result = run_synthetic_thread(
         fixture_path=Path("data/fixtures/companies/acme_series_b.json"),
         output_root=tmp_path / "runs",
