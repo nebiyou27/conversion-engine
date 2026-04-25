@@ -169,7 +169,9 @@ The runtime now favors operator visibility and safe replays:
 - `CLAUDE.md` - architecture, rules, skills index (read first)
 - `PRD.md` - what we are building and the acceptance criteria
 - `progress.md` - decision log
-- `deliverables/` - reviewer-facing artifacts
+- `deliverables/` - reviewer-facing artifacts (memo, method, ablation results, evidence graph)
+- `docs/multi_channel_flows.md` - SMS warm-lead gate, email webhook flows, idempotency, state transitions
+- `probes/failure_taxonomy.md` - measured trigger rates by category and aggregate stats
 - `.claude/skills/` - project-scoped skills: `claim-audit`, `probe-author`, `gate-check`
 
 ## Safety

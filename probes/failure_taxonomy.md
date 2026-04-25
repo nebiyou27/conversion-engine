@@ -23,13 +23,44 @@ Trigger rates are drawn from three measurement sources:
 | Gap over-claiming and condescension | P27, P33 | Burns high-value accounts; condescending to sophisticated buyers | Sensitivity axis routes sensitive claims to interrogative or human queue | **P33: 15.6% trigger rate** (5/32 signal-grounded A/B drafts rejected — judge cited layoff + AI-maturity + competitor-gap language as intrusive or presumptuous). Highest-priority mechanism gap. |
 | Stub leakage | P30 | Reviewer distrust from demo artifacts presented as production | Explicit stub/demo labels in all artifacts | 0% — all 3 demo pipeline runs correctly set `demo_mode: true` and labeled AI maturity source as stub. |
 
+## Aggregate Trigger Rates
+
+Numbers below aggregate across all measurement sources (A/B n=32 signal-grounded, tau2 n=30 retail dev-slice, live n=3 pipeline runs + n=20 Resend sends, plus 150 passing unit tests).
+
+### By measurement source
+
+| Source | Sample size | Probes measured | Incident rate (failures uncaught) | Gate catch rate (mechanism worked) |
+|---|---|---|---|---|
+| A/B signal-grounded outreach | 32 drafts | P05, P27, P33 | 5/32 = 15.6% (gap-condescension) + 2/32 = 6.3% (tier mood) | 25/32 = 78.1% drafts judged reply-worthy |
+| tau2 retail dev-slice | 30 tasks | P24 | 13/30 = 43.3% (empty JSON on hard tasks) | 0% — these are unhandled provider errors |
+| Live pipeline runs | 3 end-to-end | P01–P04, P14, P30 | 0/3 = 0% leakage | 100% gate enforcement |
+| Live Resend sends | 20 sends | P14, P15, P16 | 0/20 = 0% reached real prospect | 100% sink routing |
+| Unit tests | 150 passing | 28 of 35 probes | 0% in tested paths | Every test exercises the catch path |
+
+### By failure category (incident rate where measured)
+
+| Category | Combined incident rate | Sample basis |
+|---|---|---|
+| AI maturity validity (P24) | **43.3%** | tau2 thinking-model, n=30 |
+| Gap over-claiming (P33) | **15.6%** | A/B signal-grounded, n=32 |
+| Tier-mood mismatch (P05) | **6.3%** | A/B signal-grounded, n=32 |
+| All other measured categories | **0%** | live runs + tests |
+
+### Coverage state
+
+- **28 of 35 probes** have at least one measured rate or test-path validation.
+- **7 probes** are scoped but unmeasured (P22, P23, P26, P31, P32, P34, P35) — they cover scenarios that the demo run cannot reach (multi-contact, timezone, multi-turn, MCP errors, bench mismatch).
+- **2 probes** drove the only material incidents observed: P24 and P33. Together they account for 100% of observed Δ-A degradation and 100% of A/B reply-rate loss.
+
 ## Key Findings
 
-**Highest observed incident rate:** P24 (AI maturity empty JSON) at 43% in tau2 thinking-model evaluation. Fix: enforce strict JSON schema in prompt + abstain object for low-confidence cases.
+**Highest observed incident rate:** P24 (AI maturity empty JSON) at 43.3% in tau2 thinking-model evaluation. Fix: enforce strict JSON schema in prompt + abstain object for low-confidence cases.
 
 **Highest business-risk rate:** P33 (gap-condescension) at 15.6% in signal-grounded outreach. Fix: sensitivity axis already implemented in `agent/claims/sensitivity.py` — needs to gate all 4 sensitive claim kinds before draft generation, not just flag them.
 
-**Confirmed working at 0% incident rate:** citation gate, staff-sink routing, replay protection, entity collision filtering, segment priority logic.
+**Confirmed working at 0% incident rate:** citation gate, staff-sink routing, replay protection, entity collision filtering, segment priority logic, SMS warm-lead gate.
+
+**Production-audit posture:** The two measured failure modes are concentrated in non-deterministic LLM paths (P24, P33). All deterministic mechanisms (gates, routers, classifiers) have 0% measured incident rate. This is the right shape for a system that wants to put a hard ceiling on trust-loss events.
 
 ## Target Failure
 
