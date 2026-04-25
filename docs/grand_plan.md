@@ -461,6 +461,8 @@ sink pending mechanism fix.
 
 ## Phase E — Video + Production Bundle (4h, ~$1)
 
+### E0 — Phase breakdown: E1 (production bundle), E2a (optional real-company ingestion), E2 (video recording).
+
 ### E1 — Production bundle (3h, $0)
 Keep only rubric- or video-supporting items:
 
@@ -472,6 +474,57 @@ Keep only rubric- or video-supporting items:
 | Runbook | **Keep** 60 min | GH #1 handoff |
 | Risk score + auto-gate | **Cut** | Zero rubric points |
 | Evidence graph HTML viewer | **Cut** | Zero direct rubric points |
+
+### E2a — Real-company ingestion for video opener (OPTIONAL, 60 min, ~$0.05)
+
+**Skip if Phase C ran long and buffer is <3h at this point. Ship synthetic-only if tight.**
+
+**Goal:** open the video with a real public company flowing through the evidence pipeline so reviewers see live `source_url` + `retrieved_at` values, not hand-crafted fixture data. The rest of the video (thin-input abstain, contradicted, gate rejection) stays synthetic for controlled contrast.
+
+**Rules honored (CLAUDE.md R9):**
+- Company data = real public (Crunchbase ODM, layoffs.fyi CSV, public job boards).
+- Contact identity = synthetic (never use a real person's name/email).
+- Destination = `STAFF_SINK_EMAIL` / `STAFF_SINK_PHONE_NUMBER` (`ALLOW_REAL_PROSPECT_CONTACT=false`).
+- Provider calls = real API, routed to staff sink.
+
+**Steps:**
+
+1. **Pick target (5 min):**
+   - Browse [layoffs.fyi](https://layoffs.fyi/) for a recent mid-market tech layoff (≥50 impacted, last 120 days). These fit Segment 2 cleanly.
+   - Alternative: browse Crunchbase for a recent Series B announcement in software/SaaS.
+   - Avoid targets with high public profile (big consumer brands) to reduce downstream reputational risk if the demo leaks.
+
+2. **Ingest (30 min):**
+   ```bash
+   python scripts/run_one_prospect.py \
+     --company-slug <chosen_slug> \
+     --live-collectors \
+     --synthetic-contact
+   ```
+   The `--live-collectors` flag (add to the script if not present) routes through real Crunchbase ODM lookup + layoffs.fyi CSV fetch + public job-post scraping. `--synthetic-contact` uses a `contacts_synthetic/` identity for the outbound draft target.
+   - Writes to `data/companies/<slug>.json` (real public firmographics).
+   - Produces `outputs/runs/real-<slug>-<ts>/` with `evidence.jsonl`, `claims.jsonl`, `run.json`.
+
+3. **Verify honest output (15 min):**
+   - `evidence.jsonl` contains real `source_url` values (not `fixture://`).
+   - `retrieved_at` timestamps are current (within the last hour).
+   - `run.json` shows a real `ai_maturity` judgment (not `source: hardcoded_demo_stub`).
+   - Outbound email drafted; destination is `STAFF_SINK_EMAIL`.
+   - HubSpot upsert writes with `synthetic_contact: true` property on the record.
+
+4. **Cache for video replay (10 min):**
+   - Pin the run artifacts under `outputs/runs/video/real-company/` so the video can replay without another live call (saves cost + avoids recording-time failures).
+
+**Video slot change if E2a runs:**
+- Swap segment `0:45-2:45` (Strong-input run) to use the real-company artifacts instead of `acme_series_b`. Voiceover explicitly names the company and shows real `source_url` values on screen.
+- Keep all other segments on synthetic fixtures — abstain, contradicted, gate rejection all need deterministic inputs for clean contrast.
+
+**Memo change if E2a runs:**
+- §3 stall-rate section can cite "n=20 synthetic + 1 real-company ingestion" instead of "n=20 synthetic".
+- Evidence graph adds a `run_evidence` entry with `mode: live_real_public_data_synthetic_contact`.
+
+**Skip-path explanation (if E2a does NOT run):**
+Add one line to [deliverables/method.md](deliverables/method.md): "Evidence collectors validated against real public data in unit tests (`tests/test_evidence.py`); demo run uses synthetic fixtures for controlled contrast across behavior cases." Reviewers see validation exists without expecting live demo data.
 
 ### E2 — Video recording (1.5h, ~$1)
 
