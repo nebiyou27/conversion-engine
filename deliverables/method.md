@@ -181,6 +181,31 @@ threshold. That validates orchestration latency, not mechanism quality; the
 mechanism is evaluated by citation failures, probe results, reply-rate deltas,
 and later held-out task behavior.
 
+### Tau2 Transfer Mechanism
+
+The tau2 transfer uses the same mechanism principle, but the first-pass adapter
+is deliberately prompt-only. `eval/tau2_agent_runtime.py` subclasses tau2's
+`LLMAgent` and overrides only `system_prompt`, adding an instruction to verify
+irreversible or customer-state-changing actions against the latest tool output
+before committing. It does not intercept tool calls or override
+`_generate_next_message` on the first run.
+
+`eval/tau2_custom_agent.py` remains the unit-tested validation harness for the
+verification rules. Its helpers define and test the concrete rule shape:
+ambiguous tool output, missing action identifiers, or low-confidence
+irreversible actions should lead to a clarifying question or re-plan. The
+runtime does not need to import those helpers for the prompt-only pass; their
+role is to document the rule precisely and prove it works in isolation.
+
+Decision rule for the single-trial treatment run:
+
+| Treatment Pass@1 | Action |
+|---:|---|
+| >= 0.80 | Ship prompt-only. |
+| 0.75-0.79 | Consider code-level fallback only if trace review shows under-asking. |
+| < 0.75 | Add the `_generate_next_message` interception fallback and re-run. |
+| < 0.73 | Report flat or negative Delta A honestly; mechanism did not transfer. |
+
 ## 6. Honest Status
 
 | Area | Status | Evidence |
