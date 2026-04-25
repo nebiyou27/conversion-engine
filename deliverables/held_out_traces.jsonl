@@ -1,0 +1,17 @@
+{"simulation_id":"2ee84e7e-ebcb-4006-a066-1c9d373fc99f","task_id":"1","domain":"half_duplex","reward":0.0,"duration":107.00577109999722,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"d174d025-936f-49e7-8183-1497f8bac193","task_id":"7","domain":"half_duplex","reward":0.0,"duration":135.68284480000148,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"dad82b15-3707-47cf-951c-a69c2c9b67ac","task_id":"15","domain":"half_duplex","reward":1.0,"duration":93.89969819999533,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"77ab2d8d-7f42-4628-b5e3-ab0e37355655","task_id":"22","domain":"half_duplex","reward":1.0,"duration":338.0366882000235,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"4515c527-7303-4056-9774-bf975e1ee996","task_id":"48","domain":"half_duplex","reward":1.0,"duration":150.34404679998988,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"6e4e0bdc-8147-4545-aa41-2080bb63e082","task_id":"11","domain":"half_duplex","reward":1.0,"duration":146.49523279996356,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"90b69539-cf19-4b9d-9992-b0818fabd72e","task_id":"25","domain":"half_duplex","reward":1.0,"duration":111.22159019997343,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"ad883971-1bcd-4286-85e2-07834e36d647","task_id":"50","domain":"half_duplex","reward":1.0,"duration":119.63427020004019,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"f5497551-5989-48a6-9c14-ac73106044ae","task_id":"52","domain":"half_duplex","reward":0.0,"duration":144.87109999998938,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"a9ea9b71-3787-4f5e-9205-e61df4087fad","task_id":"34","domain":"half_duplex","reward":1.0,"duration":153.4079427999677,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"ba85025f-496d-43c0-91ed-39de2e2e480d","task_id":"66","domain":"half_duplex","reward":0.0,"duration":191.61229699995602,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"0dc9af39-5f98-42e2-8275-34dbdc790901","task_id":"72","domain":"half_duplex","reward":0.0,"duration":239.59267300000647,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"eb71d8da-2ad5-4bb9-abc5-83dc792474e1","task_id":"73","domain":"half_duplex","reward":1.0,"duration":78.83640249999007,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"6a856ef2-d337-4279-a911-8705827291bf","task_id":"83","domain":"half_duplex","reward":0.0,"duration":65.91401370003587,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"2b456ae8-d556-4045-8048-f42363281dfb","task_id":"85","domain":"half_duplex","reward":1.0,"duration":124.82446390000405,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"958f4587-64b8-4189-bfd0-20eea65b0c9a","task_id":"92","domain":"half_duplex","reward":0.0,"duration":182.9840203000349,"agent_cost":0.0,"termination_reason":"user_stop"}
+{"simulation_id":"cef286ce-4905-4cc7-bffc-e590ee3f1ddf","task_id":"87","domain":"half_duplex","reward":0.0,"duration":444.17191029997775,"agent_cost":0.0,"termination_reason":"user_stop"}

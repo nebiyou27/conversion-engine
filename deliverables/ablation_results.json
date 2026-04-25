@@ -1,0 +1,38 @@
+{
+  "method": {
+    "pass_at_1": 0.5294117647058824,
+    "ci95": [
+      0.30963235060004424,
+      0.7383489355759056
+    ],
+    "cost_per_task_usd": 0.0,
+    "p95_latency_s": 444.17191029997775,
+    "tasks": 17,
+    "trials_per_task": 1,
+    "model": "openrouter/qwen/qwen3-next-80b-a3b-thinking"
+  },
+  "day1_baseline": {
+    "pass_at_1": 0.7267,
+    "ci95": [
+      0.6504,
+      0.7917
+    ],
+    "cost_per_task_usd": 0.0199,
+    "p95_latency_s": 551.6491,
+    "tasks": 30,
+    "trials_per_task": 5,
+    "source": "deliverables/baseline.md"
+  },
+  "automated_optimization_baseline": null,
+  "delta_A": {
+    "value": -0.19728823529411765,
+    "sign": "negative",
+    "ci_separation": false,
+    "two_proportion_z_p_value": 0.09048505502570989
+  },
+  "notes": [
+    "Delta B (vs GEPA/AutoAgent) skipped per Abdulhamid 2026-04-24 scope reduction.",
+    "Sealed held-out 20-task partition not delivered; evaluation on 30-task dev slice.",
+    "One-trial sample width makes CI separation unlikely below near-perfect pass rates."
+  ]
+}
