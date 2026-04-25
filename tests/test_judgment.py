@@ -301,7 +301,7 @@ class TestICP:
         assert any(j["kind"] == "segment" for j in judgments)
 
     def test_judge_with_ai_maturity_score(self, conn):
-        claims = _make_claims(conn, "icp2", [
+        _make_claims(conn, "icp2", [
             {
                 "kind": "hiring_surge",
                 "tier": "verified",
@@ -313,29 +313,113 @@ class TestICP:
 
 
 # =====================================================================
-# competitor_gap.py — stub validation
+# competitor_gap.py — deterministic peer benchmark
 # =====================================================================
 
-class TestCompetitorGapStub:
-    def test_stub_returns_schema_valid_shape(self, conn):
+class TestCompetitorGap:
+    def _justifications(self, *, leadership="absent", mlops="absent", commentary="absent", stack="absent"):
+        return [
+            {"signal": "named_ai_ml_leadership", "status": leadership, "weight": "low", "confidence": "medium", "source_url": None},
+            {"signal": "ai_adjacent_open_roles", "status": mlops, "weight": "low", "confidence": "medium", "source_url": None},
+            {"signal": "executive_commentary", "status": commentary, "weight": "low", "confidence": "medium", "source_url": None},
+            {"signal": "modern_data_ml_stack", "status": stack, "weight": "low", "confidence": "medium", "source_url": None},
+        ]
+
+    def test_returns_schema_shaped_peer_gap_brief(self, conn):
         result = competitor_gap.judge(
             conn, "acme",
             prospect_domain="acme.com",
             prospect_sector="saas",
+            ai_maturity_score=1,
+            ai_maturity_justifications=self._justifications(),
         )
+        assert result is not None
         assert result["prospect_domain"] == "acme.com"
         assert result["prospect_sector"] == "saas"
-        assert result["prospect_ai_maturity_score"] == 0
-        assert result["competitors_analyzed"] == []
-        assert result["gap_findings"] == []
-        assert result["gap_quality_self_check"]["all_peer_evidence_has_source_url"] is False
+        assert result["prospect_ai_maturity_score"] == 1
+        assert len(result["competitors_analyzed"]) == 6
+        assert 1 <= len(result["gap_findings"]) <= 3
         assert "judgment_id" in result
 
-    def test_stub_persists_judgment_row(self, conn):
-        result = competitor_gap.judge(conn, "acme")
+    def test_top_quartile_math_and_gap_selection(self, conn):
+        result = competitor_gap.judge(
+            conn,
+            "acme",
+            prospect_domain="acme.com",
+            prospect_sector="saas",
+            ai_maturity_score=0,
+            ai_maturity_justifications=self._justifications(mlops="1 ML role open"),
+        )
+        assert result is not None
+        assert result["sector_top_quartile_benchmark"] == 3.0
+        top = [p for p in result["competitors_analyzed"] if p["top_quartile"]]
+        assert [p["domain"] for p in top] == ["northstar-metrics.example", "vectorlane.example"]
+        practices = {g["practice"] for g in result["gap_findings"]}
+        assert "Dedicated MLOps or ML-platform engineering role open" not in practices
+        assert "Dedicated AI/ML leadership role publicly named" in practices
+
+    def test_missing_peer_file_abstains_without_judgment(self, conn):
+        result = competitor_gap.judge(
+            conn,
+            "acme",
+            prospect_domain="acme.com",
+            prospect_sector="industrial",
+            ai_maturity_score=0,
+            ai_maturity_justifications=self._justifications(),
+        )
+        assert result is None
+        assert not db.get_judgments(conn, "acme")
+
+    def test_self_check_flags(self, conn):
+        result = competitor_gap.judge(
+            conn,
+            "silent",
+            prospect_domain="silent.example",
+            prospect_sector="saas",
+            ai_maturity_score=1,
+            ai_maturity_justifications=self._justifications(commentary="published engineering blog"),
+        )
+        assert result is not None
+        flags = result["gap_quality_self_check"]
+        assert flags["all_peer_evidence_has_source_url"] is True
+        assert flags["at_least_one_gap_high_confidence"] is False
+        assert flags["prospect_silent_but_sophisticated_risk"] is True
+
+    def test_persists_benchmark_and_gap_rationale(self, conn):
+        _make_claims(conn, "acme", [
+            {
+                "kind": "hiring_surge",
+                "tier": "verified",
+                "payload": {"postings_count": 3, "titles": ["ML Engineer"]},
+            },
+        ])
+        result = competitor_gap.judge(
+            conn,
+            "acme",
+            prospect_domain="acme.com",
+            prospect_sector="saas",
+            ai_maturity_score=0,
+            ai_maturity_justifications=self._justifications(),
+        )
+        assert result is not None
         judgments = db.get_judgments(conn, "acme")
-        assert any(j["kind"] == "competitor_gap" for j in judgments)
-        assert any(j["value"] == "stub" for j in judgments)
+        gap_judgment = next(j for j in judgments if j["kind"] == "competitor_gap")
+        assert gap_judgment["value"] == "3.0"
+        assert "Dedicated AI/ML leadership" in gap_judgment["rationale"]
+        assert json.loads(gap_judgment["claim_ids"])
+
+    def test_pitch_shift_template_uses_top_gap_confidence(self, conn):
+        result = competitor_gap.judge(
+            conn,
+            "acme",
+            prospect_domain="acme.com",
+            prospect_sector="saas",
+            ai_maturity_score=0,
+            ai_maturity_justifications=self._justifications(),
+        )
+        assert result is not None
+        assert "Confidence is medium" in result["suggested_pitch_shift"]
+        assert "frame it as a question" in result["suggested_pitch_shift"]
 
 
 # =====================================================================

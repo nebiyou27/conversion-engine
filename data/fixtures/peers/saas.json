@@ -1,0 +1,170 @@
+{
+  "_note": "SYNTHETIC peer fixture for deterministic competitor-gap tests. No real companies.",
+  "sector": "saas",
+  "peers": [
+    {
+      "name": "Northstar Metrics",
+      "domain": "northstar-metrics.example",
+      "ai_maturity_score": 3,
+      "ai_maturity_justification": [
+        "Named VP of AI on public team page",
+        "MLOps Platform Engineer role open",
+        "Technical blog describes evaluation harness work"
+      ],
+      "headcount_band": "80_to_200",
+      "sources_checked": [
+        "https://northstar-metrics.example/team",
+        "https://northstar-metrics.example/careers/mlops-platform-engineer",
+        "https://northstar-metrics.example/blog/evaluation-harness"
+      ],
+      "practice_signals": {
+        "named_ai_leadership": {
+          "present": true,
+          "evidence": "VP of AI is named on the public team page.",
+          "source_url": "https://northstar-metrics.example/team"
+        },
+        "mlops_role_open": {
+          "present": true,
+          "evidence": "MLOps Platform Engineer role is open.",
+          "source_url": "https://northstar-metrics.example/careers/mlops-platform-engineer"
+        },
+        "public_technical_commentary": {
+          "present": true,
+          "evidence": "Engineering blog describes an evaluation harness for AI workflows.",
+          "source_url": "https://northstar-metrics.example/blog/evaluation-harness"
+        },
+        "modern_ml_stack": {
+          "present": true,
+          "evidence": "Careers page references MLflow and vector search infrastructure.",
+          "source_url": "https://northstar-metrics.example/careers/ml-platform"
+        }
+      }
+    },
+    {
+      "name": "Vectorlane",
+      "domain": "vectorlane.example",
+      "ai_maturity_score": 3,
+      "ai_maturity_justification": [
+        "Head of Applied AI named in leadership announcement",
+        "Two ML-platform roles open",
+        "Public architecture note references feature stores and eval tooling"
+      ],
+      "headcount_band": "200_to_500",
+      "sources_checked": [
+        "https://vectorlane.example/news/head-of-applied-ai",
+        "https://vectorlane.example/careers/ml-platform-engineer",
+        "https://vectorlane.example/engineering/ai-architecture"
+      ],
+      "practice_signals": {
+        "named_ai_leadership": {
+          "present": true,
+          "evidence": "Head of Applied AI announced publicly.",
+          "source_url": "https://vectorlane.example/news/head-of-applied-ai"
+        },
+        "mlops_role_open": {
+          "present": true,
+          "evidence": "ML Platform Engineer role is open.",
+          "source_url": "https://vectorlane.example/careers/ml-platform-engineer"
+        },
+        "public_technical_commentary": {
+          "present": true,
+          "evidence": "Engineering note explains production AI architecture.",
+          "source_url": "https://vectorlane.example/engineering/ai-architecture"
+        },
+        "modern_ml_stack": {
+          "present": true,
+          "evidence": "Architecture note references feature stores and evaluation tooling.",
+          "source_url": "https://vectorlane.example/engineering/ai-architecture"
+        }
+      }
+    },
+    {
+      "name": "Brighttable",
+      "domain": "brighttable.example",
+      "ai_maturity_score": 2,
+      "ai_maturity_justification": [
+        "Senior ML Engineer role open",
+        "CTO interview mentions AI roadmap"
+      ],
+      "headcount_band": "80_to_200",
+      "sources_checked": [
+        "https://brighttable.example/careers/senior-ml-engineer",
+        "https://brighttable.example/blog/cto-ai-roadmap"
+      ],
+      "practice_signals": {
+        "named_ai_leadership": { "present": false },
+        "mlops_role_open": {
+          "present": true,
+          "evidence": "Senior ML Engineer role includes deployment ownership.",
+          "source_url": "https://brighttable.example/careers/senior-ml-engineer"
+        },
+        "public_technical_commentary": {
+          "present": true,
+          "evidence": "CTO interview mentions the AI roadmap.",
+          "source_url": "https://brighttable.example/blog/cto-ai-roadmap"
+        },
+        "modern_ml_stack": { "present": false }
+      }
+    },
+    {
+      "name": "Atlas Ops",
+      "domain": "atlas-ops.example",
+      "ai_maturity_score": 2,
+      "ai_maturity_justification": [
+        "Data Platform role includes model monitoring",
+        "No named AI leadership"
+      ],
+      "headcount_band": "80_to_200",
+      "sources_checked": [
+        "https://atlas-ops.example/careers/data-platform"
+      ],
+      "practice_signals": {
+        "named_ai_leadership": { "present": false },
+        "mlops_role_open": {
+          "present": true,
+          "evidence": "Data Platform role includes model monitoring responsibilities.",
+          "source_url": "https://atlas-ops.example/careers/data-platform"
+        },
+        "public_technical_commentary": { "present": false },
+        "modern_ml_stack": { "present": false }
+      }
+    },
+    {
+      "name": "Signalpond",
+      "domain": "signalpond.example",
+      "ai_maturity_score": 1,
+      "ai_maturity_justification": [
+        "One AI-adjacent role open",
+        "No named leadership or technical publication"
+      ],
+      "headcount_band": "15_to_80",
+      "sources_checked": [
+        "https://signalpond.example/careers"
+      ],
+      "practice_signals": {
+        "named_ai_leadership": { "present": false },
+        "mlops_role_open": { "present": false },
+        "public_technical_commentary": { "present": false },
+        "modern_ml_stack": { "present": false }
+      }
+    },
+    {
+      "name": "QuietStack",
+      "domain": "quietstack.example",
+      "ai_maturity_score": 0,
+      "ai_maturity_justification": [
+        "No public AI hiring or leadership signal"
+      ],
+      "headcount_band": "15_to_80",
+      "sources_checked": [
+        "https://quietstack.example/careers"
+      ],
+      "practice_signals": {
+        "named_ai_leadership": { "present": false },
+        "mlops_role_open": { "present": false },
+        "public_technical_commentary": { "present": false },
+        "modern_ml_stack": { "present": false }
+      }
+    }
+  ]
+}

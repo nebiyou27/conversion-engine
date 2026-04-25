@@ -3,10 +3,9 @@ from __future__ import annotations
 
 import json
 import os
-import sqlite3
 import uuid
 from contextlib import ExitStack
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
@@ -118,9 +117,8 @@ def run_synthetic_thread(
     ledger = BudgetLedger(run_id=run_id)
 
     evidence_ids = collector.collect(fixture, conn)
-    claim_ids = []
     if evidence_ids:
-        claim_ids = __import__("agent.claims.builder", fromlist=["build"]).build(conn, company_id, now=_now())
+        __import__("agent.claims.builder", fromlist=["build"]).build(conn, company_id, now=_now())
 
     rows = [dict(r) for r in conn.execute("SELECT * FROM claims WHERE company_id = ?", (company_id,)).fetchall()]
 
@@ -131,7 +129,14 @@ def run_synthetic_thread(
 
     segment_result = segment.classify(rows, now=_now(), ai_maturity_score=ai_result["score"])
     icp_result = icp.judge(conn, company_id, now=_now(), ai_maturity_score=ai_result["score"])
-    gap_result = competitor_gap.judge(conn, company_id, prospect_domain="acme.example", prospect_sector="saas", ai_maturity_score=ai_result["score"])
+    gap_result = competitor_gap.judge(
+        conn,
+        company_id,
+        prospect_domain="acme.example",
+        prospect_sector="saas",
+        ai_maturity_score=ai_result["score"],
+        ai_maturity_justifications=ai_result["justifications"],
+    )
     enrichment_artifact = enrichment.build_enrichment_artifact(conn, company_id, company_name=company_name)
 
     draft = build_commitment_email(
