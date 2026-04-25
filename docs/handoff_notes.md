@@ -2,8 +2,9 @@
 
 ## Known Limitations
 
-- Synthetic demo runs use `DEMO_MODE=true` by default. Those artifacts label AI
-  maturity as `source: hardcoded_demo_stub`; non-demo runs call
+- Synthetic demo runs use the real LLM by default. Set `DEMO_MODE=true` to fall
+  back to the hardcoded AI maturity stub for offline tests; those artifacts
+  label AI maturity as `source: hardcoded_demo_stub`. Non-demo runs call
   `agent.judgment.ai_maturity.judge()` through the Qwen-backed LLM wrapper.
 - Job-post scraping is limited to BuiltIn, Wellfound, and public LinkedIn jobs
   search. A fourth domain should not be added without robots.txt verification

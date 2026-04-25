@@ -88,73 +88,119 @@ fixture, then emits a schema-shaped `competitor_gap_brief` only when at least
 five peers and one valid gap are available. Missing peer data returns `None`
 rather than a schema-invalid soft fallback.
 
-## 5. Mechanism: Signal-Confidence-Aware Phrasing
+## 5. Mechanism Design — Signal-Confidence-Aware Phrasing
 
-**Mechanism name:** Signal-Confidence-Aware Phrasing. Internally, this is the
-combination of tier-mood mapping, citation gates, competitor-gap self-checks,
-and a bench-to-brief constraint.
+### What it is
 
-**Reimplementable rule.** The agent converts source data into progressively
-stronger truth objects:
+Signal-Confidence-Aware Phrasing is the challenge document's recommended
+direction #1 made executable. Three components: a deterministic tier-mood
+mapping that strips the LLM's freedom to escalate confidence, a sensitivity
+axis that overrides mood to interrogative for claim kinds where even verified
+evidence is presumptuous, and a bench-to-brief hard constraint that blocks
+capacity claims without a bench snapshot citation. Confidence lives outside
+the model; the model only writes prose.
+
+### Re-implementable spec
+
+**Epistemic layer contracts.** Five layers, each with a single truth contract:
 
 ```text
 evidence rows -> claim rows -> judgment objects -> draft text -> gate report
 ```
 
-The evidence layer stores raw facts with source URLs. The claims layer groups
-facts into `funding_round`, `hiring_surge`, `leadership_change`, `layoff_event`,
-and `company_metadata`, assigns a tier, and carries evidence IDs forward. The
-judgment layer reads claim rows and AI-maturity justifications, not raw scraped
-text. The actions layer may write factual sentences only from claim rows or
-schema-shaped judgments. The gate layer blocks unsupported factual sentences
-before any provider call.
+- Evidence layer (`agent/evidence/`): raw facts only, append-only, each row
+  carries `{fact, source_url, retrieved_at, method}`. No interpretation.
+- Claims layer (`agent/claims/`): groups evidence into typed claims
+  (`funding_round`, `hiring_surge`, `leadership_change`, `layoff_event`,
+  `company_metadata`), assigns tier, carries evidence IDs forward.
+- Judgment layer (`agent/judgment/`): reads claim rows and AI-maturity
+  justifications, never raw scraped text.
+- Actions layer (`agent/actions/`): factual sentences may only be written from
+  claim rows or schema-shaped judgments.
+- Gate layer (`agent/gate/`): blocks unsupported factual sentences before any
+  provider call.
 
-**Tier-mood mapping.**
+**Tier rule.**
 
-| Claim tier | Rule | Allowed outreach mood |
-|---|---|---|
-| `verified` | At least two primary URLs and event age <= 7 days | Indicative |
-| `corroborated` | At least one primary plus one secondary URL and event age <= 30 days | Hedged indicative |
-| `inferred` | One fresh primary signal, or secondary-only signal | Interrogative / soft |
-| `below_threshold` | Stale, missing, or insufficient evidence | Do not use downstream |
+| Tier | Rule |
+|---|---|
+| `verified` | >=2 independent primary URLs, event age <=7 days |
+| `corroborated` | 1 primary + 1 secondary URL, event age <=30 days |
+| `inferred` | one fresh primary signal, or secondary-only signal |
+| `below_threshold` | stale, missing, or insufficient evidence; not visible downstream |
 
-Question phrasing is not a citation exemption. If a sentence contains a factual
-claim, `agent/gate/citation_check.py` still requires a `{claim_id}` reference.
-The shadow review reuses the citation check, and the forbidden-phrase gate
-blocks style-guide violations such as prospect-facing use of "bench".
+**Mood from tier.**
 
-**Competitor-gap constraint.** Gap findings are capped at three and sorted by
-confidence. A high-confidence gap requires at least three top-quartile peers and
-an absent prospect signal with medium-or-better confidence. With six SaaS peers,
-top quartile is two companies, so high confidence is intentionally unreachable;
-small peer sets can support useful questions but not hard gap claims.
+| Tier | Allowed mood |
+|---|---|
+| `verified` | indicative |
+| `corroborated` | hedged indicative |
+| `inferred` | interrogative |
+| `below_threshold` | absent (not referenced) |
 
-**Bench-to-brief constraint.** Capacity claims must be grounded in the Tenacious
-bench snapshot. Drafts should not claim available engineers or stack coverage
-unless the corresponding bench summary supports that commitment. This is a hard
-constraint because capacity over-commitment is not a tone problem; it is a
-delivery-risk problem.
+The model does not pick mood. The tier picks it. Question phrasing is not a
+citation exemption: if a sentence makes a factual claim, `agent/gate/citation_check.py`
+still requires a `{claim_id}` reference, regardless of punctuation.
 
-**Rationale.** The target failure is signal over-claiming under defensive
-replies: once challenged, an LLM tends to explain harder and drift from "we saw
-a weak signal" into "you have this problem." The mechanism makes confidence
-external to the model. Evidence tier determines sentence mood, gap self-checks
-determine whether peer comparisons can be asserted or only asked about, and the
-gate checks citations after drafting.
+**Sensitivity axis.** Even a verified claim can be presumptuous. A sensitive
+claim kind overrides the mood-from-tier mapping to interrogative. The set
+`SENSITIVE_CLAIM_KINDS = {layoff_event, ai_maturity_below_2,
+capability_gap_primary_deficit, contradictory_signals}` covers the categories
+where naming the situation as fact ("you laid off engineers and need help")
+reads as accusatory or presumptuous regardless of evidence strength. The
+A/B reply-rate inversion (-9.38 pp, n=32/arm in `eval/ab_reply_rate_report.json`)
+showed that signal density past a threshold reduces reply likelihood; the
+sensitivity axis is the lever that lowers density on exactly the topics where
+density backfires.
 
-The A/B reply-rate run exposed the sensitivity axis. In `eval/ab_reply_rate_report.json`,
-the signal-grounded variant scored 84.38% judged reply likelihood against
-93.75% for the generic variant, a -9.38 percentage-point delta at n=32 per arm.
-That does not invalidate signal grounding; it says specificity has a dosage
-limit. Signal-grounded lost because it raised evidence density above the
-prospect's tolerance threshold for a cold first-touch email. The variable is not
-"more evidence is better"; it is **evidence density tuned to channel and
-relationship stage**. The mechanism should use signal confidence to decide both
-**what can be said** and **how much evidence to surface in a first touch**.
-Low-confidence or medium-confidence gap material should become one short
-question, not a crowded research memo in email form.
+**Gate pipeline.** Three deterministic checks run in order before any send:
 
-**Hyperparameters.**
+1. `citation_check` — every factual sentence maps to a `{claim_id}` carried by
+   the draft.
+2. `shadow_review` — adversarial second-model pass searches for unsupported
+   claims.
+3. `forbidden_phrases` — regex blocks future-tense staff availability,
+   prospect-facing "bench", and over-claiming phrases.
+
+Any gate failure routes to the human queue. There is no retry loop; retrying a
+truth-claim failure produces a different lie, not a corrected one.
+
+**Bench-to-brief constraint.** Sentences implying engineer availability,
+stack coverage, or delivery commitment must cite a row from the Tenacious
+bench summary. This is a hard constraint enforced at the claim layer (no
+`bench_capacity` claim without `data/bench/` evidence) and at the gate layer
+(forbidden-phrase regex catches "engineers ready", "availability this week",
+"can start", and similar future-tense capacity language). Capacity
+over-commitment is a delivery-risk failure, not a tone failure, so it
+gets a hard rule.
+
+### Rationale (linked to target failure)
+
+**Target failure:** signal over-claiming under defensive replies. The probe
+in `probes/target_failure_mode.md` shows that once a prospect pushes back
+("we're not actually restructuring"), a vanilla LLM tends to explain harder
+and drift from "we saw a weak signal" into "you have this problem."
+
+**Root cause:** mood drift is unobservable to the model. The model has no
+internal representation of "I should be in interrogative mode for this
+sentence", so under skepticism it raises confidence to defend itself. The
+escalation is a generation-time artifact, not a reasoning failure, which
+means a reasoning-level prompt patch does not fix it.
+
+**How the mechanism addresses it:**
+
+- Tier-mood mapping makes mood deterministic from evidence shape. The model
+  cannot escalate mood without first escalating tier, and tier escalation
+  requires fabricating evidence rows, which the citation gate catches.
+- The sensitivity axis catches verified-but-presumptuous claims. Verified
+  evidence is not licence to write the prospect's situation in declarative
+  prose; sensitive kinds always become questions.
+- The bench-to-brief guard blocks the capacity-over-commitment failure mode
+  where the model invents engineer availability to close.
+- The gate pipeline is post-generation and deterministic, so model
+  drift cannot route around it.
+
+### Hyperparameters (actual values used)
 
 | Parameter | Value | Location |
 |---|---:|---|
@@ -162,49 +208,89 @@ question, not a crowded research memo in email form.
 | `CORROBORATED_MAX_AGE_DAYS` | 30 | `agent/claims/tiers.py` |
 | `HIRING_SURGE_MIN_POSTINGS` | 3 | `agent/claims/tiers.py` |
 | `HIRING_SURGE_WINDOW_DAYS` | 30 | `agent/claims/tiers.py` |
-| Segment minimum confidence | 0.6 | `agent/judgment/segment.py` |
-| Competitor peer count | 5-10 | `data/tenacious_sales_data/schemas/competitor_gap_brief.schema.json` |
-| Competitor gap max findings | 3 | same schema |
-| Stall threshold | 300 seconds | `eval/stall_rate_report.json` |
+| `JOB_VELOCITY_WINDOW_DAYS` | 60 | `agent/evidence/sources/job_posts.py` |
+| Segment confidence threshold | 0.6 | `agent/judgment/segment.py` |
+| AI maturity silent-company score | 0 | `agent/prompts/ai_maturity_rubric.md` |
+| `LLM_BUDGET_USD` per run | 0.50 | `.env` (default in `integrations/llm.py`) |
+| Stall threshold | 300 seconds | `eval/stall_rate.py` |
+| `SENSITIVE_CLAIM_KINDS` | `{layoff_event, ai_maturity_below_2, capability_gap_primary_deficit, contradictory_signals}` | `agent/claims/sensitivity.py` |
+| Weak-hiring soft-language threshold | <5 open eng roles | per challenge doc; enforced at segment-1 qualification |
+| Competitor gap max findings | 3 | `data/tenacious_sales_data/schemas/competitor_gap_brief.schema.json` |
 
-**Ablations.**
+### Three ablation variants
 
-| Ablation | Change | Expected readout |
-|---|---|---|
-| No tier-mood mapping | Let the LLM choose confidence and sentence posture | More over-claiming on inferred or contradicted signals |
-| Blanket question exemption | Allow factual questions without `{claim_id}` | Unsupported facts bypass the citation gate |
-| No segment threshold | Emit segments below confidence 0.6 | More weak-evidence outreach and false-positive ICP matches |
-| Evidence-density cap off | Allow all claim/gap details in first touch | Higher specificity, but lower reply likelihood as shown by the A/B inversion |
+- **Variant A — No tier-mood mapping.** Flag: `TIER_MOOD_MAP_DISABLED=true`.
+  The drafter receives claim rows but no mood prescription; the LLM picks
+  mood. Tests whether deterministic mapping is what prevents over-confidence,
+  or whether the model would have stayed in correct mood anyway given the
+  same evidence.
+- **Variant B — Blanket question exemption gate.** Roll back to the
+  pre-Phase-6 `agent/gate/citation_check.py` (git SHA pre-`ffa4fe6`), which
+  exempted any sentence ending with `?` from citation requirements. Tests
+  whether question phrasing remains a viable bypass for unsupported facts
+  once the model learns it.
+- **Variant C — No sensitivity axis.** Override `SENSITIVE_CLAIM_KINDS` to
+  `frozenset()`. Verified-tier claims get indicative mood, including layoffs
+  and capability deficits. Tests the A/B finding that sensitive claim kinds
+  need interrogative mood regardless of tier strength — i.e., that mood is a
+  function of *kind* as well as *evidence*.
 
-The stalled-thread measurement currently reports 0/20 runs over the 300-second
-threshold. That validates orchestration latency, not mechanism quality; the
-mechanism is evaluated by citation failures, probe results, reply-rate deltas,
-and later held-out task behavior.
+### Statistical test plan
 
-### Tau2 Transfer Mechanism
+- **Comparison:** main method vs Variant A pass@1 on the tau2-bench retail
+  dev slice (n=30 tasks).
+- **Test:** two-proportion z-test, p<0.05 threshold.
+- **Delta A:** `your_method - supplied_qwen_baseline`. Supplied baseline =
+  Pass@1 0.7267, n=30, 5 trials averaged.
+- **Power constraint:** the supplied baseline used 5 trials; the treatment
+  budget allows 1 trial at n=30. The Wilson 95% CI on a single-trial pass@1
+  is wide. To clear the baseline CI's upper edge in a single trial, the
+  treatment must score approximately pass@1 >=0.93. This is reported as a
+  known limitation of the 1-trial scope reduction documented in
+  `docs/handoff_notes.md`, not a limitation of the mechanism itself.
+- **Delta B (vs GEPA / AutoAgent):** intentionally not run. Documented in
+  `docs/handoff_notes.md` as a scope reduction after the 2026-04-24 cut.
+- **Delta C (vs published tau2-bench reference):** informational only; the
+  published reference uses a different model and prompt baseline, so Delta C
+  carries no causal claim about this mechanism.
 
-The tau2 transfer uses the same mechanism principle, but the first-pass adapter
-is deliberately prompt-only. `eval/tau2_agent_runtime.py` subclasses tau2's
-`LLMAgent` and overrides only `system_prompt`, adding an instruction to verify
-irreversible or customer-state-changing actions against the latest tool output
-before committing. It does not intercept tool calls or override
-`_generate_next_message` on the first run.
+### Tau2 transfer mechanism
 
-`eval/tau2_custom_agent.py` remains the unit-tested validation harness for the
-verification rules. Its helpers define and test the concrete rule shape:
-ambiguous tool output, missing action identifiers, or low-confidence
-irreversible actions should lead to a clarifying question or re-plan. The
-runtime does not need to import those helpers for the prompt-only pass; their
-role is to document the rule precisely and prove it works in isolation.
+The tau2 transfer applies the same principle: confidence lives outside the
+generation step. `eval/tau2_agent_runtime.py` subclasses tau2's `LLMAgent`
+and overrides only `system_prompt`, adding instructions to verify
+irreversible or customer-state-changing actions against the most recent
+tool output before committing. The first-pass adapter is deliberately
+prompt-only; tool-call interception (`_generate_next_message` override)
+is held in reserve.
+
+`eval/tau2_custom_agent.py` is the unit-tested validation harness that
+defines the rule shape — ambiguous tool output, missing action identifiers,
+or low-confidence irreversible actions should produce a clarifying question
+or re-plan rather than a commit. The runtime does not import these helpers
+for the prompt-only pass; they document the rule precisely and prove it
+works in isolation.
 
 Decision rule for the single-trial treatment run:
 
 | Treatment Pass@1 | Action |
 |---:|---|
 | >= 0.80 | Ship prompt-only. |
-| 0.75-0.79 | Consider code-level fallback only if trace review shows under-asking. |
+| 0.75-0.79 | Code-level fallback only if trace review shows under-asking. |
 | < 0.75 | Add the `_generate_next_message` interception fallback and re-run. |
 | < 0.73 | Report flat or negative Delta A honestly; mechanism did not transfer. |
+
+### Result (filled in after F2 finishes)
+
+- Treatment Pass@1: {TBD}
+- 95% Wilson CI: {TBD}
+- Delta vs supplied baseline (0.7267): {TBD}
+- Two-proportion z-test p-value: {TBD}
+
+The stall-rate measurement currently reports 0/20 runs over the 300-second
+threshold. That validates orchestration latency, not mechanism quality;
+mechanism quality is evaluated by Delta A, citation-gate failure rate,
+probe trigger rate, and held-out task behavior.
 
 ## 6. Honest Status
 
