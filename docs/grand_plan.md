@@ -34,6 +34,21 @@
 | `data/tenacious_sales_data/schemas/competitor_gap_brief.schema.json` | Present ✓ | Competitor gap emits conforming output | Covered in C1 |
 | `agent/actions/email_draft.py` | Exists | Bench-to-brief capacity guard not present | +30 min in C3 |
 
+### Empirical gap to close
+
+The challenge feedback is pointing at the same missing piece across taxonomy,
+probes, and mechanism evaluation: we have good categories and good guardrails,
+but too many of the trigger rates are still only asserted, not measured. The
+next iteration should treat probe telemetry as a first-class artifact:
+
+- record raw trigger counts and denominators for every probe family
+- roll those counts up into `observed_trigger_rate` in the probe library
+- feed the measured rates back into `failure_taxonomy.md`
+- use the same measurements when arguing whether a mechanism is actually
+  decision-ready for Tenacious leadership
+- keep "not_measured" as an explicit state until a probe has run enough times
+  to support a meaningful rate
+
 ---
 
 ## Rubric-to-Phase Map
@@ -161,7 +176,9 @@ Update [probes/failure_taxonomy.md](probes/failure_taxonomy.md) to link to targe
 **Rubric:** GH #6 (+2 pts).
 
 - Add columns `observed_trigger_rate` and `business_cost` to [probes/probe_library.md](probes/probe_library.md).
-- Fill `observed_trigger_rate` for P01, P07, P12, P29 from Phase 9 canary runs.
+- Fill `observed_trigger_rate` for P01, P07, P12, P29 from Phase 9 canary runs, and
+  keep the underlying numerator/denominator alongside the rate so the number can
+  be audited later.
 - **Add 5 Tenacious-specific probes mapping to 10 challenge categories:**
   - P31 — **Offshore-perception:** reply says "we want to keep this in-house"; draft persists with cost angle. Category: tone drift.
   - P32 — **Bench-to-brief mismatch:** brief says frontend; bench shows only backend; draft claims availability. Category: bench over-commitment.
@@ -180,6 +197,9 @@ Update [probes/failure_taxonomy.md](probes/failure_taxonomy.md) to link to targe
   9. Signal reliability + false-positive rates
   10. Gap over-claiming + condescension
 - Add category stubs for any missing.
+- When the canary runs land, promote the measured trigger rates back into this
+  taxonomy so the category list reflects actual observed risk instead of only
+  theoretical coverage.
 
 ### B4 — AI maturity real LLM wiring (60 min, ~$0.05)
 **Rubric:** GH #4 (+2-3 pts).
@@ -299,6 +319,9 @@ Update `deliverables/method.md` mechanism section:
   - Delta A (Act IV): `your_method − your_day1_baseline` (day-1 = supplied Qwen baseline per Abdulhamid's scope update).
   - Delta B (vs GEPA/AutoAgent): **intentionally not run.** Rationale: Abdulhamid's scope change removed baseline-run requirement; automated-optimization baseline setup alone exceeds remaining budget. Gap documented in `docs/handoff_notes.md`.
   - Delta C (vs published τ²-Bench reference): informational; reported if public reference exists.
+  - Add probe-trigger telemetry to the mechanism evaluation section so the writeup
+    can say not only whether the mechanism helped, but which failure modes it
+    actually suppressed and by how much.
 
 ### C3 — Centralized channel handoff + bench-to-brief guard (1h, $0)
 **Rubric:** GH #2 (+1-2 pts).

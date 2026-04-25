@@ -51,6 +51,19 @@ flowchart LR
 | Cal.com | `integrations/calcom_client.py`, `agent/actions/schedule.py` | Adapter tests and synthetic booking flow |
 | Langfuse | `integrations/langfuse_client.py` | Wrapper implemented; current synthetic run does not prove remote trace delivery |
 
+## Measurement Loop
+
+The system is only decision-ready once probe and mechanism claims are backed
+by measured trigger rates, not just names and expected behavior. The intended
+loop is:
+
+1. run probes and canary flows
+2. capture raw counts, denominators, and trigger conditions
+3. roll the results into `observed_trigger_rate` fields in the probe library
+4. revisit the failure taxonomy with those measurements
+5. cite the same telemetry when evaluating whether a mechanism is actually
+   suppressing the intended failure mode
+
 ## Synthetic Thread Boundary
 
 `agent.core.run_synthetic_thread(live=False)` is a demo/smoke path. It uses
