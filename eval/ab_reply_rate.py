@@ -4,6 +4,7 @@ Phase A4 measurement:
   - 4 fixtures x 2 variants x 8 trials = 64 Qwen draft calls
   - 64 DeepSeek judge calls: "Would a busy CTO reply? yes/no."
   - emit eval/ab_reply_rate_report.json with rates, n, and delta pp
+  - optional timing-only run isolates grounded timing copy from gap language
 """
 from __future__ import annotations
 
@@ -37,7 +38,15 @@ DEFAULT_OUTPUT = Path("eval/ab_reply_rate_report.json")
 PROMPT_DIR = Path("agent/prompts")
 VARIANTS = {
     "signal_grounded": PROMPT_DIR / "outreach_signal_grounded.md",
+    "timing_grounded": PROMPT_DIR / "outreach_timing_grounded.md",
     "generic": PROMPT_DIR / "outreach_generic.md",
+}
+DEFAULT_VARIANTS = ("signal_grounded", "generic")
+TIMING_CLAIM_KINDS = {
+    "funding_round",
+    "hiring_surge",
+    "leadership_change",
+    "layoff_event",
 }
 
 
@@ -149,13 +158,29 @@ def build_context(fixture_path: Path) -> dict[str, Any]:
     }
 
 
-def _draft_messages(variant: str, context: dict[str, Any], trial_index: int) -> list[dict[str, str]]:
-    prompt = VARIANTS[variant].read_text(encoding="utf-8")
+def _context_for_variant(variant: str, context: dict[str, Any]) -> dict[str, Any]:
     if variant == "generic":
-        context = {
+        return {
             "company_name": context["company_name"],
             "prospect_role": context["prospect_role"],
         }
+    if variant == "timing_grounded":
+        return {
+            "company_id": context["company_id"],
+            "company_name": context["company_name"],
+            "prospect_role": context["prospect_role"],
+            "timing_claims": [
+                claim
+                for claim in context["claims"]
+                if claim["kind"] in TIMING_CLAIM_KINDS
+            ],
+        }
+    return context
+
+
+def _draft_messages(variant: str, context: dict[str, Any], trial_index: int) -> list[dict[str, str]]:
+    prompt = VARIANTS[variant].read_text(encoding="utf-8")
+    context = _context_for_variant(variant, context)
     return [
         {"role": "system", "content": prompt},
         {
@@ -349,17 +374,23 @@ def build_report(
     *,
     trials: int = 8,
     fixture_paths: list[Path] | None = None,
+    variants: list[str] | None = None,
     run_id: str = "ab-reply-rate-a4",
     ledger: BudgetLedger | None = None,
     client: Any | None = None,
 ) -> dict[str, Any]:
     fixture_paths = fixture_paths or DEFAULT_FIXTURES
+    variant_names = variants or list(DEFAULT_VARIANTS)
+    unknown_variants = sorted(set(variant_names) - set(VARIANTS))
+    if unknown_variants:
+        raise ValueError(f"Unknown variants: {', '.join(unknown_variants)}")
+
     ledger = ledger or BudgetLedger(run_id=run_id)
     details: list[dict[str, Any]] = []
 
     for fixture_path in fixture_paths:
         context = build_context(fixture_path)
-        for variant in VARIANTS:
+        for variant in variant_names:
             for trial_index in range(1, trials + 1):
                 draft, draft_resp, draft_attempts = draft_with_retries(
                     variant=variant,
@@ -394,20 +425,26 @@ def build_report(
                     "judge_attempts": judge_attempts,
                 })
 
-    variants: dict[str, dict[str, Any]] = {}
-    for variant in VARIANTS:
+    variant_reports: dict[str, dict[str, Any]] = {}
+    for variant in variant_names:
         rows = [row for row in details if row["variant"] == variant]
         replies = sum(1 for row in rows if row["judge_reply"])
         n = len(rows)
-        variants[variant] = {
+        variant_reports[variant] = {
             "n": n,
             "reply_count": replies,
             "reply_rate": replies / n if n else None,
         }
 
-    sg = variants["signal_grounded"]["reply_rate"]
-    generic = variants["generic"]["reply_rate"]
-    delta_pp = None if sg is None or generic is None else round((sg - generic) * 100, 2)
+    deltas_pp: dict[str, float | None] = {}
+    if "generic" in variant_reports:
+        generic = variant_reports["generic"]["reply_rate"]
+        for variant_name, variant_report in variant_reports.items():
+            if variant_name == "generic":
+                continue
+            rate = variant_report["reply_rate"]
+            key = f"{variant_name}_minus_generic"
+            deltas_pp[key] = None if rate is None or generic is None else round((rate - generic) * 100, 2)
 
     return {
         "run_id": run_id,
@@ -415,8 +452,11 @@ def build_report(
         "judge_question": "Would a busy CTO reply?",
         "fixtures": [str(path) for path in fixture_paths],
         "trials_per_fixture_per_variant": trials,
-        "variants": variants,
-        "delta_pp_signal_grounded_minus_generic": delta_pp,
+        "variant_names": variant_names,
+        "variants": variant_reports,
+        "deltas_pp": deltas_pp,
+        "delta_pp_signal_grounded_minus_generic": deltas_pp.get("signal_grounded_minus_generic"),
+        "delta_pp_timing_grounded_minus_generic": deltas_pp.get("timing_grounded_minus_generic"),
         "sample_size_caveat": "n=32/arm is suggestive, not a production reply-rate estimate.",
         "ledger": ledger.get_summary(),
         "details": details,
@@ -429,17 +469,29 @@ def main() -> int:
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
     parser.add_argument("--run-id", default="ab-reply-rate-a4")
     parser.add_argument("--budget-usd", type=float, default=0.50)
+    parser.add_argument(
+        "--variants",
+        nargs="+",
+        default=list(DEFAULT_VARIANTS),
+        choices=sorted(VARIANTS),
+        help="Variants to compare. Use: --variants timing_grounded generic",
+    )
     args = parser.parse_args()
 
     ledger = BudgetLedger(run_id=args.run_id, ceiling_usd=args.budget_usd)
-    report = build_report(trials=args.trials, run_id=args.run_id, ledger=ledger)
+    report = build_report(
+        trials=args.trials,
+        variants=args.variants,
+        run_id=args.run_id,
+        ledger=ledger,
+    )
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({
         "output": str(output),
         "variants": report["variants"],
-        "delta_pp_signal_grounded_minus_generic": report["delta_pp_signal_grounded_minus_generic"],
+        "deltas_pp": report["deltas_pp"],
         "spent_usd": report["ledger"]["spent_usd"],
     }, indent=2, sort_keys=True))
     return 0

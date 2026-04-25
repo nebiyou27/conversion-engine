@@ -81,6 +81,18 @@ def test_build_context_uses_fixture_claims():
     assert "competitor_gap" in context
 
 
+def test_timing_grounded_context_excludes_gap_and_ai_maturity():
+    context = ab_reply_rate.build_context(Path("data/fixtures/companies/acme_series_b.json"))
+
+    messages = ab_reply_rate._draft_messages("timing_grounded", context, trial_index=1)
+    user_message = messages[1]["content"]
+
+    assert "timing_claims" in user_message
+    assert "competitor_gap" not in user_message
+    assert "ai_maturity" not in user_message
+    assert "company_metadata" not in user_message
+
+
 def test_build_report_aggregates_variants_with_fake_client():
     responses = [
         json.dumps({"subject": "Signal", "body": "Hi, your cited hiring signal creates timing."}),
@@ -105,6 +117,31 @@ def test_build_report_aggregates_variants_with_fake_client():
     assert report["delta_pp_signal_grounded_minus_generic"] == 100.0
     assert report["ledger"]["calls"] == 4
     assert len(report["details"]) == 2
+
+
+def test_build_report_can_run_timing_grounded_against_generic():
+    responses = [
+        json.dumps({"subject": "Timing", "body": "Hi, your cited funding date creates timing."}),
+        json.dumps({"reply": True, "reason": "timely"}),
+        json.dumps({"subject": "Generic", "body": "Hi, helping teams improve engineering outcomes."}),
+        json.dumps({"reply": False, "reason": "generic"}),
+    ]
+    client = _FakeClient(responses)
+    ledger = BudgetLedger(run_id="test-timing-ab", ceiling_usd=1.0)
+
+    report = ab_reply_rate.build_report(
+        trials=1,
+        fixture_paths=[Path("data/fixtures/companies/acme_series_b.json")],
+        variants=["timing_grounded", "generic"],
+        run_id="test-timing-ab",
+        ledger=ledger,
+        client=client,
+    )
+
+    assert report["variants"]["timing_grounded"]["reply_rate"] == 1.0
+    assert report["variants"]["generic"]["reply_rate"] == 0.0
+    assert report["delta_pp_timing_grounded_minus_generic"] == 100.0
+    assert report["delta_pp_signal_grounded_minus_generic"] is None
 
 
 def test_build_report_retries_empty_draft_response():

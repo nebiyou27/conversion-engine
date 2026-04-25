@@ -35,14 +35,16 @@ Sandbox ledger CPQL = **$0.00041848 / 5 = $0.000084 per qualified lead**. Do not
 Against the manual baseline of **30-40%**, the measured delta is **-30 to -40 percentage points**. Caveat: this was not real-prospect production traffic; it proves the delivery path and reply normalization path under controlled conditions.
 
 ## Outbound Reply-Rate Delta
-The A/B test compared two first-touch variants over **32 trials per arm** (`eval/ab_reply_rate_report.json`):
+The completed A/B test compared two first-touch variants over **32 trials per arm** (`eval/ab_reply_rate_report.json`):
 
 | Variant | Definition | Replies | Reply rate |
 |---|---|---:|---:|
 | Signal-grounded | cites claim IDs, AI maturity, and gap/timing signals | 27/32 | **84.38%** |
 | Generic | normal SDR opener without research-grounded claims | 30/32 | **93.75%** |
 
-Signal-grounded delta = **84.38% - 93.75% = -9.38 pp** with **p = 0.0905**. This contradicts a broad "grounded is better" rollout. The pilot should therefore test grounded timing-signal copy against a generic control on real prospects, while excluding the sensitive gap language that drove the observed failure mode.
+Signal-grounded delta = **84.38% - 93.75% = -9.38 pp** with **p = 0.0905**. This contradicts a broad "grounded is better" rollout. It also does **not** prove that grounded timing-signal copy without gap language beats generic copy, because the treatment bundled timing signals with AI-maturity and competitor-gap language.
+
+The follow-up A/B needed to isolate that mechanism is now defined as `timing_grounded` versus `generic` in `eval/ab_reply_rate.py`: run `python eval/ab_reply_rate.py --variants timing_grounded generic --output eval/ab_reply_rate_timing_only_report.json --run-id ab-reply-rate-timing-only`. The timing-only A/B was scoped, prompted, and tested but not executed in this submission window: OpenRouter returned `403 Key limit exceeded (weekly limit)`. The harness and prompt are in place; the run will execute on quota reset without code changes. Until that second report exists, the pilot recommendation is a learning design, not a claimed reply-rate lift.
 
 ## Pilot Scope
 Proceed with a constrained A/B pilot, not broad autopilot.

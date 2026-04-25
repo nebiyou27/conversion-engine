@@ -149,9 +149,12 @@ capability_gap_primary_deficit, contradictory_signals}` covers the categories
 where naming the situation as fact ("you laid off engineers and need help")
 reads as accusatory or presumptuous regardless of evidence strength. The
 A/B reply-rate inversion (-9.38 pp, n=32/arm in `eval/ab_reply_rate_report.json`)
-showed that signal density past a threshold reduces reply likelihood; the
-sensitivity axis is the lever that lowers density on exactly the topics where
-density backfires.
+showed that the bundled signal-grounded treatment did not beat generic copy.
+That result does not isolate whether timing evidence helps or whether gap
+language hurts, so `eval/ab_reply_rate.py` now includes a separate
+`timing_grounded` treatment that removes `ai_maturity` and `competitor_gap`
+from the draft context before generation. The follow-up comparison is
+`python eval/ab_reply_rate.py --variants timing_grounded generic --output eval/ab_reply_rate_timing_only_report.json --run-id ab-reply-rate-timing-only`.
 
 **Gate pipeline.** Three deterministic checks run in order before any send:
 
