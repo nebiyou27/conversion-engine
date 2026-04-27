@@ -111,7 +111,7 @@ def run_synthetic_thread(
 ) -> ThreadResult:
     """Run one complete synthetic prospect thread and persist artifacts."""
     demo_mode = _is_demo_mode()
-    use_live_integrations = live and not demo_mode and _live_integrations_configured()
+    use_live_integrations = live and _live_integrations_configured()
 
     fixture_path = Path(fixture_path)
     output_root = Path(output_root)
