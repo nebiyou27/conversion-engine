@@ -1,6 +1,7 @@
 """Contract tests for CRM and calendar integration."""
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 
 from agent.actions.schedule import schedule_discovery_call
@@ -23,6 +24,59 @@ def test_build_contact_properties_includes_enrichment_fields():
     assert props["company"] == "Acme"
     assert props["calcom_booking_status"] == "booking_requested"
     assert "signal_enrichment" in props
+
+
+def test_hubspot_missing_custom_properties_are_ignored_after_rejection():
+    calls: list[dict] = []
+
+    class FakeHubSpotPropertyError(Exception):
+        status = 400
+        body = json.dumps(
+            {
+                "errors": [
+                    {
+                        "code": "PROPERTY_DOESNT_EXIST",
+                        "context": {"propertyName": ["calcom_booking_id"]},
+                    },
+                    {
+                        "code": "PROPERTY_DOESNT_EXIST",
+                        "context": {"propertyName": ["calcom_booking_url"]},
+                    },
+                ]
+            }
+        )
+
+    def fake_update(properties: dict):
+        calls.append(properties)
+        if "calcom_booking_id" in properties or "calcom_booking_url" in properties:
+            raise FakeHubSpotPropertyError()
+        return "contact_123"
+
+    result = hubspot_client._run_with_missing_property_fallback(
+        fake_update,
+        {
+            "email": "prospect@example.com",
+            "calcom_booking_id": "bk_123",
+            "calcom_booking_url": "https://cal.com/booking/bk_123",
+            "calcom_booking_status": "booked",
+        },
+        api_exception_type=FakeHubSpotPropertyError,
+        operation_name="update_contact",
+    )
+
+    assert result == "contact_123"
+    assert calls == [
+        {
+            "email": "prospect@example.com",
+            "calcom_booking_id": "bk_123",
+            "calcom_booking_url": "https://cal.com/booking/bk_123",
+            "calcom_booking_status": "booked",
+        },
+        {
+            "email": "prospect@example.com",
+            "calcom_booking_status": "booked",
+        },
+    ]
 
 
 @dataclass

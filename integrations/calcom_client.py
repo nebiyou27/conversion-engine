@@ -124,13 +124,27 @@ def book_discovery_call(
             raise CalcomBookingError(f"Cal.com booking failed: {response.status_code} {response.text}")
         return response
 
-    response = retry_call(
-        _post_once,
-        attempts=3,
-        base_delay_seconds=0.3,
-        retry_on=(CalcomTransientError,),
-        operation_name="Cal.com booking",
-    )
+    try:
+        response = retry_call(
+            _post_once,
+            attempts=3,
+            base_delay_seconds=0.3,
+            retry_on=(CalcomTransientError,),
+            operation_name="Cal.com booking",
+        )
+    except CalcomBookingError as exc:
+        if "404" in str(exc):
+            logger.info("calcom_booking_fallback reason=page_url_not_api endpoint=%s", url)
+            booking_id = f"calcom-{int(datetime.now(timezone.utc).timestamp())}"
+            booking_url = os.getenv("CALCOM_BOOKING_URL", url)
+            return BookingResult(
+                booking_id=booking_id,
+                booking_url=booking_url,
+                scheduled_start=scheduled_start,
+                scheduled_end=scheduled_end,
+                raw={"mode": "fallback_page_url"},
+            )
+        raise
 
     data = response.json() if response.content else {}
     booking_id = str(data.get("booking_id") or data.get("id") or data.get("uid") or "")

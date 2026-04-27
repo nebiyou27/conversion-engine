@@ -26,6 +26,7 @@ from storage import db
 
 DEFAULT_FIXTURE = Path("data/fixtures/companies/acme_series_b.json")
 DEFAULT_OUTPUT_DIR = Path("outputs") / "runs"
+LIVE_INTEGRATION_ENV_VARS = ("RESEND_API_KEY", "HUBSPOT_TOKEN", "CALCOM_API_KEY", "CALCOM_BOOKING_URL")
 
 
 def _now() -> datetime:
@@ -34,6 +35,14 @@ def _now() -> datetime:
 
 def _now_slug() -> str:
     return _now().strftime("%Y%m%d-%H%M%S")
+
+
+def _is_demo_mode() -> bool:
+    return os.getenv("DEMO_MODE", "false").lower() == "true"
+
+
+def _live_integrations_configured() -> bool:
+    return all(os.getenv(name) for name in LIVE_INTEGRATION_ENV_VARS)
 
 
 def _safe_json(value: Any) -> str:
@@ -101,6 +110,9 @@ def run_synthetic_thread(
     live: bool = False,
 ) -> ThreadResult:
     """Run one complete synthetic prospect thread and persist artifacts."""
+    demo_mode = _is_demo_mode()
+    use_live_integrations = live and not demo_mode and _live_integrations_configured()
+
     fixture_path = Path(fixture_path)
     output_root = Path(output_root)
     output_root.mkdir(parents=True, exist_ok=True)
@@ -122,7 +134,7 @@ def run_synthetic_thread(
 
     rows = [dict(r) for r in conn.execute("SELECT * FROM claims WHERE company_id = ?", (company_id,)).fetchall()]
 
-    if os.getenv("DEMO_MODE", "false").lower() == "true":
+    if demo_mode:
         ai_result = _build_demo_ai_maturity_response()
     else:
         ai_result = ai_maturity.judge(conn, company_id, run_id=run_id, ledger=ledger)
@@ -175,7 +187,7 @@ def run_synthetic_thread(
         ],
     )
 
-    if live and all(os.getenv(k) for k in ("RESEND_API_KEY", "HUBSPOT_TOKEN", "CALCOM_API_KEY", "CALCOM_BOOKING_URL")):
+    if use_live_integrations:
         email_message_id = email_handler.send_outbound_email("prospect@example.com", draft["subject"], draft["body"])
     else:
         email_message_id = _fake_email_send("prospect@example.com", draft["subject"], draft["body"])
@@ -192,7 +204,7 @@ def run_synthetic_thread(
     )
 
     with ExitStack() as stack:
-        if not live:
+        if not use_live_integrations:
             stack.enter_context(patch("integrations.hubspot_client.upsert_contact", _fake_hubspot_upsert_contact))
             stack.enter_context(patch("integrations.hubspot_client.record_booking", _fake_hubspot_record_booking))
             stack.enter_context(patch("integrations.calcom_client.book_discovery_call", _fake_book_discovery_call))
@@ -207,7 +219,10 @@ def run_synthetic_thread(
         )
 
     run_summary = {
-        "demo_mode": not live,
+        "demo_mode": not use_live_integrations,
+        "demo_mode_env": demo_mode,
+        "live_requested": live,
+        "live_integrations_used": use_live_integrations,
         "company_id": company_id,
         "company_name": company_name,
         "evidence_ids": evidence_ids,
@@ -221,7 +236,7 @@ def run_synthetic_thread(
                     "source": "hardcoded_demo_stub",
                     "limitation": "Synthetic thread uses a fixed AI maturity response when DEMO_MODE=true; agent.judgment.ai_maturity.judge is tested separately.",
                 }
-                if os.getenv("DEMO_MODE", "false").lower() == "true"
+                if demo_mode
                 else {"source": "llm_qwen"}
             ),
         },

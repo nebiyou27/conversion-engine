@@ -50,3 +50,7 @@ data/bench/bench_summary.json
 # Do keep these empty-dir markers
 !outputs/runs/.gitkeep
 !data/cache/.gitkeep
+
+# Demo/debug artifacts
+reply.json
+run_output.txt

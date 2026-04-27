@@ -4,6 +4,8 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
+from collections.abc import Callable
 from datetime import datetime, timezone
 from typing import Any
 
@@ -39,6 +41,76 @@ def _get_mcp_client():
     from integrations.hubspot_mcp_client import HubSpotMCPClient
 
     return HubSpotMCPClient.from_env()
+
+
+def _collect_missing_property_names(payload: Any) -> set[str]:
+    missing: set[str] = set()
+    if isinstance(payload, dict):
+        error_code = payload.get("error") or payload.get("code")
+        if error_code == "PROPERTY_DOESNT_EXIST":
+            name = payload.get("name")
+            if isinstance(name, str):
+                missing.add(name)
+
+            context = payload.get("context")
+            if isinstance(context, dict):
+                property_names = context.get("propertyName")
+                if isinstance(property_names, list):
+                    missing.update(name for name in property_names if isinstance(name, str))
+
+        for value in payload.values():
+            missing.update(_collect_missing_property_names(value))
+    elif isinstance(payload, list):
+        for item in payload:
+            missing.update(_collect_missing_property_names(item))
+    return missing
+
+
+def _extract_missing_property_names(exc: BaseException) -> set[str]:
+    texts = [str(getattr(exc, "body", "") or ""), str(exc)]
+    missing: set[str] = set()
+    for text in texts:
+        if not text:
+            continue
+        try:
+            missing.update(_collect_missing_property_names(json.loads(text)))
+        except json.JSONDecodeError:
+            pass
+        missing.update(
+            re.findall(r'Property \\"?([A-Za-z0-9_]+)\\"? does not exist', text)
+        )
+        missing.update(
+            re.findall(r'"propertyName"\s*:\s*\[\s*"([^"]+)"\s*\]', text)
+        )
+    return missing
+
+
+def _run_with_missing_property_fallback(
+    operation: Callable[[dict[str, Any]], str],
+    properties: dict[str, Any],
+    *,
+    api_exception_type: type[BaseException],
+    operation_name: str,
+) -> str:
+    current = dict(properties)
+    ignored: set[str] = set()
+
+    while True:
+        try:
+            return operation(current)
+        except api_exception_type as exc:
+            missing = (_extract_missing_property_names(exc) & current.keys()) - {"email"}
+            missing -= ignored
+            if not missing:
+                raise
+
+            ignored.update(missing)
+            current = {key: value for key, value in current.items() if key not in missing}
+            logger.warning(
+                "hubspot_unsupported_properties_ignored operation=%s properties=%s",
+                operation_name,
+                ",".join(sorted(missing)),
+            )
 
 
 def build_contact_properties(
@@ -109,14 +181,40 @@ def upsert_contact(
             logger.info("hubspot_upsert_attempt mode=mcp email=%s", email)
             return _get_mcp_client().upsert_contact(email=email, properties=properties)
 
-        from hubspot.crm.contacts import SimplePublicObjectInputForCreate
+        from hubspot.crm.contacts import SimplePublicObjectInputForCreate, SimplePublicObjectInput
+        from hubspot.crm.contacts.exceptions import ApiException
 
         logger.info("hubspot_upsert_attempt mode=sdk email=%s", email)
         client = _get_client()
-        contact = client.crm.contacts.basic_api.create(
-            SimplePublicObjectInputForCreate(properties=properties)
-        )
-        return contact.id
+        try:
+            return _run_with_missing_property_fallback(
+                lambda create_properties: client.crm.contacts.basic_api.create(
+                    SimplePublicObjectInputForCreate(properties=create_properties)
+                ).id,
+                properties,
+                api_exception_type=ApiException,
+                operation_name="create_contact",
+            )
+        except ApiException as exc:
+            if exc.status != 409:
+                raise
+            match = re.search(r"Existing ID:\s*(\d+)", str(exc.body or ""))
+            if not match:
+                raise
+            existing_id = match.group(1)
+            logger.info("hubspot_upsert_existing email=%s contact_id=%s", email, existing_id)
+            return _run_with_missing_property_fallback(
+                lambda update_properties: (
+                    client.crm.contacts.basic_api.update(
+                        existing_id,
+                        SimplePublicObjectInput(properties=update_properties),
+                    ),
+                    existing_id,
+                )[1],
+                properties,
+                api_exception_type=ApiException,
+                operation_name="upsert_existing_contact",
+            )
 
     contact_id = retry_call(
         _upsert_once,
@@ -160,14 +258,22 @@ def update_contact(
             return _get_mcp_client().update_contact(contact_id, email=email, properties=properties)
 
         from hubspot.crm.contacts import SimplePublicObjectInput
+        from hubspot.crm.contacts.exceptions import ApiException
 
         logger.info("hubspot_update_attempt mode=sdk contact_id=%s", contact_id)
         client = _get_client()
-        client.crm.contacts.basic_api.update(
-            contact_id,
-            SimplePublicObjectInput(properties=properties),
+        return _run_with_missing_property_fallback(
+            lambda update_properties: (
+                client.crm.contacts.basic_api.update(
+                    contact_id,
+                    SimplePublicObjectInput(properties=update_properties),
+                ),
+                contact_id,
+            )[1],
+            properties,
+            api_exception_type=ApiException,
+            operation_name="update_contact",
         )
-        return contact_id
 
     updated_contact_id = retry_call(
         _update_once,
