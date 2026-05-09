@@ -1,5 +1,11 @@
 # Conversion Engine
 
+**What** - Conversion Engine automates evidence-backed sales outreach for Tenacious Consulting and Outsourcing.
+
+**How** - It uses an epistemic-layered AI agent with evidence collection, claim building, judgment, gated draft generation, reply handling, booking flow, CRM/calendar adapters, and mocked plus live latency verification.
+
+**Why** - It reduces unsupported outreach claims and manual follow-up work while preserving auditable evidence, safety gates, and measurable channel behavior.
+
 AI agent for automated, evidence-backed sales outreach on behalf of Tenacious Consulting and Outsourcing. Built for TRP1 Week 10.
 
 ## Status
